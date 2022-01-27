@@ -5,6 +5,10 @@
 #include "DFA.h"
 #include "indexTemplate.h"
 //class def State
+const int FINAL = -2;
+const int NOTFINAL = -3;
+const int INITIAL = -4;
+const int NORMAL = -5;
 State::State() = default;
 State::State(int n, bool i, bool f):name{n}, initial{i}, final{f} {};
 State::~State() {}
@@ -79,18 +83,36 @@ std::vector<char> DFA::alphabet() {
  * TODO could be a type error I think of trying to put ints into a char vector
  */
 
-std::vector<std::vector<char>> DFA::generateTable(int aSize, int nState, std::vector<int> stateArray, std::vector<char> alphabetArray) {
-    //char table[aSize][nState];
-    std::vector<std::vector<char>> table(aSize, std::vector<char> (nState));
+std::vector<std::vector<int>> DFA::generateTable(std::vector<int> stateArray, std::vector<char> alphabetArray) {
+    std::vector<std::vector<int>> table(stateArray.size(), std::vector<int> (alphabetArray.size()+2));
     char inputChar{};
     int destination{}, charIndex{}, stateIndex{};
 
     //initialize all values in the table to empty char
     for (auto& outer: table){
         for (auto &inner: outer){
-            inner = char(0);
+            inner = -1;
         }
     }
+    // find if state is final or not
+    for (State &s: states){
+        stateIndex = findIndex<int>(s.getName(), stateArray);
+        if (s.isFinal()){
+           table[stateIndex][alphabetArray.size()] = FINAL;
+        }
+        else {
+            table[stateIndex][alphabetArray.size()] = NOTFINAL;
+        }
+        if (s.isInitial()){
+            table[stateIndex][alphabetArray.size()+1] = INITIAL;
+        }
+        else {
+            table[stateIndex][alphabetArray.size()+1] = NORMAL;
+        }
+    }
+
+
+    //Build transition table from DFA
     for (State &s: states){
         stateIndex = findIndex<int>(s.getName(), stateArray);
         for (auto &a: s.transitions()){

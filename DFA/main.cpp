@@ -16,6 +16,7 @@ int main(){
     dfa.addTransition(2,1, '4');
     dfa.addTransition(2,1, '5');
     dfa.addTransition(2,1, '6');
+    \
     dfa.addTransition(2,1, '7');
     dfa.addTransition(2,1, '8');
     dfa.addTransition(2,1, '9');
@@ -34,13 +35,13 @@ int main(){
     std::vector<int> states = dfa.stateList();
     std::vector<char> alphabet = dfa.alphabet();
 
-    std::vector<std::vector<char>> tableau = dfa.generateTable(alphabet.size(), states.size(), states, alphabet);
+    std::vector<std::vector<int>> tableau = dfa.generateTable(states, alphabet);
 
     for (auto &a: tableau) {
         for (auto &b: a) {
-            std::cout<< b << ", ";
+            std::cout<< b << " ";
         }
-        std::cout<<std::endl;
+        std::cout<<'$'<<std::endl;
     }
 
 

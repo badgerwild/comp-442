@@ -13,7 +13,7 @@ private:
     int name;
     bool initial;
     bool final;
-    std::vector<std::tuple<int, char>> transition; //<to, from, input>
+    std::vector<std::tuple<int, char>> transition; //<to, input>
 public:
     State();
     State(int n, bool i, bool f);
@@ -37,7 +37,7 @@ public:
     std::vector<std::tuple<int, char>>getTransitions(int state);
     std::vector<int> stateList();
     std::vector<char> alphabet();
-    std::vector<std::vector<char>> generateTable(int aSize, int nState, std::vector<int> stateArray,std::vector<char> alphabetArray);
+    std::vector<std::vector<int>> generateTable(std::vector<int> stateArray, std::vector<char> alphabetArray);
     void printTable();
 
 
