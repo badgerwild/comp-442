@@ -5,11 +5,32 @@
 #ifndef COMP_442_LEXER_H
 #define COMP_442_LEXER_H
 #include <string>
-// temporary transition table just to test integer DFA
-const std::string TRANS_TABLE_HEADER[] = {"state", "int_1_9", "zero", "final"};
-const  char TRANS_TABLE[][4]= {{'a','b', 'c', 'N'},{'b','b', 'b', 'Y'},{'c', char(0), char(0), 'Y' }};
+#include <vector>
+#include "Token.h"
 
 class Lexer{
+    std::string fileName;
+    std::vector<std::string> program;
+    int charPosition;
+    int lineNumber;
+    //TODO make these into pointers
+    std::vector<int> states;
+    std::vector<char> inputs;
+    std::vector<std::vector<int>> lookUpTable;
+
+
+    Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std::vector<int>> lookUpTable);
+    ~Lexer();
+    void addFile(std::string file);
+    void readFile();
+    Token nextToken();
+    int tableLookUp(int state, char input);
+    char nextChar();
+    bool isFinal();
+
+
+//TODO backTrack() function, whatever the this does???
+    bool backTrack();
 
 
 };

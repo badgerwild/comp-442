@@ -78,17 +78,13 @@ std::vector<char> DFA::alphabet() {
     }
     return alph;
 }
-/* TODO reverse order of rows and columns because that part is wrong currently
- * TODO debug why array is not being filled correctly and why characters are not being placed correctly,
- * TODO could be a type error I think of trying to put ints into a char vector
- */
 
 std::vector<std::vector<int>> DFA::generateTable(std::vector<int> stateArray, std::vector<char> alphabetArray) {
     std::vector<std::vector<int>> table(stateArray.size(), std::vector<int> (alphabetArray.size()+2));
     char inputChar{};
     int destination{}, charIndex{}, stateIndex{};
 
-    //initialize all values in the table to empty char
+    //initialize all values in the tableLookUp to empty char
     for (auto& outer: table){
         for (auto &inner: outer){
             inner = -1;
@@ -110,9 +106,7 @@ std::vector<std::vector<int>> DFA::generateTable(std::vector<int> stateArray, st
             table[stateIndex][alphabetArray.size()+1] = NORMAL;
         }
     }
-
-
-    //Build transition table from DFA
+    //Build transition tableLookUp from DFA
     for (State &s: states){
         stateIndex = findIndex<int>(s.getName(), stateArray);
         for (auto &a: s.transitions()){

@@ -1,6 +1,8 @@
 set(BINARY ${comp_422})
 
 file(GLOB SOURCES
+        Token.cpp
+        Token.h
         lexer.cpp
         lexer.h
         ../DFA/DFA.cpp
@@ -8,7 +10,6 @@ file(GLOB SOURCES
         Formula.cpp
         Formula.h
         main.cpp
-
         )
 set(SOURCES ${SOURCES})
 

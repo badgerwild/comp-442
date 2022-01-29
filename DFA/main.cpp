@@ -4,6 +4,7 @@
 #include "DFA.h"
 
 int main(){
+    //int DFA
     DFA dfa = DFA();
     dfa.addState(State(1,true, false));
     dfa.addState(State(2,false, true));
@@ -31,23 +32,16 @@ int main(){
     dfa.addTransition(2,2, '7');
     dfa.addTransition(2,2, '8');
     dfa.addTransition(2,2, '9');
-
+//state Vector
     std::vector<int> states = dfa.stateList();
     std::vector<char> alphabet = dfa.alphabet();
-
+//tableLookUp
     std::vector<std::vector<int>> tableau = dfa.generateTable(states, alphabet);
-
     for (auto &a: tableau) {
         for (auto &b: a) {
             std::cout<< b << " ";
         }
         std::cout<<'$'<<std::endl;
     }
-
-
-
-
-
-
     return 0;
 }
