@@ -69,8 +69,20 @@ int main(){
     Lexer scanner = Lexer(states, alphabet, tableau);
     scanner.addFile("/home/jason/collective/comp-442/comp-442/src/a.txt");
     scanner.readFile();
-    Token t = scanner.nextToken();
-    std::cout<<t;
+    bool condition =scanner.getLineNumber() < scanner.getProgramSize();
+    while (true) {
+        int temp_1 = scanner.getLineNumber();
+        int temp2 = scanner.getProgramSize();
+        condition = temp_1 < temp2;
+        if (condition) {
+            Token t = scanner.nextToken();
+            std::cout << t;
+        }
+        else{
+            break;
+        }
+
+    }
 
     return 0;
 

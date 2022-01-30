@@ -22,6 +22,8 @@ private:
 public:
     Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std::vector<int>> lookUpTable);
     ~Lexer();
+    int getProgramSize();
+    int getLineNumber();
     void addFile(std::string file);
     void readFile();
     Token nextToken();
@@ -29,6 +31,7 @@ public:
     char nextChar();
     bool isFinal(int stateName);
     bool backTrack(int stateName);
+
 };
 
 #endif //COMP_442_LEXER_H

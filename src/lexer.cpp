@@ -22,6 +22,14 @@ Lexer::Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std:
 
 Lexer::~Lexer() {}
 
+int Lexer::getProgramSize() {
+    return program.size();
+}
+
+int Lexer::getLineNumber() {
+    return lineNumber;
+}
+
 void Lexer::addFile(std::string file) {
     this->fileName = file;
 }
@@ -32,6 +40,7 @@ void Lexer::readFile() {
     std::ifstream programFile(this->fileName);
     if (programFile.is_open()){
         while (getline(programFile, temp)){
+            temp+= '\n';
             lineStorage.push_back(temp);
         }
     }
@@ -56,12 +65,13 @@ int Lexer::tableLookUp(int state, char input) {
 
 char Lexer::nextChar() {
     int maxLen = this->program[lineNumber].size();
-    if(this->charPosition > maxLen) {
+    char temp = this->program[lineNumber][charPosition];
+    ++this->charPosition;
+    //if(this->charPosition > maxLen) {
+    if (temp == '\n'){
         ++this->lineNumber;
         this->charPosition = 0;
     }
-    char temp = this->program[lineNumber][charPosition];
-    ++this->charPosition;
     return temp;
 }
 
@@ -80,6 +90,7 @@ bool Lexer::backTrack(int stateName) {
     bool val = status == BACKTRACK;
     return val;
 }
+//TODO Figure out a proper stop condition
 Token Lexer::nextToken() {
 int state = 1;
 Token token;
@@ -88,16 +99,19 @@ int type{};
 char lookUp{};
 while (token.isEmpty()){
     lookUp = nextChar();
+    if (lookUp == '\n'){
+        continue;
+    }
     state = tableLookUp(state, lookUp);
     lex.push_back(lookUp);
     if (isFinal(state)){
         type = state;
+        //TODO save lookup as previous state and revert to it upon backtrack
         if (backTrack(state)){
             lex.pop_back();
         }
         token.create(lex, type, this->lineNumber);
     }
 }
-    ++this->lineNumber;
     return token;
 }
