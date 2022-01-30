@@ -5,13 +5,19 @@
 #include <fstream>
 #include <utility>
 #include "lexer.h"
+#include "../DFA/indexTemplate.h"
 #include "../DFA/DFA.h"
-//TODO populate all these functions
+const int FINAL = -2;
+const int NOTFINAL = -3;
+const int BACKTRACK = -4;
+const int NORMAL = -5;
+
 Lexer::Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std::vector<int>> lookUpTable) {
     this->lineNumber = 0;
     this->states = states;
     this->inputs = inputs;
     this->lookUpTable = lookUpTable;
+    this->charPosition = 0;
 }
 
 Lexer::~Lexer() {}
@@ -35,9 +41,17 @@ void Lexer::readFile() {
     programFile.close();
     this->program = lineStorage;
 }
-//TODO Finish this function first thing. then should be good to move on to nextToken
 int Lexer::tableLookUp(int state, char input) {
-    return 1;
+    int stateIndex{}, charIndex{}, newState{};
+    stateIndex = findIndex<int>(state, states);
+    charIndex = findIndex<char>(input, inputs);
+    if (charIndex == -1 || stateIndex == -1){
+        newState = -1;
+    }
+    else {
+        newState = lookUpTable[stateIndex][charIndex];
+    }
+    return newState;
 }
 
 char Lexer::nextChar() {
@@ -51,32 +65,39 @@ char Lexer::nextChar() {
     return temp;
 }
 
-bool Lexer::isFinal() {
-    return true;
+bool Lexer::isFinal(int stateName) {
+    int tempIndex = findIndex<int>(stateName, this->states);
+    int find = this->inputs.size();
+    int status = this->lookUpTable[tempIndex][find];
+    bool val = status == FINAL;
+    return val;
+}
+
+bool Lexer::backTrack(int stateName) {
+    int tempIndex = findIndex<int>(stateName, this->states);
+    int find = this->inputs.size()+1;
+    int status = this->lookUpTable[tempIndex][find];
+    bool val = status == BACKTRACK;
+    return val;
 }
 Token Lexer::nextToken() {
 int state = 1;
 Token token;
 std::string lex{};
-std::string type{};
+int type{};
 char lookUp{};
 while (token.isEmpty()){
     lookUp = nextChar();
     state = tableLookUp(state, lookUp);
     lex.push_back(lookUp);
-    if (isFinal()){
-        if (/*backTrack()*/ 8 ==8){
-            //TODO use backtracking to determin char and return type or whatever we need to do
-            type = "SOMETHING";
-        }
-        else {
-            //base case without backtracking
-            type = "SOMETHING ELSE";
+    if (isFinal(state)){
+        type = state;
+        if (backTrack(state)){
+            lex.pop_back();
         }
         token.create(lex, type, this->lineNumber);
     }
+}
     ++this->lineNumber;
     return token;
-}
-
 }

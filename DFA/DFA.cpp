@@ -7,10 +7,10 @@
 //class def State
 const int FINAL = -2;
 const int NOTFINAL = -3;
-const int INITIAL = -4;
+const int BACKTRACK = -4;
 const int NORMAL = -5;
 State::State() = default;
-State::State(int n, bool i, bool f):name{n}, initial{i}, final{f} {};
+State::State(int n, bool i, bool f):name{n}, backtrack{i}, final{f} {};
 State::~State() {}
 void State::transitionFunction(int to, char input) {
     transition.push_back(std::make_tuple(to, input));
@@ -19,7 +19,7 @@ bool State::isFinal(){
     return this->final;
 }
 bool State::isInitial(){
-    return this->initial;
+    return this->backtrack;
 }
 
 int State::getName(){
@@ -100,7 +100,7 @@ std::vector<std::vector<int>> DFA::generateTable(std::vector<int> stateArray, st
             table[stateIndex][alphabetArray.size()] = NOTFINAL;
         }
         if (s.isInitial()){
-            table[stateIndex][alphabetArray.size()+1] = INITIAL;
+            table[stateIndex][alphabetArray.size()+1] = BACKTRACK;
         }
         else {
             table[stateIndex][alphabetArray.size()+1] = NORMAL;

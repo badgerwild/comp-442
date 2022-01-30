@@ -9,6 +9,7 @@
 #include "Token.h"
 
 class Lexer{
+private:
     std::string fileName;
     std::vector<std::string> program;
     int charPosition;
@@ -18,7 +19,7 @@ class Lexer{
     std::vector<char> inputs;
     std::vector<std::vector<int>> lookUpTable;
 
-
+public:
     Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std::vector<int>> lookUpTable);
     ~Lexer();
     void addFile(std::string file);
@@ -26,13 +27,8 @@ class Lexer{
     Token nextToken();
     int tableLookUp(int state, char input);
     char nextChar();
-    bool isFinal();
-
-
-//TODO backTrack() function, whatever the this does???
-    bool backTrack();
-
-
+    bool isFinal(int stateName);
+    bool backTrack(int stateName);
 };
 
 #endif //COMP_442_LEXER_H

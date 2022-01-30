@@ -16,8 +16,8 @@ int findIndex(T value, std::vector<T>arr) {
             ++count;
         }
     }
-
+    //error code
+    return -1;
 }
-
 
 #endif //COMP_442_FINDINDEX_H

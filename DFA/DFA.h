@@ -11,7 +11,7 @@
 class State{
 private:
     int name;
-    bool initial;
+    bool backtrack;
     bool final;
     std::vector<std::tuple<int, char>> transition; //<to, input>
 public:
