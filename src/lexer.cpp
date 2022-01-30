@@ -65,12 +65,18 @@ int Lexer::tableLookUp(int state, char input) {
 
 char Lexer::nextChar() {
     int maxLen = this->program[lineNumber].size();
-    char temp = this->program[lineNumber][charPosition];
-    ++this->charPosition;
-    //if(this->charPosition > maxLen) {
-    if (temp == '\n'){
-        ++this->lineNumber;
-        this->charPosition = 0;
+    char temp;
+    if ((this->charPosition == maxLen-1) && (lineNumber == this->program.size()-1)){
+        temp = '\r';
+
+    }
+    else {
+        temp = this->program[lineNumber][charPosition];
+        ++this->charPosition;
+        if ((temp == '\n') && (lineNumber < this->program.size()-1)) {
+            ++this->lineNumber;
+            this->charPosition = 0;
+        }
     }
     return temp;
 }
@@ -90,27 +96,43 @@ bool Lexer::backTrack(int stateName) {
     bool val = status == BACKTRACK;
     return val;
 }
-//TODO Figure out a proper stop condition
+
+//TODO 1.Deal with Space problem, 2.error recovery 3. deal with invalid id
 Token Lexer::nextToken() {
 int state = 1;
 Token token;
 std::string lex{};
 int type{};
 char lookUp{};
+int line{};
 while (token.isEmpty()){
     lookUp = nextChar();
-    if (lookUp == '\n'){
+    if (lookUp == ' '){
         continue;
     }
     state = tableLookUp(state, lookUp);
     lex.push_back(lookUp);
     if (isFinal(state)){
         type = state;
-        //TODO save lookup as previous state and revert to it upon backtrack
         if (backTrack(state)){
+            if (lookUp == '\n') {
+                int temp = this-> lineNumber;
+                line = temp-1;
+            }
+            else{
+                line = this->lineNumber;
+            }
             lex.pop_back();
         }
-        token.create(lex, type, this->lineNumber);
+        else {
+            line = this->lineNumber;
+        }
+        if (lex == "\n"){
+            state = 1;
+            lex.pop_back();
+            continue;
+        }
+        token.create(lex, type, line+1);
     }
 }
     return token;

@@ -16,7 +16,7 @@ private:
     std::vector<std::tuple<int, char>> transition; //<to, input>
 public:
     State();
-    State(int n, bool i, bool f);
+    State(int stateName, bool back, bool fin);
     ~State();
     void transitionFunction(int to, char input);
     bool isFinal();

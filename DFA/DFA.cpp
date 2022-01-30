@@ -10,7 +10,7 @@ const int NOTFINAL = -3;
 const int BACKTRACK = -4;
 const int NORMAL = -5;
 State::State() = default;
-State::State(int n, bool i, bool f):name{n}, backtrack{i}, final{f} {};
+State::State(int stateName, bool back, bool fin): name{stateName}, backtrack{back}, final{fin} {};
 State::~State() {}
 void State::transitionFunction(int to, char input) {
     transition.push_back(std::make_tuple(to, input));
