@@ -30,6 +30,7 @@ int Lexer::getLineNumber() {
     return lineNumber;
 }
 
+
 void Lexer::addFile(std::string file) {
     this->fileName = file;
 }
@@ -107,9 +108,9 @@ char lookUp{};
 int line{};
 while (token.isEmpty()){
     lookUp = nextChar();
-    if (lookUp == ' '){
-        continue;
-    }
+    //if (lookUp == ' '){
+      //  continue;
+    //}
     state = tableLookUp(state, lookUp);
     lex.push_back(lookUp);
     if (isFinal(state)){

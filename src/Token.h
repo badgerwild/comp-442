@@ -16,12 +16,12 @@ private:
     bool isNull;
     const std::unordered_map<int, std::string> type_lookup = {
             {4, "integer"},
-            {5, "invalid number"},
-            {-1, "invalid_char"},
+            {5, "invalid"},
+            {-1, "invalid"},
             {6, "EOF"},
             {9, "id"},
             {18, "float"},
-            {17, "invalid_float"},
+            {17, "invalid"},
             //Start Here
             {20, "plus"},
             {22, "and"},
@@ -75,6 +75,7 @@ public:
     bool isEmpty();
     bool isEOF();
     void create(std::string lex, int type, int number);
+    std::string getType();
     friend std::ostream &operator << (std::ostream &out, Token &T);
     void printToken();
 };

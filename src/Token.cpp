@@ -27,7 +27,9 @@ void Token::create(std::string lex, int type, int number) {
     isNull = false;
 }
 Token::~Token() {};
-
+std::string Token::getType() {
+    return tokenType;
+}
 bool Token::isEmpty() {
     return isNull;
 }

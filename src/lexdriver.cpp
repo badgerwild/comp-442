@@ -154,6 +154,51 @@ int main(){
     dfa.addTransition(4,2, ' ');
     dfa.addTransition(4,2,'\r');
     dfa.addTransition(4,2, '\n');
+//Any
+    dfa.addTransition(4,2, ' ');
+    dfa.addTransition(4,2, '+');
+    dfa.addTransition(4,2, '&');
+    dfa.addTransition(4,2, '*');
+    dfa.addTransition(4,2, ';');
+    dfa.addTransition(4,2, '!');
+    dfa.addTransition(4,2, '.');
+    dfa.addTransition(4,2, '[');
+    dfa.addTransition(4,2, ']');
+    dfa.addTransition(4,2, '(');
+    dfa.addTransition(4,2, ')');
+    dfa.addTransition(4,2, '{');
+    dfa.addTransition(4,2, '}');
+    dfa.addTransition(4,2, '>');
+    dfa.addTransition(4,2, '<');
+    dfa.addTransition(4,2, '=');
+    dfa.addTransition(4,2, ':');
+    dfa.addTransition(4,2, '-');
+
+
+    dfa.addTransition(9,8, ' ');
+    dfa.addTransition(9,8, '+');
+    dfa.addTransition(9,8, '&');
+    dfa.addTransition(9,8, '*');
+    dfa.addTransition(9,8, ';');
+    dfa.addTransition(9,8, '!');
+    dfa.addTransition(9,8, '.');
+    dfa.addTransition(9,8, '[');
+    dfa.addTransition(9,8, ']');
+    dfa.addTransition(9,8, '(');
+    dfa.addTransition(9,8, ')');
+    dfa.addTransition(9,8, '{');
+    dfa.addTransition(9,8, '}');
+    dfa.addTransition(9,8, '>');
+    dfa.addTransition(9,8, '<');
+    dfa.addTransition(9,8, '=');
+    dfa.addTransition(9,8, ':');
+    dfa.addTransition(9,8, '-');
+
+
+
+
+
+
     //  DOT for Float
     dfa.addTransition(10, 3, '.');
     dfa.addTransition(10,2,'.');
@@ -361,39 +406,36 @@ int main(){
 
     //LEXER SETUP
     Lexer scanner = Lexer(states, alphabet, tableau);
-    scanner.addFile("/home/jason/collective/comp-442/comp-442/src/a.txt");
+    string filePre ="/home/jason/collective/comp-442/comp-442/src/";
+    string file_a = "a.txt";
+
+    scanner.addFile(filePre+file_a);
     scanner.readFile();
     bool condition = false;
+    vector<Token> err {};
+    vector<Token> tok {};
     while (!condition) {
             Token t = scanner.nextToken();
-            std::cout << t;
+            if(t.getType() == "invalid"){
+                err.push_back(t);
+            }
+            else{
+                tok.push_back(t);
+            }
+
+           // std::cout << t;
             condition = t.isEOF();
+    }
+    cout<<endl;
+
+    for (auto &a :err){
+        cout <<a;
+    }
+    cout<<endl;
+    for (auto &a :tok){
+        cout <<a;
     }
 
     return 0;
 
-    /*
-    string text;
-    vector<string> words;
-    ifstream myFile("/home/jason/collective/comp-442/comp-442/src/a.txt");
-    if (myFile.is_open()) {
-        while (getline(myFile, text)){
-            //cout <<text <<endl;
-            words.push_back(text);
-        }
-    }
-    else {
-        cout << "file not found";
-    }
-    for (string &s:words) {
-        for (char &c: s) {
-            if (c == ' '){
-                cout<< "Yay!" <<endl;
-            }
-            cout << c << ", ";
-        }
-        cout <<endl;
-    }
-    myFile.close();
-*/
 }

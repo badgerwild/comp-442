@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include "Token.h"
+#include "../DFA/DFA.h"
 
 class Lexer{
 private:
@@ -24,6 +25,7 @@ public:
     ~Lexer();
     int getProgramSize();
     int getLineNumber();
+    void dfaSetUp();
     void addFile(std::string file);
     void readFile();
     Token nextToken();
