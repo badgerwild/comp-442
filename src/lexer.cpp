@@ -97,7 +97,7 @@ bool Lexer::backTrack(int stateName) {
     return val;
 }
 
-//TODO 1.Deal with Space problem, 2.error recovery 3. deal with invalid id
+//TODO 1.Deal with Space problem, 2.error recovery add specific error ever where 3. deal with invalid id
 Token Lexer::nextToken() {
 int state = 1;
 Token token;

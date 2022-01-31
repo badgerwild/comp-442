@@ -9,7 +9,7 @@ file(GLOB SOURCES
         ../DFA/DFA.h
         Formula.cpp
         Formula.h
-        main.cpp
+        lexdriver.cpp
         )
 set(SOURCES ${SOURCES})
 
