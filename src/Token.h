@@ -13,15 +13,19 @@ private:
     std::string lexeme;
     std::string tokenType;
     int lineNumber;
+    bool isError;
     bool isNull;
+   const std::unordered_map<int, std::string> error_types = {
+           {5, "invalid_integer"},
+           {-1, "invalid_character"},
+           {17, "invalid_float"},
+
+   };
     const std::unordered_map<int, std::string> type_lookup = {
             {4, "integer"},
-            {5, "invalid"},
-            {-1, "invalid"},
             {6, "EOF"},
             {9, "id"},
             {18, "float"},
-            {17, "invalid"},
             //Start Here
             {20, "plus"},
             {22, "and"},
@@ -72,6 +76,7 @@ private:
 public:
     Token();
     ~Token();
+    bool getIsError();
     bool isEmpty();
     bool isEOF();
     void create(std::string lex, int type, int number);

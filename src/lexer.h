@@ -21,6 +21,7 @@ private:
     std::vector<std::vector<int>> lookUpTable;
 
 public:
+    Lexer();
     Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std::vector<int>> lookUpTable);
     ~Lexer();
     int getProgramSize();
