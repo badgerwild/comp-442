@@ -13,7 +13,7 @@ int main(){
     Lexer scanner = Lexer();
     //Lexer scanner = Lexer(states, alphabet, tableau);
     string filePre ="/home/jason/collective/comp-442/comp-442/src/";
-    string fileName = "a";//change this for different input file
+    string fileName = "b";//change this for different input file
     string fileSuf = ".txt";
     scanner.addFile(filePre+fileName+ fileSuf);
     scanner.readFile();
@@ -30,22 +30,22 @@ int main(){
             }
             condition = t.isEOF();
     }
-    string outFiles[2] = {fileName+".outlexerrors", fileName+".outlextokens"};
-    ofstream outPut[2];
-    for (int i = 0; i < 2; i++){
-        outPut[i].open(outFiles[i]);
-    }
+    //string outFiles[2] = {fileName+".outlexerrors", fileName+".outlextokens"};
+    //ofstream outPut[2];
+    //for (int i = 0; i < 2; i++){
+      //  outPut[i].open(outFiles[i]);
+    //}
     for (auto &a :err){
         cout <<a;
-        outPut[0]<< a;
+     //   outPut[0]<< a;
     }
     cout<<endl;
     for (auto &a :tok){
         cout <<a;
-        outPut[1]<< a;
+      //  outPut[1]<< a;
     }
-    outPut[0].close();
-    outPut[1].close();
+    //outPut[0].close();
+    //outPut[1].close();
 
     return 0;
 

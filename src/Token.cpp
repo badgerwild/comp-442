@@ -12,7 +12,10 @@ void Token::create(std::string lex, int type, int number) {
         lex = "EOF";
         number = -1;
     }
-    if (lex[lex.size()] == '\n'){
+    if (lex[lex.size()-1] == '\n'){
+        lex.pop_back();
+    }
+    if (lex[lex.size()-1] == '\r') {
         lex.pop_back();
     }
     //check if type is id and then look if it is a reserve word
