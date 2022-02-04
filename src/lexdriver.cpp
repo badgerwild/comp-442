@@ -35,13 +35,14 @@ int main(){
     //for (int i = 0; i < 2; i++){
       //  outPut[i].open(outFiles[i]);
     //}
+    cout<< "Invalid Tokens" <<endl;
     for (auto &a :err){
-        cout <<a;
+        cout <<a << endl;
      //   outPut[0]<< a;
     }
-    cout<<endl;
+    cout<< "Accepted tokens" <<endl;
     for (auto &a :tok){
-        cout <<a;
+        cout <<a << endl;
       //  outPut[1]<< a;
     }
     //outPut[0].close();

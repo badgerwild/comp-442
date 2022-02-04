@@ -10,7 +10,7 @@ const int FINAL = -2;
 const int NOTFINAL = -3;
 const int BACKTRACK = -4;
 const int NORMAL = -5;
-const char SYMBOLS[17] = {'+','&', '*', ';', '!', '.', '[',']','(', ')', '{','}', '>','<','=',':','-'};
+const char SYMBOLS[18] = {'+', ',','&', '*', ';', '!', '.', '[',']','(', ')', '{','}', '>','<','=',':','-'};
 Lexer::Lexer() {
 
     DFA dfa = DFA();
@@ -18,7 +18,7 @@ Lexer::Lexer() {
     dfa.addState(State(2,false, false));
     dfa.addState(State(3,false, false));
     dfa.addState(State(4, true, true));
-    dfa.addState(State(5,false,true));
+    dfa.addState(State(5,false,false));
     //Invalid char state
     dfa.addState(State(-1, false, true));
     // EOF State
@@ -35,11 +35,12 @@ Lexer::Lexer() {
     dfa.addState(State(14, false, false));
     dfa.addState(State(15, false, false));
     dfa.addState(State(16, false, false));
-    dfa.addState(State(17, false, true));
+    dfa.addState(State(17, false, false));
     dfa.addState(State(18, true, true));
     dfa.addState(State(19, false, false));
 
     //single punc states
+    dfa.addState(State(20, false, true));
     dfa.addState(State(20, false, true));
     dfa.addState(State(22, false, true));
     dfa.addState(State(23, false, true));
@@ -71,7 +72,8 @@ Lexer::Lexer() {
     dfa.addState(State(48, false, true));
     dfa.addState(State(49, false, true));
 
-
+    dfa.addState(State(50, true, true ));
+    dfa.addState(State(51, true, true ));
 
 //State 1 transition functions
 //int
@@ -88,10 +90,9 @@ Lexer::Lexer() {
         dfa.addTransition(8, 1, i);
     }
 
-    //to float
-
 //single punk
     dfa.addTransition(20, 1, '+');
+    dfa.addTransition(21, 1, ',');
     dfa.addTransition(22, 1, '&');
     dfa.addTransition(23, 1, '|');
     dfa.addTransition(24, 1, '!');
@@ -112,8 +113,7 @@ Lexer::Lexer() {
     dfa.addTransition(46, 1, '-');
 
 //invalid transitions
-    dfa.addTransition(-1, 1, '_');
-
+    dfa.addTransition(17, 1, '_');
     //space
     dfa.addTransition(1,1, ' ');
     //return
@@ -134,7 +134,7 @@ Lexer::Lexer() {
 
     dfa.addTransition(9,8, ' ');
     for (const char &c: SYMBOLS){
-        dfa.addTransition(4,2, c);
+        dfa.addTransition(9,8, c);
     }
     dfa.addTransition(10, 3, '.');
     dfa.addTransition(10,2,'.');
@@ -158,7 +158,27 @@ Lexer::Lexer() {
     dfa.addTransition(5, 3, '_');
     //dfa.addTransition(6,1,'\r');
 //state 5
-    dfa.addTransition(1,5, ' ');
+    dfa.addTransition(1,5, ' '); //TODO what the fuck is this
+
+    //Panik
+    for (char i = 'a'; i<= 'z'; ++i ){
+        dfa.addTransition(5, 5, i);
+    }
+    for (char i = 'A'; i<= 'Z'; ++i ){
+        dfa.addTransition(5, 5, i);
+    }
+    for (char i = '0'; i < '9'; ++i) {
+        dfa.addTransition(5, 5, i);
+    }
+    dfa.addTransition(17, 5, '.');
+    //kalm
+    for (const char &c: SYMBOLS){
+        if (c != '.') {
+            dfa.addTransition(50, 5, c);
+        }
+    }
+    dfa.addTransition(50, 5, '\n');
+
     //state 6
     dfa.addTransition(1,4, ' ');
 
@@ -170,12 +190,15 @@ Lexer::Lexer() {
         dfa.addTransition(8, 8, i);
     }
     for (char i = '0'; i < '9'; ++i) {
-        dfa.addTransition(8, 8, '0');
+        dfa.addTransition(8, 8, i);
     }
 
     dfa.addTransition(8, 8, '_');
-
     dfa.addTransition(9, 8, '\n');
+    for (const char &c: SYMBOLS){
+        dfa.addTransition(9, 8, c);
+    }
+
 
     // Float
     dfa.addTransition(11, 10, '0');
@@ -186,6 +209,16 @@ Lexer::Lexer() {
     for (char i = '0'; i<= '9' ; ++i) {
         dfa.addTransition(12, 11, i);
     }
+    // float with a single zero accept on symbol
+    for (const char &c: SYMBOLS){
+        dfa.addTransition(11, 18, c);
+    }
+
+   //float with single digit to accept on symbol
+    for (const char &c: SYMBOLS){
+        dfa.addTransition(12, 18, c);
+    }
+    dfa.addTransition(12, 18, '\n');
     // dfa.addTransition(18, 12, '\n'); //TODO add more accept character
     for (char i = '1'; i<= '9' ; ++i) {
         dfa.addTransition(13, 12, i);
@@ -203,6 +236,26 @@ Lexer::Lexer() {
 
     dfa.addTransition(15, 14, '+');
     dfa.addTransition(15, 14, '-');
+   // panik
+    for (char i = '0'; i<= '9' ; ++i) {
+        dfa.addTransition(17, 14, i);
+    }
+    for (char i = 'A'; i<= 'Z' ; ++i) {
+        dfa.addTransition(17, 14, i);
+    }
+    for (char i = 'a'; i<= 'z' ; ++i) {
+        dfa.addTransition(17, 14, i);
+    }
+    for (const char &c: SYMBOLS) {
+        if (c != '+' && c !='-'){
+            dfa.addTransition(51, 14, c);
+        }
+        dfa.addTransition(51, 14, ' ');
+        dfa.addTransition(51, 14, '\n');
+    }
+
+
+
 //TODO fill in the transistions
     dfa.addTransition(17, 15, '0');//invlaid
 
@@ -222,15 +275,39 @@ Lexer::Lexer() {
     //punk trans
     dfa.addTransition(34, 33, '\n');//EXPAND
     dfa.addTransition(35, 33, '=');
+
     dfa.addTransition(37, 36, '\n');
     dfa.addTransition(38, 36, '>');
     dfa.addTransition(39, 36, '=');
+
     dfa.addTransition(41, 40, '\n');
     dfa.addTransition(42, 40, '=');
+
     dfa.addTransition(44, 43, '\n');
+    dfa.addTransition(44, 43, ' ');
     dfa.addTransition(45, 43, ':');
+
     dfa.addTransition(47, 46, '\n');
     dfa.addTransition(48, 46, '>');
+//Panik
+    for (char i = 'a'; i<= 'z'; ++i ){
+        dfa.addTransition(17, 17, i);
+    }
+    for (char i = 'A'; i<= 'Z'; ++i ){
+        dfa.addTransition(17, 17, i);
+    }
+    dfa.addTransition(17, 17, '.');
+    for (char i = '0'; i < '9'; ++i) {
+            dfa.addTransition(17, 17, i);
+    }
+
+    //kalm
+    for (const char &c: SYMBOLS){
+        if (c != '.') {
+            dfa.addTransition(51, 17, c);
+        }
+    }
+    dfa.addTransition(51, 17, '\n');
 
 
 // creating state and alphabet vectors
@@ -341,9 +418,9 @@ char lookUp{};
 int line{};
 while (token.isEmpty()){
     lookUp = nextChar();
-    //if (lookUp == ' '){
-      //  continue;
-    //}
+    if (lookUp == '\t'){
+        continue;
+    }
     state = tableLookUp(state, lookUp);
     lex.push_back(lookUp);
     if (isFinal(state)){
@@ -357,6 +434,7 @@ while (token.isEmpty()){
                 line = this->lineNumber;
             }
             lex.pop_back();
+            --charPosition;
         }
         else {
             line = this->lineNumber;

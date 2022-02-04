@@ -16,9 +16,9 @@ private:
     bool isError;
     bool isNull;
    const std::unordered_map<int, std::string> error_types = {
-           {5, "invalid_integer"},
+           {50, "invalid_integer"},
            {-1, "invalid_character"},
-           {17, "invalid_float"},
+           {51, "invalid_float"},
 
    };
     const std::unordered_map<int, std::string> type_lookup = {
@@ -28,6 +28,7 @@ private:
             {18, "float"},
             //Start Here
             {20, "plus"},
+            {21, "comma"},
             {22, "and"},
             {23, "or"},
             {24, "not"},
