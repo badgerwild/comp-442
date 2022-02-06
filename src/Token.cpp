@@ -37,7 +37,15 @@ void Token::create(std::string lex, int type, int number) {
     else {
         tokenType = tempType;
     }
-    lexeme = lex;
+    if (tokenType == "cmt"){
+        lexeme = "cmt";
+    }
+    else if (tokenType =="invalid_cmt") {
+        lexeme = "invalid_cmt";
+    }
+    else {
+        lexeme = lex;
+    }
     lineNumber = number;
     isNull = false;
 }

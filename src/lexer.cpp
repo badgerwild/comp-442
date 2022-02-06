@@ -3,14 +3,18 @@
 //
 #include <iostream>
 #include <fstream>
+#include <unordered_set>
 #include "lexer.h"
 #include "../DFA/indexTemplate.h"
+
 #include "../DFA/DFA.h"
 const int FINAL = -2;
 const int NOTFINAL = -3;
 const int BACKTRACK = -4;
 const int NORMAL = -5;
-const char SYMBOLS[18] = {'+', ',','&', '*', ';', '!', '.', '[',']','(', ')', '{','}', '>','<','=',':','-'};
+const char SYMBOLS[19] = {'+', ',','&', '*', ';', '!', '.', '[',']','(', ')', '{','}', '>','<','=',':','-', '/'};
+const std::unordered_set<char> NOTADD{'\t', ' '};
+
 Lexer::Lexer() {
 
     DFA dfa = DFA();
@@ -41,7 +45,7 @@ Lexer::Lexer() {
 
     //single punc states
     dfa.addState(State(20, false, true));
-    dfa.addState(State(20, false, true));
+    dfa.addState(State(21, false, true));
     dfa.addState(State(22, false, true));
     dfa.addState(State(23, false, true));
     dfa.addState(State(24, false, true));
@@ -71,16 +75,24 @@ Lexer::Lexer() {
     dfa.addState(State(47, true, true));
     dfa.addState(State(48, false, true));
     dfa.addState(State(49, false, true));
-
+//invlaid ID states
     dfa.addState(State(50, true, true ));
     dfa.addState(State(51, true, true ));
-
+    dfa.addState(State(52, false, false));
+    dfa.addState(State(53, true, true));
+    dfa.addState(State(54, false, false));
+    dfa.addState(State(55, false, false));
+    dfa.addState(State(56, false, false));
+    dfa.addState(State(57, false, true));
+    dfa.addState(State(58, false, false));
+    dfa.addState(State(59, false, true));
+    dfa.addState(State(60, true, true));
+    dfa.addState(State(61, false, true));
 //State 1 transition functions
 //int
     for(char i = '1'; i<='9';++i){
         dfa.addTransition(2,1, i);
     }
-
     dfa.addTransition(3,1, '0');
     // to id
     for (char i = 'a'; i<= 'z'; ++i ){
@@ -111,11 +123,13 @@ Lexer::Lexer() {
     dfa.addTransition(40, 1, '=');
     dfa.addTransition(43, 1, ':');
     dfa.addTransition(46, 1, '-');
+    dfa.addTransition(54,1,'/');
 
 //invalid transitions
-    dfa.addTransition(17, 1, '_');
+    dfa.addTransition(52, 1, '_');
     //space
     dfa.addTransition(1,1, ' ');
+    dfa.addTransition(1,1, '\t');
     //return
     dfa.addTransition(6,1,'\r');
     // state 2 transition functions
@@ -124,6 +138,7 @@ Lexer::Lexer() {
         dfa.addTransition(2,2, i);
     }
     dfa.addTransition(4,2, ' ');
+    dfa.addTransition(4,2, '\t');
     dfa.addTransition(4,2,'\r');
     dfa.addTransition(4,2, '\n');
 //Any
@@ -133,6 +148,7 @@ Lexer::Lexer() {
     }
 
     dfa.addTransition(9,8, ' ');
+    dfa.addTransition(9,8, '\t');
     for (const char &c: SYMBOLS){
         dfa.addTransition(9,8, c);
     }
@@ -153,11 +169,13 @@ Lexer::Lexer() {
         dfa.addTransition(5,3, i);
     }
     dfa.addTransition(4,3, ' ');
+    dfa.addTransition(4,3, '\t');
     dfa.addTransition(10,3,'.');
 
     dfa.addTransition(5, 3, '_');
     //dfa.addTransition(6,1,'\r');
 //state 5
+    dfa.addTransition(1,5, '\t');
     dfa.addTransition(1,5, ' '); //TODO what the fuck is this
 
     //Panik
@@ -181,6 +199,7 @@ Lexer::Lexer() {
 
     //state 6
     dfa.addTransition(1,4, ' ');
+    dfa.addTransition(1,4, '\t');
 
     //state 8
     for (char i = 'a'; i<= 'z'; ++i ){
@@ -198,14 +217,12 @@ Lexer::Lexer() {
     for (const char &c: SYMBOLS){
         dfa.addTransition(9, 8, c);
     }
-
-
     // Float
     dfa.addTransition(11, 10, '0');
     for (char i = '1'; i<= '9' ; ++i) {
         dfa.addTransition(12, 10, i);
     }
-    dfa.addTransition(18, 11, '\n'); //TODO add more accept character
+    dfa.addTransition(18, 11, '\n');
     for (char i = '0'; i<= '9' ; ++i) {
         dfa.addTransition(12, 11, i);
     }
@@ -219,7 +236,6 @@ Lexer::Lexer() {
         dfa.addTransition(12, 18, c);
     }
     dfa.addTransition(12, 18, '\n');
-    // dfa.addTransition(18, 12, '\n'); //TODO add more accept character
     for (char i = '1'; i<= '9' ; ++i) {
         dfa.addTransition(13, 12, i);
     }
@@ -233,7 +249,6 @@ Lexer::Lexer() {
     for (char i = '1'; i<= '9' ; ++i) {
         dfa.addTransition(13, 13, i);
     }
-
     dfa.addTransition(15, 14, '+');
     dfa.addTransition(15, 14, '-');
    // panik
@@ -251,12 +266,10 @@ Lexer::Lexer() {
             dfa.addTransition(51, 14, c);
         }
         dfa.addTransition(51, 14, ' ');
+        dfa.addTransition(51,14, '\t');
         dfa.addTransition(51, 14, '\n');
     }
 
-
-
-//TODO fill in the transistions
     dfa.addTransition(17, 15, '0');//invlaid
 
     for (char i = '1'; i<= '9' ; ++i) {
@@ -273,22 +286,37 @@ Lexer::Lexer() {
         dfa.addTransition(13, 19, i);
     }
     //punk trans
-    dfa.addTransition(34, 33, '\n');//EXPAND
+    dfa.addTransition(34, 33, '\n');
+    dfa.addTransition(34, 33, '\t');
+    dfa.addTransition(34, 33, ' ');
+
+
     dfa.addTransition(35, 33, '=');
 
     dfa.addTransition(37, 36, '\n');
+    dfa.addTransition(37, 36, '\t');
+    dfa.addTransition(37, 36, ' ');
+
     dfa.addTransition(38, 36, '>');
     dfa.addTransition(39, 36, '=');
 
     dfa.addTransition(41, 40, '\n');
+    dfa.addTransition(41, 40, '\t');
+    dfa.addTransition(41, 40, ' ');
     dfa.addTransition(42, 40, '=');
 
     dfa.addTransition(44, 43, '\n');
     dfa.addTransition(44, 43, ' ');
+    dfa.addTransition(44,43, '\t');
     dfa.addTransition(45, 43, ':');
 
     dfa.addTransition(47, 46, '\n');
+    dfa.addTransition(47, 46, '\t');
+    dfa.addTransition(47, 46, ' ');
     dfa.addTransition(48, 46, '>');
+
+
+
 //Panik
     for (char i = 'a'; i<= 'z'; ++i ){
         dfa.addTransition(17, 17, i);
@@ -308,6 +336,119 @@ Lexer::Lexer() {
         }
     }
     dfa.addTransition(51, 17, '\n');
+    dfa.addTransition(52, 1, '_');
+    dfa.addTransition(52, 52, '_');
+    //Panik
+    for (char i = 'a'; i<= 'z'; ++i ){
+        dfa.addTransition(52, 52, i);
+    }
+    for (char i = 'A'; i<= 'Z'; ++i ){
+        dfa.addTransition(52, 52, i);
+    }
+    for (char i = '0'; i < '9'; ++i) {
+        dfa.addTransition(52, 52, i);
+    }
+
+    //kalm
+    for (const char &c: SYMBOLS){
+            dfa.addTransition(53, 52, c);
+    }
+    dfa.addTransition(53, 52, '\n');
+    dfa.addTransition(53, 52, '\r');
+// comments
+    dfa.addTransition(58, 54, '/');
+    for (char i = 'a'; i<= 'z'; ++i ){
+        dfa.addTransition(58, 58, i);
+    }
+    for (char i = 'A'; i<= 'Z'; ++i ){
+        dfa.addTransition(58, 58, i);
+    }
+    for (char i = '0'; i < '9'; ++i) {
+
+        dfa.addTransition(58, 58, i);
+
+    }
+    for (const char &c: SYMBOLS) {
+        dfa.addTransition(58, 58, c);
+    }
+    dfa.addTransition(58, 58, '\t');
+    dfa.addTransition(58, 58, ' ');
+    dfa.addTransition(59, 58, '\n');
+    dfa.addTransition(59, 58, '\r');
+
+
+// Multi line comments:
+    dfa.addTransition(55, 54, '*');
+    for (char i = 'a'; i<= 'z'; ++i ){
+        dfa.addTransition(55, 55, i);
+    }
+    for (char i = 'A'; i<= 'Z'; ++i ){
+        dfa.addTransition(55, 55, i);
+    }
+    for (char i = '0'; i < '9'; ++i) {
+        dfa.addTransition(55, 55, i);
+
+    }
+    for (const char &c: SYMBOLS) {
+        if (c != '*') {
+            dfa.addTransition(55, 55, c);
+        }
+    }
+    dfa.addTransition(55, 55, '\t');
+    dfa.addTransition(55, 55, ' ');
+    dfa.addTransition(55, 55, '\n');
+
+    dfa.addTransition(56, 55, '*');
+    dfa.addTransition(57, 56, '/');
+
+
+//comments that continue after a *
+    for (char i = 'a'; i<= 'z'; ++i ){
+        dfa.addTransition(55, 56, i);
+    }
+    for (char i = 'A'; i<= 'Z'; ++i ){
+        dfa.addTransition(55, 56, i);
+    }
+    for (char i = '0'; i < '9'; ++i) {
+
+        dfa.addTransition(55, 56, i);
+
+    }
+    for (const char &c: SYMBOLS) {
+        if (c != '*' && c!= '/') {
+            dfa.addTransition(55, 56, c);
+        }
+    }
+    dfa.addTransition(56, 56, '*');
+    dfa.addTransition(55, 56, '\t');
+    dfa.addTransition(55, 56, ' ');
+    dfa.addTransition(55, 56, '\n');
+
+
+    dfa.addTransition(61, 56, '\r');
+    dfa.addTransition(61, 55, '\r');
+
+
+    //div
+    for (char i = 'a'; i<= 'z'; ++i ){
+        dfa.addTransition(60, 54, i);
+    }
+    for (char i = 'A'; i<= 'Z'; ++i ){
+        dfa.addTransition(60, 54, i);
+    }
+    for (char i = '0'; i < '9'; ++i) {
+
+            dfa.addTransition(60, 54, i);
+
+    }
+    for (const char &c: SYMBOLS){
+        if( c != '/' && c!= '*') {
+            dfa.addTransition(60, 54, c);
+    }
+    }
+    dfa.addTransition(60, 54, '\n');
+    dfa.addTransition(60, 54, '\t');
+    dfa.addTransition(60, 54, ' ');
 
 
 // creating state and alphabet vectors
@@ -359,6 +500,8 @@ void Lexer::readFile() {
         std::cout<< "file not found";
     }
     programFile.close();
+    //replaces last '\n' with a '\r'
+    lineStorage[lineStorage.size()-1][lineStorage[lineStorage.size()-1].size()-1] = '\r';
     this->program = lineStorage;
 }
 int Lexer::tableLookUp(int state, char input) {
@@ -418,11 +561,14 @@ char lookUp{};
 int line{};
 while (token.isEmpty()){
     lookUp = nextChar();
-    if (lookUp == '\t'){
+    if (lookUp == '\000'){
         continue;
     }
     state = tableLookUp(state, lookUp);
-    lex.push_back(lookUp);
+    //if (lookUp != ' ') {
+    if (NOTADD.find(lookUp) == NOTADD.end()) {
+        lex.push_back(lookUp);
+    }
     if (isFinal(state)){
         type = state;
         if (backTrack(state)){
@@ -433,8 +579,12 @@ while (token.isEmpty()){
             else{
                 line = this->lineNumber;
             }
-            lex.pop_back();
-            --charPosition;
+            if (NOTADD.find(lookUp) == NOTADD.end()) {
+                lex.pop_back();
+            }
+            if (lookUp != '\r') {
+                --charPosition;
+            }
         }
         else {
             line = this->lineNumber;

@@ -19,6 +19,8 @@ private:
            {50, "invalid_integer"},
            {-1, "invalid_character"},
            {51, "invalid_float"},
+           {53, "invalid_id"},
+           {61, "invalid_cmt"}
 
    };
     const std::unordered_map<int, std::string> type_lookup = {
@@ -26,7 +28,6 @@ private:
             {6, "EOF"},
             {9, "id"},
             {18, "float"},
-            //Start Here
             {20, "plus"},
             {21, "comma"},
             {22, "and"},
@@ -52,6 +53,9 @@ private:
             {47, "minus"},
             {48, "arrow"},
             {49, "mul"},
+            {60,"div"},
+            {57, "cmt"},
+            {59, "cmt"}
     };
     const std::unordered_map<std::string, std::string> reserve_words = {
             {"if", "if"},
