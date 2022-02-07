@@ -12,7 +12,7 @@ const int FINAL = -2;
 const int NOTFINAL = -3;
 const int BACKTRACK = -4;
 const int NORMAL = -5;
-const char SYMBOLS[19] = {'+', ',','&', '*', ';', '!', '.', '[',']','(', ')', '{','}', '>','<','=',':','-', '/'};
+const char SYMBOLS[20] = {'|','+', ',','&', '*', ';', '!', '.', '[',']','(', ')', '{','}', '>','<','=',':','-', '/'};
 const std::unordered_set<char> NOTADD{'\t', ' '};
 
 Lexer::Lexer() {
@@ -171,6 +171,12 @@ Lexer::Lexer() {
     dfa.addTransition(4,3, ' ');
     dfa.addTransition(4,3, '\t');
     dfa.addTransition(10,3,'.');
+    for (const char &c: SYMBOLS){
+        if (c!= '.') {
+            dfa.addTransition(4, 3, c);
+        }
+    }
+
 
     dfa.addTransition(5, 3, '_');
     //dfa.addTransition(6,1,'\r');
@@ -228,14 +234,14 @@ Lexer::Lexer() {
     }
     // float with a single zero accept on symbol
     for (const char &c: SYMBOLS){
-        dfa.addTransition(11, 18, c);
+        dfa.addTransition(18, 11, c);
     }
 
    //float with single digit to accept on symbol
     for (const char &c: SYMBOLS){
-        dfa.addTransition(12, 18, c);
+        dfa.addTransition(18, 12, c);
     }
-    dfa.addTransition(12, 18, '\n');
+    dfa.addTransition(18, 12, '\n');
     for (char i = '1'; i<= '9' ; ++i) {
         dfa.addTransition(13, 12, i);
     }
@@ -299,6 +305,15 @@ Lexer::Lexer() {
 
     dfa.addTransition(38, 36, '>');
     dfa.addTransition(39, 36, '=');
+    for (char i = '1'; i<= '9';++i){
+        dfa.addTransition(37, 36, i);
+    }
+    for (char i = 'a'; i<= 'z';++i){
+        dfa.addTransition(37, 36, i);
+    }
+    for (char i = 'A'; i<= 'Z';++i){
+        dfa.addTransition(37, 36, i);
+    }
 
     dfa.addTransition(41, 40, '\n');
     dfa.addTransition(41, 40, '\t');
@@ -315,7 +330,15 @@ Lexer::Lexer() {
     dfa.addTransition(47, 46, ' ');
     dfa.addTransition(48, 46, '>');
 
-
+    for (char i = '1'; i<= '9';++i){
+        dfa.addTransition(47, 46, i);
+    }
+    for (char i = 'a'; i<= 'z';++i){
+        dfa.addTransition(47, 46, i);
+    }
+    for (char i = 'A'; i<= 'Z';++i){
+        dfa.addTransition(47, 46, i);
+    }
 
 //Panik
     for (char i = 'a'; i<= 'z'; ++i ){
@@ -513,6 +536,15 @@ int Lexer::tableLookUp(int state, char input) {
     }
     else {
         newState = lookUpTable[stateIndex][charIndex];
+    }
+    if (newState == -1 && state == 55) {
+        newState = 55;
+    }
+    else if(newState == -1 && state ==58 ) {
+        newState = 58;
+    }
+    else if (newState == -1 && state == 56){
+        newState = 55;
     }
     return newState;
 }
