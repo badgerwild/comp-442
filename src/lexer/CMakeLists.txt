@@ -5,14 +5,12 @@ file(GLOB SOURCES
         Token.h
         lexer.cpp
         lexer.h
-        ../DFA/DFA.cpp
-        ../DFA/DFA.h
-        Formula.cpp
-        Formula.h
+        ../../DFA/DFA.cpp
+        ../../DFA/DFA.h
         lexdriver.cpp
         )
 set(SOURCES ${SOURCES})
 
-add_executable(${BINARY}_run ${SOURCES})
+add_executable(${BINARY}_lexer ${SOURCES})
 
 add_library(${BINARY}_lib STATIC ${SOURCES})

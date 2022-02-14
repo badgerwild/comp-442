@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "../DFA/DFA.h"
+#include "../../DFA/DFA.h"
 #include "lexer.h"
 
 using namespace std;
@@ -12,7 +12,7 @@ int main(){
     //LEXER SETUP
     Lexer scanner = Lexer();
     //Lexer scanner = Lexer(states, alphabet, tableau);
-    string filePre ="/home/jason/collective/comp-442/comp-442/src/";
+    string filePre ="/home/jason/collective/comp-442/comp-442/src/lexer/";
     string fileName = "a";//change this for different input file
     string fileSuf = ".txt";
     scanner.addFile(filePre+fileName+ fileSuf);

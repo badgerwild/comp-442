@@ -5,9 +5,9 @@
 #include <fstream>
 #include <unordered_set>
 #include "lexer.h"
-#include "../DFA/indexTemplate.h"
+#include "../../DFA/indexTemplate.h"
 
-#include "../DFA/DFA.h"
+#include "../../DFA/DFA.h"
 const int FINAL = -2;
 const int NOTFINAL = -3;
 const int BACKTRACK = -4;

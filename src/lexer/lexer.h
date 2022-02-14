@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 #include "Token.h"
-#include "../DFA/DFA.h"
+#include "../../DFA/DFA.h"
 
 class Lexer{
 private:
