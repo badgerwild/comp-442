@@ -1,0 +1,59 @@
+nonterminal,follow set,nullable,endable
+START,∅,yes,yes
+ARRAYOPTION,semi lsqbr rpar comma,no,no
+ASSIGNOP,id intlit floatlit lpar not eq neq lt gt leq geq plus minus,no,no
+FUNCBODY,struct impl func rcurbr,no,yes
+FUNCHEAD,semi lcurbr,no,no
+FPARAMS,rpar,yes,no
+IDFACTOR,semi mult div and rsqbr plus minus or comma rpar,yes,no
+IDFACTOR1,semi mult div and rsqbr plus minus or comma rpar,yes,no
+IDNEST1,semi mult div and dot lpar lsqbr rsqbr plus minus or comma rpar,no,no
+APARAMS,rpar,yes,no
+FUNCDECL,rcurbr public private,no,no
+PROG,∅,yes,yes
+ARITHEXPR,semi rsqbr comma rpar,no,no
+RELOP,id intlit floatlit lpar not eq neq lt gt leq geq plus minus,no,no
+APARAMSTAIL,comma rpar,no,no
+REPTAPARAMS1,rpar,yes,no
+REPTFPARAMS3,rpar comma,yes,no
+FPARAMSTAIL,comma rpar,no,no
+REPTFPARAMS4,rpar,yes,no
+REPTFPARAMSTAIL4,comma rpar,yes,no
+REPTFUNCBODY1,rcurbr,yes,no
+IDNEST,semi mult div and dot lpar lsqbr rsqbr plus minus or comma rpar,no,no
+REPTFUNCTIONCALLORVARIABLE,semi mult div and lpar lsqbr rsqbr plus minus or comma rpar,yes,no
+REPTIDNEST1,dot,yes,no
+REPTIMPLDEF3,rcurbr,yes,no
+REPTOPTSTRUCTDECL22,lcurbr,yes,no
+REPTPROG0,∅,yes,yes
+MEMBERDECL,rcurbr public private,no,no
+ARRAYSIZE,semi lsqbr rpar comma,no,no
+INDICE,semi mult div and lsqbr dot rsqbr equal plus minus or comma rpar,no,no
+RETURNTYPE,semi lcurbr,no,no
+ADDOP,id intlit floatlit lpar not plus minus,no,no
+RIGHTRECARITHEXPR,semi rsqbr comma rpar,yes,no
+MULTOP,id intlit floatlit lpar not plus minus,no,no
+SIGN,id intlit floatlit lpar not plus minus,no,no
+REPTSTATBLOCK1,rcurbr,yes,no
+ASSIGNSTAT,semi,no,no
+RELEXPR,semi rsqbr comma rpar,no,no
+STATBLOCK,else semi,yes,no
+EXPR,semi comma rpar,no,no
+FUNCTIONCALL,semi mult div and rsqbr plus minus or comma rpar,no,no
+OPTSTRUCTDECL2,lcurbr,yes,no
+REPTSTRUCTDECL4,rcurbr,yes,no
+STRUCTORIMPLORFUNC,struct impl func,no,yes
+STRUCTDECL,struct impl func,no,yes
+IMPLDEF,struct impl func,no,yes
+FUNCDEF,struct impl func rcurbr,no,yes
+TERM,semi rsqbr plus minus or comma rpar,no,no
+FACTOR,semi mult div and rsqbr plus minus or comma rpar,no,no
+RIGHTRECTERM,semi rsqbr plus minus or comma rpar,yes,no
+TYPE,rpar lcurbr comma lsqbr semi,no,no
+REPTVARDECL4,semi,yes,no
+VARDECLORSTAT,let if while read write return lpar equal lsqbr rcurbr,no,no
+VARDECL,public private let if while read write return lpar equal lsqbr rcurbr,no,no
+STATEMENT,else semi let if while read write return lpar equal lsqbr rcurbr,no,no
+VARIABLE,semi mult div and rsqbr equal plus minus or comma rpar,yes,no
+REPTVARIABLE2,semi mult div and rsqbr equal plus minus or comma rpar,yes,no
+VISIBILITY,let func,no,no
