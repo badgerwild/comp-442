@@ -7,11 +7,14 @@
 
 int main() {
     using namespace std;
-   Parser test = Parser();
+
 
 
     cout <<"PARSER!!! " <<endl;
-    cout<< "beans" <<endl;
+    Parser test = Parser();
+    test.readSource("a.txt");
+    test.parse();
 
+    cout<< "beans" <<endl;
 
 }

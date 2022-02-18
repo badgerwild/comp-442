@@ -3,6 +3,70 @@
 //
 
 #include "Token.h"
+
+const std::unordered_map<int, std::string> ERROR_TYPES = {
+        {50, "invalid_integer"},
+        {-1, "invalid_character"},
+        {51, "invalid_float"},
+        {53, "invalid_id"},
+        {61, "invalid_cmt"}
+
+};
+const std::unordered_map<int, std::string> TYPE_LOOKUP = {
+        {4, "integer"},
+        {6, "EOF"},
+        {9, "id"},
+        {18, "float"},
+        {20, "plus"},
+        {21, "comma"},
+        {22, "and"},
+        {23, "or"},
+        {24, "not"},
+        {25, "semi"},
+        {26, "dot"},
+        {27, "lsqbr"},
+        {28, "rsqbr"},
+        {29, "rpar"},
+        {30, "lpar"},
+        {31, "lcurbr"},
+        {32, "rcurbr"},
+        {34, "gt"},
+        {35, "geq"},
+        {37, "lt"},
+        {38, "neq"},
+        {39, "leq"},
+        {41, "equal"},
+        {42, "eq"},
+        {44, "colon"},
+        {45, "coloncolon"},
+        {47, "minus"},
+        {48, "arrow"},
+        {49, "mult"},
+        {60,"div"},
+        {57, "cmt"},
+        {59, "cmt"}
+};
+const std::unordered_map<std::string, std::string>RESERVE_WORDS = {
+        {"if", "if"},
+        {"then", "then"},
+        {"else", "else"},
+        {"integer", "integer"},
+        {"float", "float"},
+        {"void", "void"},
+        {"public", "public"},
+        {"private", "private"},
+        {"func", "func"},
+        {"var", "var"},
+        {"struct", "struct"},
+        {"while", "while"},
+        {"read", "read"},
+        {"write", "write"},
+        {"return", "return"},
+        {"self", "self"},
+        {"inherits", "inherits"},
+        {"let", "let"},
+        {"impl", "impl"}
+};
 Token::Token() {
     isError = false;
     isNull = true;
@@ -20,19 +84,19 @@ void Token::create(std::string lex, int type, int number) {
     }
     //check if type is id and then look if it is a reserve word
     std::string tempType{};
-    if (!(type_lookup.find(type) == type_lookup.end())) {
-       tempType = type_lookup.at(type);
+    if (!(TYPE_LOOKUP.find(type) == TYPE_LOOKUP.end())) {
+       tempType = TYPE_LOOKUP.at(type);
     }
-    else if (!(error_types.find(type) == error_types.end())){
-        tempType = error_types.at(type);
+    else if (!(ERROR_TYPES.find(type) == ERROR_TYPES.end())){
+        tempType = ERROR_TYPES.at(type);
         this->isError = true;
     }
     else{
         tempType = "Final State error at state " +type;
         this->isError = true;
     }
-    if((tempType == "id") &&!(reserve_words.find(lex) == reserve_words.end())){
-        tokenType = reserve_words.at(lex);
+    if((tempType == "id") &&!(RESERVE_WORDS.find(lex) == RESERVE_WORDS.end())){
+        tokenType = RESERVE_WORDS.at(lex);
     }
     else {
         tokenType = tempType;
@@ -49,6 +113,7 @@ void Token::create(std::string lex, int type, int number) {
     lineNumber = number;
     isNull = false;
 }
+Token::Token(Token const&) = default;
 Token::~Token() {};
 std::string Token::getType() {
     return tokenType;
@@ -66,12 +131,18 @@ bool Token::isEOF() {
     return check;
 }
 
-
-
-
  std::ostream &operator<<(std::ostream &out, Token &T){
     out<<'['<<T.tokenType <<", "<<T.lexeme << ", " << T.lineNumber << ']';
     return out;
-
 }
+
+Token& Token::operator=(const Token &toAssign) {
+    lexeme = toAssign.lexeme;
+    tokenType = toAssign.tokenType;
+    lineNumber = toAssign.lineNumber;
+    isError = toAssign.isError;
+    isNull = toAssign.isNull;
+    return *this;
+}
+
 
