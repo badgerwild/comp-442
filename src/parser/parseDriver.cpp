@@ -12,7 +12,7 @@ int main() {
 
     cout <<"PARSER!!! " <<endl;
     Parser test = Parser();
-    test.readSource("a.txt");
+    test.readSource("b.txt");
     test.parse();
 
     cout<< "beans" <<endl;

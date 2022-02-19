@@ -118,6 +118,10 @@ Token::~Token() {};
 std::string Token::getType() {
     return tokenType;
 }
+
+int Token::getLineNumber() {
+    return lineNumber;
+}
 bool Token::getIsError() {
     return isError;
 }
@@ -127,7 +131,7 @@ bool Token::isEmpty() {
 }
 
 bool Token::isEOF() {
-    bool check = (tokenType == "EOF");
+    bool check = (tokenType == "eof");
     return check;
 }
 

@@ -55,39 +55,43 @@ void Parser::parse(){
     parseStack.push_back("START");
     Token token;
     token = getNextToken();
-    std::cout<<token.getType() <<" ";
+//    std::cout<<token.getType() <<" ";
     //tip != to end
-    while(parseStack.back() != "$" ){
-       std::string topStack = parseStack.back();
+    while(parseStack.back() != "$" ) {
+        std::string topStack = parseStack.back();
+        if (token.getType() == "cmt") {
+            token = getNextToken();
+        }
 
-       if (topStack == token.getType()) {
-           parseStack.pop_back();
-           token = getNextToken();
-           std::cout<< token.getType() <<" " ;
-       }
-       else if (topStack == "&epsilon"){
-           parseStack.pop_back();
-       }
+        if (topStack == token.getType()) {
+            parseStack.pop_back();
+            token = getNextToken();
+            //std::cout<< token.getType() <<" " ;
+            log();
+           std::cout<<"Line number: " << token.getLineNumber() << " token :"<<token.getType()<<std::endl;
 
-       else{
-           int tokenIndex = find2dIndex<std::string>(topStack, parseTable, 'y');
-           int nonTerminalIndex = find2dIndex<std::string>(token.getType(), parseTable, 'x');
-           if (parseTable[tokenIndex][nonTerminalIndex] != "error"){
-               parseStack.pop_back();
-               std::string debugTemp = parseTable[tokenIndex][nonTerminalIndex]; //DEBUG
-               inverseRHSMultiPush(debugTemp);
-               //Push all items in the string to the stack in reverse order
-           }
-           else{
-               std::cout<<"error!!!!!!!" <<std::endl;
-           }
-       }
+        } else if (topStack == "&epsilon") {
+            parseStack.pop_back();
+        } else {
+            int tokenIndex = find2dIndex<std::string>(topStack, parseTable, 'y');
+            int nonTerminalIndex = find2dIndex<std::string>(token.getType(), parseTable, 'x');
+            if (parseTable[tokenIndex][nonTerminalIndex] != "error") {
+                parseStack.pop_back();
+                std::string debugTemp = parseTable[tokenIndex][nonTerminalIndex]; //DEBUG
+                inverseRHSMultiPush(debugTemp);
+                //Push all items in the string to the stack in reverse order
+            } else {
+                std::cout << "error!!!!!!!" << std::endl;
+            }
+        }
+    }
         if (false) {
             std::cout<<"Panik" <<std::endl;
         }
         else
-            std::cout <<" " <<std::endl;
-    }
+
+           std::cout <<"true" <<std::endl;
+
 }
 
 std::vector<std::string> Parser::whitespace_split(const std::string &str) {
@@ -101,6 +105,15 @@ void Parser::inverseRHSMultiPush(std::string rules) {
     for(int i = recStack.size()-1; i>1; --i){
         parseStack.push_back(recStack[i]);
     }
+}
+
+void Parser::log() {
+ for (std::string &s: parseStack ) {
+     std::cout<< "[ " <<s <<"] ";
+ }
+ std::cout<<"-->"<<std::endl;
+
+
 }
 
 
