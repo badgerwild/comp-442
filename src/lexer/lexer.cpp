@@ -318,6 +318,7 @@ Lexer::Lexer() {
     dfa.addTransition(41, 40, '\n');
     dfa.addTransition(41, 40, '\t');
     dfa.addTransition(41, 40, ' ');
+    dfa.addTransition(41, 40, '(');
     dfa.addTransition(42, 40, '=');
 
     dfa.addTransition(44, 43, '\n');

@@ -78,6 +78,11 @@ bool Parser::parse(){
         if (token.getType() == "cmt") {
             token = getNextToken();
         }
+        if (token.getType() == "eof"){
+            parseStack.push_back("$");
+            outPut[0]<< "eof";
+            //token = getNextToken();
+        }
         if ((terminals.find(topStack)!= terminals.end()) ||(topStack == "&epsilon")) {
             if (topStack == token.getType()) {
                 parseStack.pop_back();
@@ -100,7 +105,14 @@ bool Parser::parse(){
         else {
             int tokenIndex = find2dIndex<std::string>(topStack, parseTable, 'y');
             int nonTerminalIndex = find2dIndex<std::string>(token.getType(), parseTable, 'x');
-            if (parseTable[tokenIndex][nonTerminalIndex] != "error") {
+            if ((tokenIndex == ERROR) || (nonTerminalIndex == ERROR)) {
+                //Error logging
+                outPut[1]<< "Invalid Token at line: " << token.getLineNumber()<<" Token type: "<<token.getType()<< " Token value: " <<token.getLexeme() <<std::endl;
+                //skipError();
+                token = getNextToken();
+                success = false;
+            }
+            else if ((parseTable[tokenIndex][nonTerminalIndex] != " ")) {
                 parseStack.pop_back();
                 std::string debugTemp = parseTable[tokenIndex][nonTerminalIndex]; //DEBUG
                 inverseRHSMultiPush(debugTemp);
