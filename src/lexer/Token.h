@@ -26,6 +26,7 @@ public:
     void create(std::string lex, int type, int number);
     std::string getType();
     int getLineNumber();
+    std::string getLexeme();
     friend std::ostream &operator << (std::ostream &out, Token &T);
     Token& operator = (const Token &toAssign);
 };

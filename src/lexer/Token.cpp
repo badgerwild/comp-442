@@ -14,7 +14,7 @@ const std::unordered_map<int, std::string> ERROR_TYPES = {
 };
 const std::unordered_map<int, std::string> TYPE_LOOKUP = {
         {4, "integer"},
-        {6, "EOF"},
+        {6, "eof"},
         {9, "id"},
         {18, "float"},
         {20, "plus"},
@@ -73,7 +73,7 @@ Token::Token() {
 }
 void Token::create(std::string lex, int type, int number) {
     if(lex == "\r") {
-        lex = "EOF";
+        lex = "eof";
         number = -1;
     }
     if (lex[lex.size()-1] == '\n'){
@@ -124,6 +124,10 @@ int Token::getLineNumber() {
 }
 bool Token::getIsError() {
     return isError;
+}
+
+std::string Token::getLexeme() {
+    return lexeme;
 }
 
 bool Token::isEmpty() {

@@ -1,0 +1,10 @@
+func printArray() -> void
+{
+  let n integer
+  n = size;
+  #
+  while (<%) {
+    write(arr[i]);
+      i = i+1;
+  };
+}
