@@ -1,10 +1,10 @@
  func evaluate(x: float) -> float
-  {/*
+  {
     let result: float;
     let bean: integer;
     //id testing
     fish[1][2] = 5;
-    result.g.e = 0.0;*/
+    result.g.e = 0.0;
     dog(dean).a = 2;
     bean[r].this = 1;
     result = a * x + b;
