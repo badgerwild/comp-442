@@ -15,7 +15,7 @@ const string F = "class_func_etc";
 
 int main() {
     cout<< "Parser started " <<endl;
-    string file = F;
+    string file = S;
     Parser test = Parser(file);
     test.readSource();
     cout<<"****************************************************" <<endl;

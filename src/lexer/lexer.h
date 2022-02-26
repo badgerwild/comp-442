@@ -6,8 +6,11 @@
 #define COMP_442_LEXER_H
 #include <string>
 #include <vector>
+#include <memory>
 #include "Token.h"
-#include "../../DFA/DFA.h"
+#include "DFA/DFA.h"
+#include "logger/logSubject.h"
+#include "logger/lexerLogObservers.h"
 
 class Lexer{
 private:
@@ -19,10 +22,13 @@ private:
     std::vector<int> states;
     std::vector<char> inputs;
     std::vector<std::vector<int>> lookUpTable;
+    std::unique_ptr<lexerLogObservers> logObserver;
+    Logger* logger;
+
 
 public:
-    Lexer();
-    Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std::vector<int>> lookUpTable);
+    Lexer(Logger *logger_, std::string file);
+    //Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std::vector<int>> lookUpTable);
     ~Lexer();
     int getProgramSize();
     int getLineNumber();

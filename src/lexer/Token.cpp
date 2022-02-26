@@ -144,6 +144,11 @@ bool Token::isEOF() {
     return out;
 }
 
+std::string Token::toString() {
+    std::string temp = '['+tokenType+", " + lexeme + ", " + std::to_string(lineNumber)+ ']';
+    return temp;
+}
+
 Token& Token::operator=(const Token &toAssign) {
     lexeme = toAssign.lexeme;
     tokenType = toAssign.tokenType;

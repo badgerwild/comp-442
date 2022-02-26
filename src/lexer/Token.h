@@ -29,5 +29,6 @@ public:
     std::string getLexeme();
     friend std::ostream &operator << (std::ostream &out, Token &T);
     Token& operator = (const Token &toAssign);
+    std::string toString();
 };
 #endif //COMP_442_TOKEN_H

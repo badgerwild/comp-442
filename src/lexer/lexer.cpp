@@ -5,17 +5,21 @@
 #include <fstream>
 #include <unordered_set>
 #include "lexer.h"
-#include "../../DFA/indexTemplate.h"
+#include "DFA/indexTemplate.h"
+#include "DFA/DFA.h"
+#include "logger/logSubject.h"
+#include "logger/lexerLogObservers.h"
 
-#include "../../DFA/DFA.h"
 const int FINAL = -2;
 const int NOTFINAL = -3;
 const int BACKTRACK = -4;
 const int NORMAL = -5;
 const char SYMBOLS[20] = {'|','+', ',','&', '*', ';', '!', '.', '[',']','(', ')', '{','}', '>','<','=',':','-', '/'};
 const std::unordered_set<char> NOTADD{'\t', ' '};
+//string outFiles[2] = {fileName+".outlexerrors", fileName+".outlextokens"};
 
-Lexer::Lexer() {
+
+Lexer::Lexer(Logger *logger_, std::string file) {
 
     DFA dfa = DFA();
     dfa.addState(State(1,false, false));
@@ -485,15 +489,20 @@ Lexer::Lexer() {
     this->lookUpTable = tableau;
     this->lineNumber = 0;
     this->charPosition = 0;
+    this->fileName = file;
+    std::string outFiles[2] = {fileName+".outlexerrors", fileName+".outlextokens"};
+    this->logObserver =  std::make_unique<lexerLogObservers>(outFiles);
+    this->logger = logger_;
+    logger->subscribe(*logObserver);
 }
-
+/*
 Lexer::Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std::vector<int>> lookUpTable) {
     this->lineNumber = 0;
     this->states = states;
     this->inputs = inputs;
     this->lookUpTable = lookUpTable;
     this->charPosition = 0;
-}
+}*/
 
 Lexer::~Lexer() {}
 
@@ -630,5 +639,7 @@ while (token.isEmpty()){
         token.create(lex, type, line+1);
     }
 }
+    bool debugValue = token.getIsError();
+    logger->log(token.toString(), token.getIsError());
     return token;
 }

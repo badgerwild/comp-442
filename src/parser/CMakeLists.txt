@@ -6,8 +6,8 @@ file(GLOB SOURCES
         ../lexer/lexer.cpp
         ../lexer/Token.h
         ../lexer/Token.cpp
-        ../../DFA/DFA.cpp
-        ../../DFA/DFA.h
+        ../DFA/DFA.cpp
+        ../DFA/DFA.h
         parser.cpp
         parser.h
         parseDriver.cpp
