@@ -640,6 +640,6 @@ while (token.isEmpty()){
     }
 }
     bool debugValue = token.getIsError();
-    logger->log(token.toString(), token.getIsError());
+    logger->log(token.toString(), debugValue);
     return token;
 }

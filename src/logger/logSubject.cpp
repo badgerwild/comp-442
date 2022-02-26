@@ -8,5 +8,5 @@ Logger::Logger() = default;
 Logger::~Logger() = default;
 
 void Logger::log(std::string s, bool valid) {
-    notify(*this, s);
+    notify(*this, s, valid);
 }

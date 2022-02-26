@@ -14,9 +14,9 @@ class subject {
 private:
     std::vector<Observer<T>*> observers;
 public:
-    void notify(T& source, std::string& S) {
+    void notify(T& source, std::string& S, bool valid ) {
         for (auto o: observers) {
-            o->update(&source, S, false);
+            o->update(&source, S, valid);
         }
     }
 
