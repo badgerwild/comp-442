@@ -10,6 +10,9 @@ file(GLOB SOURCES
         logSubject.h
         lexerLogObservers.cpp
         lexerLogObservers.h
+        messageBuilder.h
+        parserLogObservers.cpp
+        parserLogObservers.h
         )
 set(SOURCES ${SOURCES} )
 add_executable(${BINARY}_logger ${SOURCES})

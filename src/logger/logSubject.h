@@ -6,13 +6,14 @@
 #define COMP_442_LOGSUBJECT_H
 #include <string>
 #include "subject.h"
+#include "messageBuilder.h"
 
 class Logger: public subject<Logger> {
 
 public:
     Logger();
     ~Logger();
-    void log(std::string s, bool valid);
+    void log(messageBuilder M);
 };
 
 #endif //COMP_442_LOGSUBJECT_H

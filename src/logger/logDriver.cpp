@@ -20,7 +20,7 @@ public:
 
     void set_s(string tee){
        this->s = tee;
-       notify(*this, tee);
+        notify(*this, tee);
 
     }
 };

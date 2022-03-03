@@ -8,14 +8,14 @@
 #include <vector>
 #include "observer.h"
 #include "logSubject.h"
-
-
+#include "messageBuilder.h"
 class lexerLogObservers : public Observer<Logger>{
 private:
-    std::ofstream output[2];
-    void update(Logger* _subject, const std::string& s, bool valid) override;
+    std::vector<std::shared_ptr<std::ofstream>> output;
+
+    void update(Logger *_subject, messageBuilder message) override;
 public:
-    lexerLogObservers(std::string files[]);
+    lexerLogObservers(std::vector<std::string> files);
     ~lexerLogObservers();
     //lexerLogObservers& operator =(const lexerLogObservers &toAssign);
 

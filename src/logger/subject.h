@@ -7,6 +7,8 @@
 #include <vector>
 #include <string>
 #include "observer.h"
+#include "messageBuilder.h"
+
 template <typename T> class Observer;
 
 template <typename T>
@@ -14,9 +16,9 @@ class subject {
 private:
     std::vector<Observer<T>*> observers;
 public:
-    void notify(T& source, std::string& S, bool valid ) {
+    void notify(T &source, messageBuilder M) {
         for (auto o: observers) {
-            o->update(&source, S, valid);
+            o->update(&source, M);
         }
     }
 

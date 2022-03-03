@@ -12,6 +12,23 @@
 #include "logger/logSubject.h"
 #include "logger/lexerLogObservers.h"
 
+class DfaSingleton {
+private:
+    DFA dfa;
+    //static std::shared_ptr<DfaSingleton> inst_;
+    DfaSingleton();
+    DfaSingleton(const DfaSingleton&);
+    DfaSingleton& operator=(const DfaSingleton);
+
+public:
+    static std::shared_ptr<DfaSingleton>& getInstance();
+    std::vector<int> getDfaState();
+    std::vector<char> getAlphabet();
+    std::vector<std::vector<int>> getTable(std::vector<int> alpha, std::vector<char> states);
+
+};
+
+
 class Lexer{
 private:
     std::string fileName;
@@ -27,9 +44,12 @@ private:
 
 
 public:
+    Lexer();
     Lexer(Logger *logger_, std::string file);
     //Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std::vector<int>> lookUpTable);
     ~Lexer();
+    Lexer(const Lexer &toCopy);
+    Lexer& operator=(const Lexer &toAssign);
     int getProgramSize();
     int getLineNumber();
     void dfaSetUp();

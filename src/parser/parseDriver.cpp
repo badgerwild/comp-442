@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include "parser.h"
+#include "../logger/logSubject.h"
 
 using namespace std;
 const string D = "short_demo";
@@ -16,7 +17,8 @@ const string F = "class_func_etc";
 int main() {
     cout<< "Parser started " <<endl;
     string file = S;
-    Parser test = Parser(file);
+   Logger theLogger{};
+    Parser test = Parser(&theLogger, file);
     test.readSource();
     cout<<"****************************************************" <<endl;
     if(test.parse()){

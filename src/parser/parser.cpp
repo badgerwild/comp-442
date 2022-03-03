@@ -10,10 +10,7 @@
 #include "parser.h"
 #include "DFA/indexTemplate.h"
 
-//using namespace Lexer;
-
-
-Parser::Parser(std::string src) : lexer(nullptr, nullptr) {
+Parser::Parser(Logger *logger_, std::string src) {
     parseTable = loadTable(PATH+PARSE+VERSION) ;
     //index 0 = non-terminal; 1 = first set; 2 = follow set
     firstFollow = loadTable(PATH + FOLLOW + VERSION);
@@ -24,16 +21,17 @@ Parser::Parser(std::string src) : lexer(nullptr, nullptr) {
             terminals.insert(s);
         }
     }
-    lexer = Lexer(nullptr, nullptr);
     sourceFile = src;
-    outFiles[0] = PATH+LOG+src+OUT;
-    outFiles[1] = PATH+LOG+src+ERR;
+    outFiles.push_back(PATH+LOG+src+OUT);
+    outFiles.push_back(PATH+LOG+src+ERR);
+    this->logObserver = std::make_unique<lexerLogObservers>(outFiles);
+    lexer = Lexer(logger, PATH+LOG+src);
 }
 
 Parser::~Parser() {}
 
 void Parser::readSource() {
-    lexer.addFile(PATH+sourceFile+SRCSUFFIX);
+   // lexer.addFile(PATH+sourceFile+SRCSUFFIX);
     lexer.readFile();
 }
 

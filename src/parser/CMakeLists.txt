@@ -11,6 +11,16 @@ file(GLOB SOURCES
         parser.cpp
         parser.h
         parseDriver.cpp
+        ../logger/subject.h
+        ../logger/subject.cpp
+        ../logger/observer.h
+        ../logger/observer.cpp
+        ../logger/logSubject.h
+        ../logger/logSubject.cpp
+        ../logger/lexerLogObservers.h
+        ../logger/lexerLogObservers.cpp
+        ../logger/parserLogObservers.h
+        ../logger/parserLogObservers.cpp
         )
 set(SOURCES ${SOURCES})
 add_executable(${BINARY}_parser ${SOURCES})

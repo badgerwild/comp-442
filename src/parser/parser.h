@@ -7,8 +7,11 @@
 #include <vector>
 #include <string>
 #include <unordered_set>
+#include <memory>
 #include "../lexer/lexer.h"
 #include "../lexer/Token.h"
+#include "../logger/parserLogObservers.h"
+#include "../logger/logSubject.h"
 const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/parser/";
 const std::string FOLLOW = "first_follow_v";
 const std::string PARSE = "parse_table_v";
@@ -27,9 +30,11 @@ private:
     Lexer lexer;
     std::vector<std::string> parseStack{};
     std::string sourceFile;
-    std::string outFiles[2];
+    std::vector<std::string> outFiles;
+    std::unique_ptr<lexerLogObservers> logObserver;
+    Logger* logger;
 public:
-    Parser(std::string src);
+    Parser(Logger *logger, std::string src);
     ~Parser();
     std::vector<std::vector<std::string>>loadTable(std::string fileName);
     void readSource();
