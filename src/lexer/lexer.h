@@ -39,13 +39,14 @@ private:
     std::vector<int> states;
     std::vector<char> inputs;
     std::vector<std::vector<int>> lookUpTable;
-    std::unique_ptr<lexerLogObservers> logObserver;
+    std::shared_ptr<lexerLogObservers> logObserver;
     Logger* logger;
 
 
 public:
     Lexer();
     Lexer(Logger *logger_, std::string file);
+    Lexer(Logger *logger_, std::shared_ptr<lexerLogObservers> logObserver, std::string file);
     //Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std::vector<int>> lookUpTable);
     ~Lexer();
     Lexer(const Lexer &toCopy);

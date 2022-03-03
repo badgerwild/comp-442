@@ -31,7 +31,7 @@ private:
     std::vector<std::string> parseStack{};
     std::string sourceFile;
     std::vector<std::string> outFiles;
-    std::unique_ptr<lexerLogObservers> logObserver;
+    std::shared_ptr<lexerLogObservers> logObserver;
     Logger* logger;
 public:
     Parser(Logger *logger, std::string src);

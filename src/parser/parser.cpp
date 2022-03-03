@@ -24,8 +24,9 @@ Parser::Parser(Logger *logger_, std::string src) {
     sourceFile = src;
     outFiles.push_back(PATH+LOG+src+OUT);
     outFiles.push_back(PATH+LOG+src+ERR);
-    this->logObserver = std::make_unique<lexerLogObservers>(outFiles);
-    lexer = Lexer(logger, PATH+LOG+src);
+    this->logObserver.reset(new lexerLogObservers(outFiles));
+    int temp = 0;
+    lexer = Lexer(logger_, logObserver, PATH+src);
 }
 
 Parser::~Parser() {}

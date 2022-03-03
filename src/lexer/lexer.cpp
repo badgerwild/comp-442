@@ -515,7 +515,7 @@ Lexer::Lexer(Logger *logger_, std::string file) {
     //id states
     dfa.addState(State(7, false, false));
     dfa.addState(State(8, false, false));
-    dfa.addState(State(9,true, true));
+    dfa.addState(State(9,true, true))
     //float states
     dfa.addState(State(10, false, false));
     dfa.addState(State(11, false, false));
@@ -974,7 +974,22 @@ Lexer::Lexer(Logger *logger_, std::string file) {
     this->charPosition = 0;
     this->fileName = file;
     std::vector<std::string> outFiles = {fileName+".outlexerrors", fileName+".outlextokens"};
-    this->logObserver =  std::make_unique<lexerLogObservers>(outFiles);
+    this->logObserver.reset(new lexerLogObservers(outFiles));
+    this->logger = logger_;
+    logger->subscribe(*logObserver);
+}
+
+Lexer::Lexer(Logger *logger_, std::shared_ptr<lexerLogObservers> logObserver, std::string file) {
+    std::shared_ptr<DfaSingleton> dfa = DfaSingleton::getInstance();
+    this->states = dfa->getDfaState();
+    this->inputs = dfa->getAlphabet();
+    this->lookUpTable = dfa->getTable(this->states, this->inputs);
+    this->lineNumber = 0;
+    this->charPosition = 0;
+    this->fileName = file;
+   // std::vector<std::string> outFiles = {fileName+".outlexerrors", fileName+".outlextokens"};
+    //this->logObserver =  std::make_unique<lexerLogObservers>(outFiles);
+    this->logObserver = logObserver;
     this->logger = logger_;
     logger->subscribe(*logObserver);
 }
@@ -991,7 +1006,7 @@ Lexer::Lexer(const Lexer &toCopy) {
     this->charPosition = 0;
     this->fileName = toCopy.fileName;
     std::vector<std::string> outFiles = {fileName+".outlexerrors", fileName+".outlextokens"};
-    this->logObserver =  std::make_unique<lexerLogObservers>(outFiles);
+    this->logObserver.reset( new lexerLogObservers(outFiles));
     this->logger = toCopy.logger;
     this->logger->subscribe(*logObserver);
 }
@@ -1026,7 +1041,7 @@ void Lexer::addFile(std::string file) {
 void Lexer::readFile() {
     std::string temp;
     std::vector<std::string> lineStorage;
-    std::ifstream programFile(this->fileName);
+    std::ifstream programFile(this->fileName+".txt");
     if (programFile.is_open()){
         while (getline(programFile, temp)){
             temp+= '\n';
