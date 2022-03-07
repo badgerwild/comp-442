@@ -7,15 +7,15 @@
 using namespace std;
 const string D = "short_demo";
 const string E = "short_err";
-const string B = "bubbleSort";
-const string S = "polynomial1";
+const string B = "bubble";
+const string S = "poly";
 const string V = "variableAndIdnest";
 const string X = "expression";
 const string F = "class_func_etc";
 
 int main() {
     cout<< "Parser started " <<endl;
-    string file = F;
+    string file = S;
     Parser test = Parser(file);
     test.readSource();
     cout<<"****************************************************" <<endl;

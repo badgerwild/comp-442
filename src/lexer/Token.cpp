@@ -13,10 +13,10 @@ const std::unordered_map<int, std::string> ERROR_TYPES = {
 
 };
 const std::unordered_map<int, std::string> TYPE_LOOKUP = {
-        {4, "integer"},
+        {4, "intlit"},
         {6, "eof"},
         {9, "id"},
-        {18, "float"},
+        {18, "floatlit"},
         {20, "plus"},
         {21, "comma"},
         {22, "and"},

@@ -630,5 +630,7 @@ while (token.isEmpty()){
         token.create(lex, type, line+1);
     }
 }
+//DEBUG
+//std::cout<< lineNumber<< std::endl;
     return token;
 }

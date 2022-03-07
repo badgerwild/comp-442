@@ -77,12 +77,16 @@ bool Parser::parse(){
         std::string topStack = parseStack.back();
         if (token.getType() == "cmt") {
             token = getNextToken();
+            //DEBUG
+            //std::cout<<token <<std::endl;
         }
+        /*
         if (token.getType() == "eof"){
             parseStack.push_back("$");
             outPut[0]<< "eof";
             //token = getNextToken();
         }
+         */
         if ((terminals.find(topStack)!= terminals.end()) ||(topStack == "&epsilon")) {
             if (topStack == token.getType()) {
                 parseStack.pop_back();
@@ -108,7 +112,7 @@ bool Parser::parse(){
             if ((tokenIndex == ERROR) || (nonTerminalIndex == ERROR)) {
                 //Error logging
                 outPut[1]<< "Invalid Token at line: " << token.getLineNumber()<<" Token type: "<<token.getType()<< " Token value: " <<token.getLexeme() <<std::endl;
-                //skipError();
+                skipError();
                 token = getNextToken();
                 success = false;
             }
