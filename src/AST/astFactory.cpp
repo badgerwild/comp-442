@@ -135,6 +135,54 @@ NodeFactory::NodeFactory() {
                      }
     );
 
+    factories.insert({"returnStat", []{
+                         auto returnStat = std::make_shared<InnerNode>();
+                         returnStat->setNumberOfChildren(1);
+                         returnStat->setType("returnStat");
+                         returnStat->setTypeOfChildren("expr");
+                         returnStat->setIsLeaf(false);
+                         return returnStat;
+                     }
+                     }
+    );
+    factories.insert({"getStat", []{
+                         auto getStat = std::make_shared<InnerNode>();
+                         getStat->setNumberOfChildren(1);
+                         getStat->setType("getStat");
+                         getStat->setTypeOfChildren("var");
+                         getStat->setIsLeaf(false);
+                         return getStat;
+                     }
+                     }
+    );
+    factories.insert({"ifStat", []{
+                         auto ifStat = std::make_shared<InnerNode>();
+                         ifStat->setNumberOfChildren(3);
+                         ifStat->setType("ifStat");
+                         ifStat->setTypeOfChildren("relExpr");
+                         ifStat->setTypeOfChildren("programBlock");
+                         ifStat->setTypeOfChildren("programBlock");
+                         ifStat->setIsLeaf(false);
+                         return ifStat;
+                     }
+                     }
+    );
+
+    factories.insert({"forStat", []{
+                         auto forStat = std::make_shared<InnerNode>();
+                         forStat->setNumberOfChildren(6);
+                         forStat->setType("forStat");
+                         forStat->setTypeOfChildren("type");
+                         forStat->setTypeOfChildren("id");
+                         forStat->setTypeOfChildren("expr");
+                         forStat->setTypeOfChildren("relExpr");
+                         forStat->setTypeOfChildren("assignStat");
+                         forStat->setTypeOfChildren("programBlock");
+                         forStat->setIsLeaf(false);
+                         return forStat;
+                     }
+                     }
+    );
     factories.insert({"addOp", []{
                          auto addOp = std::make_shared<InnerNode>();
                          addOp->setNumberOfChildren(2);
@@ -158,7 +206,149 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
+    factories.insert({"not", []{
+                         auto _not = std::make_shared<InnerNode>();
+                         _not->setNumberOfChildren(1);
+                         _not->setType("not");
+                         _not->setTypeOfChildren("factor");
+                         _not->setIsLeaf(false);
+                         return _not;
+                     }
+                     }
+    );
+    factories.insert({"sign", []{
+                         auto sign = std::make_shared<InnerNode>();
+                         sign->setNumberOfChildren(1);
+                         sign->setType("sign");
+                         sign->setTypeOfChildren("factor");
+                         sign->setIsLeaf(false);
+                         return sign;
+                     }
+                     }
+    );
+    factories.insert({"dot", []{
+                         auto dot = std::make_shared<InnerNode>();
+                         dot->setNumberOfChildren(2);
+                         dot->setType("dot");
+                         dot->setTypeOfChildren("dotParam");
+                         dot->setIsLeaf(false);
+                         return dot;
+                     }
+                     }
+    );
+    factories.insert({"dataMember", []{
+                         auto dataMember = std::make_shared<InnerNode>();
+                         dataMember->setNumberOfChildren(2);
+                         dataMember->setType("dataMember");
+                         dataMember->setTypeOfChildren("id");
+                         dataMember->setTypeOfChildren("indexList");
+                         dataMember->setIsLeaf(false);
+                         return dataMember;
+                     }
+                     }
+    );
 
+    factories.insert({"fCall", []{
+                         auto fCall = std::make_shared<InnerNode>();
+                         fCall->setNumberOfChildren(2);
+                         fCall->setType("fCall");
+                         fCall->setTypeOfChildren("id");
+                         fCall->setTypeOfChildren("aParams");
+                         fCall->setIsLeaf(false);
+                         return fCall;
+                     }
+                     }
+    );
+
+    factories.insert({"relExpr", []{
+                         auto relExpr = std::make_shared<InnerNode>();
+                         relExpr->setNumberOfChildren(3);
+                         relExpr->setType("relExpr");
+                         relExpr->setTypeOfChildren("expr");
+                         relExpr->setTypeOfChildren("relOp");
+                         relExpr->setIsLeaf(false);
+                         return relExpr;
+                     }
+                     }
+    );
+
+    factories.insert({"funcDecl", []{
+                         auto funcDecl = std::make_shared<InnerNode>();
+                         funcDecl->setNumberOfChildren(3);
+                         funcDecl->setType("funcDecl");
+                         funcDecl->setTypeOfChildren("type");
+                         funcDecl->setTypeOfChildren("id");
+                         funcDecl->setTypeOfChildren("fParamList");
+                         funcDecl->setIsLeaf(false);
+                         return funcDecl;
+                     }
+                     }
+    );
+    factories.insert({"fParam", []{
+                         auto fParam = std::make_shared<InnerNode>();
+                         fParam->setNumberOfChildren(3);
+                         fParam->setType("fParam");
+                         fParam->setTypeOfChildren("type");
+                         fParam->setTypeOfChildren("id");
+                         fParam->setTypeOfChildren("dimList");
+                         fParam->setIsLeaf(false);
+                         return fParam;
+                     }
+                     }
+    );
+
+    factories.insert({"inherList", []{
+                         auto inherList = std::make_shared<InnerNode>();
+                         inherList->setNumberOfChildren(NOLIMIT);
+                         inherList->setType("inherList");
+                         inherList->setTypeOfChildren("id");
+                         inherList->setIsLeaf(false);
+                         return inherList;
+                     }
+                     }
+    );
+    factories.insert({"scopeSpec", []{
+                         auto scopeSpec = std::make_shared<InnerNode>();
+                         scopeSpec->setNumberOfChildren(NOLIMIT);
+                         scopeSpec->setType("scopeSpec");
+                         scopeSpec->setTypeOfChildren("id");
+                         scopeSpec->setTypeOfChildren(EPSILON);
+                         scopeSpec->setIsLeaf(false);
+                         return scopeSpec;
+                     }
+                     }
+    );
+    factories.insert({"indexList", []{
+                         auto indexList = std::make_shared<InnerNode>();
+                         indexList->setNumberOfChildren(NOLIMIT);
+                         indexList->setType("indexList");
+                         indexList->setTypeOfChildren("arithExpr");
+                         indexList->setIsLeaf(false);
+                         return indexList;
+                     }
+                     }
+    );
+
+    factories.insert({"fParamList", []{
+                         auto fParamList = std::make_shared<InnerNode>();
+                         fParamList->setNumberOfChildren(NOLIMIT);
+                         fParamList->setType("fParamList");
+                         fParamList->setTypeOfChildren("fParam");
+                         fParamList->setIsLeaf(false);
+                         return fParamList;
+                     }
+                     }
+    );
+    factories.insert({"aParams", []{
+                         auto aParams = std::make_shared<InnerNode>();
+                         aParams->setNumberOfChildren(NOLIMIT);
+                         aParams->setType("aParams");
+                         aParams->setTypeOfChildren("expr");
+                         aParams->setIsLeaf(false);
+                         return aParams;
+                     }
+                     }
+    );
     factories.insert({"stat", []{
                          auto stat = std::make_shared<IntermediateInnerNode>();
                          stat->setNumberOfChildren(1);
@@ -171,6 +361,42 @@ NodeFactory::NodeFactory() {
                          stat->setTypeOfChildren("returnStat");
                          stat->setIsLeaf(false);
                          return stat;
+                     }
+                     }
+    );
+
+    factories.insert({"dotParam", []{
+                         auto dotParam = std::make_shared<IntermediateInnerNode>();
+                         dotParam->setNumberOfChildren(1);
+                         dotParam->setType("dotParam");
+                         dotParam->setTypeOfChildren("dataMember");
+                         dotParam->setTypeOfChildren("fCall");
+                         dotParam->setTypeOfChildren("dot");
+                         dotParam->setIsLeaf(false);
+                         return dotParam;
+                     }
+                     }
+    );
+    factories.insert({"membDecl", []{
+                         auto membDecl = std::make_shared<IntermediateInnerNode>();
+                         membDecl->setNumberOfChildren(1);
+                         membDecl->setType("membDecl");
+                         membDecl->setTypeOfChildren("varDecl");
+                         membDecl->setTypeOfChildren("funcDecl");
+                         membDecl->setIsLeaf(false);
+                         return membDecl;
+                     }
+                     }
+    );
+
+    factories.insert({"expr", []{
+                         auto expr= std::make_shared<IntermediateInnerNode>();
+                         expr->setNumberOfChildren(1);
+                         expr->setType("expr");
+                         expr->setTypeOfChildren("relExpr");
+                         expr->setTypeOfChildren("arithExpr");
+                         expr->setIsLeaf(false);
+                         return expr;
                      }
                      }
     );
@@ -193,6 +419,18 @@ NodeFactory::NodeFactory() {
                          term->setTypeOfChildren("factor");
                          term->setIsLeaf(false);
                          return term;
+                     }
+                     }
+    );
+
+    factories.insert({"starOrVarDecl", []{
+                         auto statOrVarDecl = std::make_shared<IntermediateInnerNode>();
+                         statOrVarDecl->setNumberOfChildren(1);
+                         statOrVarDecl->setType("starOrVarDecl");
+                         statOrVarDecl->setTypeOfChildren("stat");
+                         statOrVarDecl->setTypeOfChildren("varDecl");
+                         statOrVarDecl->setIsLeaf(false);
+                         return statOrVarDecl;
                      }
                      }
     );
@@ -239,7 +477,14 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
-
+    factories.insert({"relOp", []{
+                         auto relOp = std::make_shared<Leaf>();
+                         relOp->setType("relOp");
+                         relOp->setIsLeaf(true);
+                         return relOp;
+                     }
+                     }
+    );
     factories.insert({EPSILON, []{
                          auto num = std::make_shared<Leaf>();
                          num->setType("Null");
