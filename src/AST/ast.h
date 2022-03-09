@@ -22,12 +22,12 @@ protected:
 public:
     Node();
     virtual ~Node();
-    void makeSiblings(std::shared_ptr<Node>& sibling);
-    void setType(std::string ty);
-    void setIsLeaf(bool isLeaf);
-    void setRightSibling(const std::shared_ptr<Node> &rightSibling);
-    void setLeftMostSibling(const std::shared_ptr<Node> &leftMostSibling);
-    void setParent(const std::weak_ptr<Node> &parent);
+    virtual void makeSiblings(std::shared_ptr<Node>& sibling);
+    virtual void setType(std::string ty);
+    virtual void setIsLeaf(bool isLeaf);
+    virtual void setRightSibling(const std::shared_ptr<Node> &rightSibling);
+    virtual void setLeftMostSibling(const std::shared_ptr<Node> &leftMostSibling);
+    virtual void setParent(const std::weak_ptr<Node> &parent);
 };
 /*Class for inner nodes of the tree,
  * number of children is the number of cildren that are allowed for this node type, this
@@ -40,7 +40,8 @@ private:
    std::unordered_set<std::string> typeOfChildren;
 public:
     InnerNode() = default;
-    ~InnerNode() = default;
+    virtual ~InnerNode() = default;
+    //possibly set these as virtual??
     void setNumberOfChildren(int num);
     virtual void adoptChildren(std::shared_ptr<Node>& child);
     void makeFamily(std::string op, std::shared_ptr<Node> &children);
@@ -71,5 +72,313 @@ public:
     void setData(const std::string &data);
 
 };
+
+class ProgNode: public InnerNode{
+public:
+    ProgNode();
+
+    virtual ~ProgNode();
+};
+
+class ClassListNode: public InnerNode{
+public:
+    ClassListNode();
+
+    virtual ~ClassListNode();
+
+};
+
+class FuncDefList: public InnerNode{
+public:FuncDefList();
+
+    virtual ~FuncDefList();
+};
+
+class ClassDeclNode: public InnerNode{
+public:
+    ClassDeclNode();
+    virtual ~ClassDeclNode();
+};
+
+class FuncDefNode: public InnerNode{
+public:
+    FuncDefNode();
+
+    virtual ~FuncDefNode();
+};
+
+class MembListNode: public InnerNode{
+public:
+    MembListNode();
+
+    virtual ~MembListNode();
+};
+
+class ProgramBlock: public InnerNode{
+public:
+    ProgramBlock();
+
+    virtual ~ProgramBlock();
+};
+
+class VarDecl: public InnerNode{
+public:
+    VarDecl();
+    virtual ~VarDecl();
+};
+
+class DimList: public InnerNode{
+public:
+    DimList();
+
+    virtual ~DimList();
+};
+
+class AssignStat: public InnerNode{
+public:
+    AssignStat();
+
+    virtual ~AssignStat();
+};
+
+class PutStat: public InnerNode{
+public:
+    PutStat();
+    virtual ~PutStat();
+};
+
+class ReturnStat: public InnerNode{
+public:
+    ReturnStat();
+
+    virtual ~ReturnStat();
+};
+
+class GetStat: public InnerNode{
+public:
+    GetStat();
+    virtual ~GetStat();
+};
+
+class IfStat: public InnerNode{
+
+public:
+    IfStat();
+
+    virtual ~IfStat();
+};
+
+class ForStat: public InnerNode{
+public:
+    ForStat();
+
+    virtual ~ForStat();
+};
+
+class AddOp: public InnerNode{
+public:
+    AddOp();
+
+    virtual ~AddOp();
+
+};
+
+class MultOp: public InnerNode{
+public:
+    MultOp();
+
+    virtual ~MultOp();
+
+};
+
+class NotNode: public InnerNode{
+public:
+    NotNode();
+    virtual ~NotNode();
+
+};
+
+class SignNode: public InnerNode{
+public:
+    SignNode();
+
+    virtual ~SignNode();
+
+};
+
+class DotNode: public InnerNode{
+public:
+    DotNode();
+
+    virtual ~DotNode();
+
+};
+
+class DataMemberNode: public InnerNode{
+public:
+    DataMemberNode();
+
+    virtual ~DataMemberNode();
+
+};
+
+class FCallNode: public InnerNode{
+public:
+    FCallNode();
+
+    virtual ~FCallNode();
+};
+
+class RelExprNode: public InnerNode{
+public:
+    RelExprNode();
+
+    virtual ~RelExprNode();
+
+};
+
+class FuncDeclNode: public InnerNode{
+public:
+
+    FuncDeclNode();
+
+    virtual ~FuncDeclNode();
+};
+
+class FPAramNode: public InnerNode{
+
+public:
+    FPAramNode();
+
+    virtual ~FPAramNode();
+
+};
+
+class InherListNode: public InnerNode{
+public:
+    InherListNode();
+
+    virtual ~InherListNode();
+};
+
+class ScopeSpec: public InnerNode{
+public:
+    ScopeSpec();
+
+    virtual ~ScopeSpec();
+};
+class IndexList: public InnerNode{
+public:
+    IndexList();
+
+    virtual ~IndexList();
+};
+class FParamList: public InnerNode{
+public:
+    FParamList();
+
+    virtual ~FParamList();
+
+};
+
+class AParamsNode: public InnerNode{
+public:
+    AParamsNode();
+
+    virtual ~AParamsNode();
+
+};
+
+class StatNode: public IntermediateInnerNode {
+public:
+    StatNode();
+
+    virtual ~StatNode();
+
+};
+
+class DotParamNode: public IntermediateInnerNode{
+public:
+    DotParamNode();
+    virtual ~DotParamNode();
+};
+
+
+class MembDeclNode: public IntermediateInnerNode{
+public:
+    MembDeclNode();
+    virtual ~MembDeclNode();
+
+};
+
+class ExprNode: public IntermediateInnerNode{
+public:
+    ExprNode();
+
+    virtual ~ExprNode();
+};
+
+class ArithExprNode: public IntermediateInnerNode{
+public:
+    ArithExprNode();
+    virtual ~ArithExprNode();
+};
+
+class TermNode: public IntermediateInnerNode{
+public:
+    TermNode();
+    virtual ~TermNode();
+};
+
+class StatOrVarDeclNode: public IntermediateInnerNode{
+public:
+    StatOrVarDeclNode();
+    virtual ~StatOrVarDeclNode();
+};
+
+class FactorNode: public IntermediateInnerNode{
+public:
+    FactorNode();
+    virtual ~FactorNode();
+};
+
+class TypeNode: public Leaf{
+public:
+    TypeNode();
+    virtual ~TypeNode();
+};
+
+class IdNode: public Leaf{
+public:
+    IdNode();
+
+    virtual ~IdNode();
+};
+
+class NumNode: public Leaf{
+public:
+    NumNode();
+
+    virtual ~NumNode();
+
+};
+
+class RelOpNode: public Leaf{
+public:
+    RelOpNode();
+
+    virtual ~RelOpNode();
+
+};
+
+class EpsilonNode: public Leaf{
+
+public:
+    EpsilonNode();
+
+    virtual ~EpsilonNode();
+
+};
+
 
 #endif //COMP_442_AST_H

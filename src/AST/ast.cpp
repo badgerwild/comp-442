@@ -59,3 +59,261 @@ void IntermediateInnerNode::setData(const std::string &data) {
 const std::string &IntermediateInnerNode::getData() const {
     return data;
 }
+
+ProgNode::ProgNode() {}
+
+ProgNode::~ProgNode() {
+
+}
+
+ClassListNode::ClassListNode() {}
+
+ClassListNode::~ClassListNode() {
+
+}
+
+FuncDefList::FuncDefList() {}
+
+FuncDefList::~FuncDefList() {
+
+}
+
+ClassDeclNode::ClassDeclNode() {}
+
+ClassDeclNode::~ClassDeclNode() {
+
+}
+
+FuncDefNode::FuncDefNode() {}
+
+FuncDefNode::~FuncDefNode() {
+
+}
+
+MembListNode::MembListNode() {}
+
+MembListNode::~MembListNode() {
+
+}
+
+ProgramBlock::ProgramBlock() {}
+
+ProgramBlock::~ProgramBlock() {
+
+}
+
+VarDecl::VarDecl() {}
+
+VarDecl::~VarDecl() {
+
+}
+
+DimList::DimList() {}
+
+DimList::~DimList() {
+
+}
+
+AssignStat::AssignStat() {}
+
+AssignStat::~AssignStat() {
+
+}
+
+PutStat::PutStat() {}
+
+PutStat::~PutStat() {
+
+}
+
+ReturnStat::ReturnStat() {}
+
+ReturnStat::~ReturnStat() {
+
+}
+
+GetStat::GetStat() {}
+
+GetStat::~GetStat() {
+
+}
+
+ForStat::ForStat() {}
+
+ForStat::~ForStat() {
+
+}
+
+AddOp::AddOp() {}
+
+AddOp::~AddOp() {
+
+}
+
+MultOp::MultOp() {}
+
+MultOp::~MultOp() {
+
+}
+
+NotNode::NotNode() {}
+
+NotNode::~NotNode() {
+
+}
+
+SignNode::SignNode() {}
+
+SignNode::~SignNode() {
+
+}
+
+DotNode::DotNode() {}
+
+DotNode::~DotNode() {
+
+}
+
+DataMemberNode::DataMemberNode() {}
+
+DataMemberNode::~DataMemberNode() {
+
+}
+
+FCallNode::FCallNode() {}
+
+FCallNode::~FCallNode() {
+
+}
+
+RelExprNode::RelExprNode() {}
+
+RelExprNode::~RelExprNode() {
+
+}
+
+FuncDeclNode::FuncDeclNode() {}
+
+FuncDeclNode::~FuncDeclNode() {
+
+}
+
+FPAramNode::FPAramNode() {}
+
+FPAramNode::~FPAramNode() {
+
+}
+
+InherListNode::InherListNode() {}
+
+InherListNode::~InherListNode() {
+
+}
+
+ScopeSpec::ScopeSpec() {}
+
+ScopeSpec::~ScopeSpec() {
+
+}
+
+FParamList::FParamList() {}
+
+FParamList::~FParamList() {
+
+}
+
+AParamsNode::AParamsNode() {}
+
+AParamsNode::~AParamsNode() {
+
+}
+
+StatNode::StatNode() {}
+
+StatNode::~StatNode() {
+
+}
+
+DotParamNode::DotParamNode() {}
+
+DotParamNode::~DotParamNode() {
+
+}
+
+MembDeclNode::MembDeclNode() {}
+
+MembDeclNode::~MembDeclNode() {
+
+}
+
+ExprNode::ExprNode() {}
+
+ExprNode::~ExprNode() {
+
+}
+
+ArithExprNode::ArithExprNode() {}
+
+ArithExprNode::~ArithExprNode() {
+
+}
+
+TermNode::TermNode() {}
+
+TermNode::~TermNode() {
+
+}
+
+StatOrVarDeclNode::StatOrVarDeclNode() {}
+
+StatOrVarDeclNode::~StatOrVarDeclNode() {
+
+}
+
+FactorNode::FactorNode() {}
+
+FactorNode::~FactorNode() {
+
+}
+
+TypeNode::TypeNode() {}
+
+TypeNode::~TypeNode() {
+
+}
+
+IdNode::IdNode() {}
+
+IdNode::~IdNode() {
+
+}
+
+NumNode::NumNode() {}
+
+NumNode::~NumNode() {
+
+}
+
+RelOpNode::RelOpNode() {}
+
+RelOpNode::~RelOpNode() {
+
+}
+
+EpsilonNode::EpsilonNode() {}
+
+EpsilonNode::~EpsilonNode() {
+
+}
+
+IfStat::IfStat() {}
+
+IfStat::~IfStat() {
+
+}
+
+IndexList::IndexList() {}
+
+IndexList::~IndexList() {
+
+}
