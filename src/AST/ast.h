@@ -11,23 +11,29 @@
 #include <functional>
 #include <unordered_set>
 //Node base class
+//TODO create a large delete function that completly iterates through tree and deletes everything
 class Node{
 protected:
     std::string type;
     bool isLeaf;
-    std::weak_ptr<Node> parent;
-    std::shared_ptr<Node> leftMostSibling;
-    std::shared_ptr<Node> rightSibling;
+    Node* parent;
+    Node* leftMostSibling;
+    Node* rightSibling;
 
 public:
     Node();
+    Node(Node const& toCopy);
     virtual ~Node();
-    virtual void makeSiblings(std::shared_ptr<Node>& sibling);
+    Node& operator = (const Node &toAssign);
+    virtual void makeSiblings(Node *sibling);
     virtual void setType(std::string ty);
     virtual void setIsLeaf(bool isLeaf);
-    virtual void setRightSibling(const std::shared_ptr<Node> &rightSibling);
-    virtual void setLeftMostSibling(const std::shared_ptr<Node> &leftMostSibling);
-    virtual void setParent(const std::weak_ptr<Node> &parent);
+    virtual void setRightSibling(Node &rightSibling);
+    virtual void setLeftMostSibling( Node &leftMostSibling);
+    virtual void setParent(Node *parent);
+    virtual void adoptChildren(Node *child) = 0;
+
+    Node *getRightSibling() const;
 };
 /*Class for inner nodes of the tree,
  * number of children is the number of cildren that are allowed for this node type, this
@@ -36,17 +42,18 @@ public:
 class InnerNode: public Node{
 private:
    int numberOfChildren;
-    std::shared_ptr<Node> leftMostChild;
+    Node* leftMostChild;
    std::unordered_set<std::string> typeOfChildren;
 public:
     InnerNode() = default;
     virtual ~InnerNode() = default;
     //possibly set these as virtual??
     void setNumberOfChildren(int num);
-    virtual void adoptChildren(std::shared_ptr<Node>& child);
-    void makeFamily(std::string op, std::shared_ptr<Node> &children);
+    void adoptChildren(Node *child) override;
+    void makeFamily(std::string op, Node &children);
     void addChildType(std::string child);
     void setTypeOfChildren(const std::string &typeOfChild);
+    void deleteChild();
     //TODO validator fucntion
 };
 /* Class for non-determinstic nodes, that are replaced, overides
@@ -56,10 +63,13 @@ class IntermediateInnerNode: public InnerNode{
 private:
     std::string data;
 public:
-    const std::string &getData() const;
+    IntermediateInnerNode();
 
+    virtual ~IntermediateInnerNode();
+
+    const std::string &getData() const;
     void setData(const std::string &data);
-    void adoptChildren(std::shared_ptr<Node>& child) override;
+    void adoptChildren(Node *child) override;
 };
 /* Leaf node
  * Children cannot be added to it, so it only inherits from base class
@@ -70,16 +80,16 @@ private:
 
 public:
     void setData(const std::string &data);
+    void adoptChildren(Node *child);
 
 };
 
 class ProgNode: public InnerNode{
 public:
     ProgNode();
-
     virtual ~ProgNode();
 };
-
+/*
 class ClassListNode: public InnerNode{
 public:
     ClassListNode();
@@ -323,13 +333,13 @@ public:
     ArithExprNode();
     virtual ~ArithExprNode();
 };
-
+*/
 class TermNode: public IntermediateInnerNode{
 public:
     TermNode();
     virtual ~TermNode();
 };
-
+/*
 class StatOrVarDeclNode: public IntermediateInnerNode{
 public:
     StatOrVarDeclNode();
@@ -341,13 +351,13 @@ public:
     FactorNode();
     virtual ~FactorNode();
 };
-
+*/
 class TypeNode: public Leaf{
 public:
     TypeNode();
     virtual ~TypeNode();
 };
-
+/*
 class IdNode: public Leaf{
 public:
     IdNode();
@@ -379,6 +389,6 @@ public:
     virtual ~EpsilonNode();
 
 };
-
+*/
 
 #endif //COMP_442_AST_H

@@ -10,8 +10,8 @@ NodeFactory::~NodeFactory() {}
  */
 NodeFactory::NodeFactory() {
     factories.insert({"prog", []{
-                         auto prog = std::make_shared<ProgNode>();
-                         prog->setNumberOfChildren(3);
+                         auto prog = new ProgNode();
+                         prog -> setNumberOfChildren(3);
                          prog->setType("prog");
                          prog->setTypeOfChildren("classList");
                          prog->setTypeOfChildren("funcDefList");
@@ -21,6 +21,7 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
+    /*
     factories.insert({"classList", []{
                          auto classList = std::make_shared<ClassListNode>();
                          classList->setNumberOfChildren(NOLIMIT);
@@ -411,8 +412,9 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
+     */
     factories.insert({"term", []{
-                         auto term = std::make_shared<TermNode>();
+                         auto term = new TermNode();
                          term->setNumberOfChildren(1);
                          term->setType("term");
                          term->setTypeOfChildren("multOp");
@@ -422,7 +424,7 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
-
+/*
     factories.insert({"starOrVarDecl", []{
                          auto statOrVarDecl = std::make_shared<StatOrVarDeclNode>();
                          statOrVarDecl->setNumberOfChildren(1);
@@ -451,15 +453,16 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
+    */
     factories.insert({"type", []{
-                         auto type = std::make_shared<TypeNode>();
+                         auto type = new TypeNode();
                          type->setType("type");
                          type->setIsLeaf(true);
                          return type;
                      }
                      }
     );
-
+/*
     factories.insert({"id", []{
                          auto id = std::make_shared<IdNode>();
                          id->setType("id");
@@ -493,9 +496,8 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
-
+*/
 }
-
-std::shared_ptr<Node> NodeFactory::makeNode(std::string type) {
+Node* NodeFactory::makeNode(std::string type) {
     return factories[type]();
 }

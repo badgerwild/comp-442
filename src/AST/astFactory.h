@@ -10,12 +10,12 @@ const int NOLIMIT = -1;
 const std::string EPSILON = "epsilon";
 class NodeFactory{
 private:
-    std::unordered_map<std::string, std::function<std::shared_ptr<Node>()>> factories;
+    std::unordered_map<std::string, std::function<Node*()>> factories;
 public:
     NodeFactory();
     ~NodeFactory();
-    std::shared_ptr<Node> makeNode(std::string type);
-    std::shared_ptr<Node> makeLeaf(std::string type, std::string data);
+    Node* makeNode(std::string type);
+    Node makeLeaf(std::string type, std::string data);
 
 
 };
