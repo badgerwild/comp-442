@@ -28,8 +28,8 @@ public:
     virtual void makeSiblings(Node *sibling);
     virtual void setType(std::string ty);
     virtual void setIsLeaf(bool isLeaf);
-    virtual void setRightSibling(Node &rightSibling);
-    virtual void setLeftMostSibling( Node &leftMostSibling);
+    virtual void setRightSibling(Node *rightSibling);
+    virtual void setLeftMostSibling(Node *leftMostSibling);
     virtual void setParent(Node *parent);
     virtual void adoptChildren(Node *child) = 0;
 
@@ -49,8 +49,9 @@ public:
     virtual ~InnerNode() = default;
     //possibly set these as virtual??
     void setNumberOfChildren(int num);
+    int getNumberOfChildren();
     void adoptChildren(Node *child) override;
-    void makeFamily(std::string op, Node &children);
+    static Node* makeFamily(std::string op, std::vector<Node *> children);
     void addChildType(std::string child);
     void setTypeOfChildren(const std::string &typeOfChild);
     void deleteChild();
@@ -89,7 +90,7 @@ public:
     ProgNode();
     virtual ~ProgNode();
 };
-/*
+
 class ClassListNode: public InnerNode{
 public:
     ClassListNode();
@@ -333,13 +334,13 @@ public:
     ArithExprNode();
     virtual ~ArithExprNode();
 };
-*/
+
 class TermNode: public IntermediateInnerNode{
 public:
     TermNode();
     virtual ~TermNode();
 };
-/*
+
 class StatOrVarDeclNode: public IntermediateInnerNode{
 public:
     StatOrVarDeclNode();
@@ -351,13 +352,13 @@ public:
     FactorNode();
     virtual ~FactorNode();
 };
-*/
+
 class TypeNode: public Leaf{
 public:
     TypeNode();
     virtual ~TypeNode();
 };
-/*
+
 class IdNode: public Leaf{
 public:
     IdNode();
@@ -389,6 +390,6 @@ public:
     virtual ~EpsilonNode();
 
 };
-*/
+
 
 #endif //COMP_442_AST_H

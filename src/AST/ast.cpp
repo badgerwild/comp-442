@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include "ast.h"
+#include "astFactory.h"
 
 Node::Node(){}
 Node::~Node(){}
@@ -33,7 +34,9 @@ Node& Node::operator=(const Node &toAssign) {
 
 
 
-
+int InnerNode::getNumberOfChildren() {
+    return numberOfChildren;
+}
 
 void InnerNode::adoptChildren(Node *child) {
     this->leftMostChild = child;
@@ -64,7 +67,6 @@ void Node::makeSiblings(Node *sibling) {
     }
     sibling->parent = this->parent;
 }
-
 void Node::setIsLeaf(bool isLeaf) {
     this->isLeaf = isLeaf;
 }
@@ -73,12 +75,12 @@ void Node::setParent(Node *parent) {
     this->parent = parent;
 }
 
-void Node::setLeftMostSibling(Node &leftMostSibling) {
-    this->leftMostSibling = &leftMostSibling;
+void Node::setLeftMostSibling(Node *leftMostSibling) {
+    this->leftMostSibling = leftMostSibling;
 }
 
-void Node::setRightSibling(Node &rightSibling) {
-    this->rightSibling = &rightSibling;
+void Node::setRightSibling(Node *rightSibling) {
+    this->rightSibling = rightSibling;
 }
 
 Node *Node::getRightSibling() const {
@@ -86,9 +88,15 @@ Node *Node::getRightSibling() const {
 }
 
 //TODO
-void InnerNode::makeFamily(std::string op, Node &children){
-   this->leftMostChild = &children;
-
+ Node *InnerNode::makeFamily(std::string op, std::vector<Node *> children){
+   NodeFactory fac;
+    auto parentNode = fac.makeNode(op);
+    children[0]->setLeftMostSibling(children[0]);
+    for (int i = 0; i< children.size()-1;++i){
+        children[i]->makeSiblings(children[i+1]);
+    }
+    parentNode->adoptChildren(children[0]);
+    return parentNode;
 }
 
 void InnerNode::setNumberOfChildren(int num) {
@@ -132,12 +140,8 @@ ProgNode::~ProgNode() {
     delete leftMostSibling;
     delete rightSibling;
     deleteChild();
-
-
-
 std::cout <<"deleteing prog" << std::endl;
 }
-/*
 ClassListNode::ClassListNode() {}
 
 ClassListNode::~ClassListNode() {
@@ -329,13 +333,11 @@ ArithExprNode::ArithExprNode() {}
 ArithExprNode::~ArithExprNode() {
 
 }
-*/
 TermNode::TermNode() {}
 
 TermNode::~TermNode() {
  std::cout<< "deleting temr" <<std::endl;
 }
-/*
 StatOrVarDeclNode::StatOrVarDeclNode() {}
 
 StatOrVarDeclNode::~StatOrVarDeclNode() {
@@ -347,13 +349,11 @@ FactorNode::FactorNode() {}
 FactorNode::~FactorNode() {
 
 }
-*/
 TypeNode::TypeNode() {}
 
 TypeNode::~TypeNode() {
 std::cout<<"delete type"<<std::endl;
 }
-/*
 IdNode::IdNode() {}
 
 IdNode::~IdNode() {
@@ -389,4 +389,3 @@ IndexList::IndexList() {}
 IndexList::~IndexList() {
 
 }
- */

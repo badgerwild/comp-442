@@ -21,9 +21,8 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
-    /*
     factories.insert({"classList", []{
-                         auto classList = std::make_shared<ClassListNode>();
+                         auto classList = new ClassListNode();
                          classList->setNumberOfChildren(NOLIMIT);
                          classList->setType("classList");
                          classList->setTypeOfChildren("classDecl");
@@ -33,7 +32,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"funcDefList", []{
-                         auto funcDefList = std::make_shared<FuncDefList>();
+                         auto funcDefList = new FuncDefList();
                          funcDefList->setNumberOfChildren(NOLIMIT);
                          funcDefList->setType("funcDefList");
                          funcDefList->setTypeOfChildren("funcDef");
@@ -43,7 +42,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"classDecl", []{
-                         auto classDecl = std::make_shared<ClassDeclNode>();
+                         auto classDecl = new ClassDeclNode();
                          classDecl->setNumberOfChildren(3);
                          classDecl->setType("classDecl");
                          classDecl->setTypeOfChildren("id");
@@ -55,7 +54,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"funcDef", []{
-                         auto funcDef = std::make_shared<FuncDefNode>();
+                         auto funcDef = new FuncDefNode();
                          funcDef->setNumberOfChildren(5);
                          funcDef->setType("funcDef");
                          funcDef->setTypeOfChildren("type");
@@ -70,7 +69,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"membList", []{
-                         auto membList = std::make_shared<MembListNode>();
+                         auto membList = new MembListNode();
                          membList->setNumberOfChildren(NOLIMIT);
                          membList->setType("membList");
                          membList->setTypeOfChildren("membDecl");
@@ -80,7 +79,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"programBlock", []{
-                         auto programBlock = std::make_shared<ProgramBlock>();
+                         auto programBlock = new ProgramBlock();
                          programBlock->setNumberOfChildren(NOLIMIT);
                          programBlock->setType("programBlock");
                          programBlock->setTypeOfChildren("stat");
@@ -91,7 +90,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"varDecl", []{
-                         auto varDecl = std::make_shared<VarDecl>();
+                         auto varDecl = new VarDecl();
                          varDecl->setNumberOfChildren(3);
                          varDecl->setType("varDecl");
                          varDecl->setTypeOfChildren("type");
@@ -103,7 +102,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"dimList", []{
-                         auto dimList = std::make_shared<DimList>();
+                         auto dimList = new DimList();
                          dimList->setNumberOfChildren(NOLIMIT);
                          dimList->setType("dimList");
                          dimList->setTypeOfChildren("num");
@@ -114,7 +113,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"assignStat", []{
-                         auto assignStat = std::make_shared<AssignStat>();
+                         auto assignStat = new AssignStat();
                          assignStat->setNumberOfChildren(2);
                          assignStat->setType("assignStat");
                          assignStat->setTypeOfChildren("var");
@@ -126,7 +125,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"putStat", []{
-                         auto putStat = std::make_shared<PutStat>();
+                         auto putStat = new PutStat();
                          putStat->setNumberOfChildren(1);
                          putStat->setType("putStat");
                          putStat->setTypeOfChildren("expr");
@@ -137,7 +136,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"returnStat", []{
-                         auto returnStat = std::make_shared<ReturnStat>();
+                         auto returnStat = new ReturnStat();
                          returnStat->setNumberOfChildren(1);
                          returnStat->setType("returnStat");
                          returnStat->setTypeOfChildren("expr");
@@ -147,7 +146,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"getStat", []{
-                         auto getStat = std::make_shared<GetStat>();
+                         auto getStat = new GetStat();
                          getStat->setNumberOfChildren(1);
                          getStat->setType("getStat");
                          getStat->setTypeOfChildren("var");
@@ -157,7 +156,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"ifStat", []{
-                         auto ifStat = std::make_shared<IfStat>();
+                         auto ifStat = new IfStat();
                          ifStat->setNumberOfChildren(3);
                          ifStat->setType("ifStat");
                          ifStat->setTypeOfChildren("relExpr");
@@ -170,7 +169,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"forStat", []{
-                         auto forStat = std::make_shared<ForStat>();
+                         auto forStat = new ForStat();
                          forStat->setNumberOfChildren(6);
                          forStat->setType("forStat");
                          forStat->setTypeOfChildren("type");
@@ -185,7 +184,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"addOp", []{
-                         auto addOp = std::make_shared<AddOp>();
+                         auto addOp = new AddOp();
                          addOp->setNumberOfChildren(2);
                          addOp->setType("addOp");
                          addOp->setTypeOfChildren("arithExpr");
@@ -197,7 +196,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"multOp", []{
-                         auto multOp = std::make_shared<MultOp>();
+                         auto multOp = new MultOp();
                          multOp->setNumberOfChildren(2);
                          multOp->setType("multOp");
                          multOp->setTypeOfChildren("factor");
@@ -208,7 +207,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"not", []{
-                         auto _not = std::make_shared<NotNode>();
+                         auto _not = new NotNode();
                          _not->setNumberOfChildren(1);
                          _not->setType("not");
                          _not->setTypeOfChildren("factor");
@@ -218,7 +217,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"sign", []{
-                         auto sign = std::make_shared<SignNode>();
+                         auto sign = new SignNode();
                          sign->setNumberOfChildren(1);
                          sign->setType("sign");
                          sign->setTypeOfChildren("factor");
@@ -228,7 +227,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"dot", []{
-                         auto dot = std::make_shared<DotNode>();
+                         auto dot = new DotNode();
                          dot->setNumberOfChildren(2);
                          dot->setType("dot");
                          dot->setTypeOfChildren("dotParam");
@@ -238,7 +237,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"dataMember", []{
-                         auto dataMember = std::make_shared<DataMemberNode>();
+                         auto dataMember = new DataMemberNode();
                          dataMember->setNumberOfChildren(2);
                          dataMember->setType("dataMember");
                          dataMember->setTypeOfChildren("id");
@@ -250,7 +249,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"fCall", []{
-                         auto fCall = std::make_shared<FCallNode>();
+                         auto fCall = new FCallNode();
                          fCall->setNumberOfChildren(2);
                          fCall->setType("fCall");
                          fCall->setTypeOfChildren("id");
@@ -262,7 +261,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"relExpr", []{
-                         auto relExpr = std::make_shared<RelExprNode>();
+                         auto relExpr = new RelExprNode();
                          relExpr->setNumberOfChildren(3);
                          relExpr->setType("relExpr");
                          relExpr->setTypeOfChildren("expr");
@@ -274,7 +273,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"funcDecl", []{
-                         auto funcDecl = std::make_shared<FuncDeclNode>();
+                         auto funcDecl = new FuncDeclNode();
                          funcDecl->setNumberOfChildren(3);
                          funcDecl->setType("funcDecl");
                          funcDecl->setTypeOfChildren("type");
@@ -286,7 +285,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"fParam", []{
-                         auto fParam = std::make_shared<FPAramNode>();
+                         auto fParam = new FPAramNode();
                          fParam->setNumberOfChildren(3);
                          fParam->setType("fParam");
                          fParam->setTypeOfChildren("type");
@@ -299,7 +298,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"inherList", []{
-                         auto inherList = std::make_shared<InherListNode>();
+                         auto inherList = new InherListNode();
                          inherList->setNumberOfChildren(NOLIMIT);
                          inherList->setType("inherList");
                          inherList->setTypeOfChildren("id");
@@ -309,7 +308,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"scopeSpec", []{
-                         auto scopeSpec = std::make_shared<ScopeSpec>();
+                         auto scopeSpec = new ScopeSpec();
                          scopeSpec->setNumberOfChildren(NOLIMIT);
                          scopeSpec->setType("scopeSpec");
                          scopeSpec->setTypeOfChildren("id");
@@ -320,7 +319,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"indexList", []{
-                         auto indexList = std::make_shared<IndexList>();
+                         auto indexList = new IndexList();
                          indexList->setNumberOfChildren(NOLIMIT);
                          indexList->setType("indexList");
                          indexList->setTypeOfChildren("arithExpr");
@@ -331,7 +330,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"fParamList", []{
-                         auto fParamList = std::make_shared<FParamList>();
+                         auto fParamList = new FParamList();
                          fParamList->setNumberOfChildren(NOLIMIT);
                          fParamList->setType("fParamList");
                          fParamList->setTypeOfChildren("fParam");
@@ -341,7 +340,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"aParams", []{
-                         auto aParams = std::make_shared<AParamsNode>();
+                         auto aParams = new AParamsNode();
                          aParams->setNumberOfChildren(NOLIMIT);
                          aParams->setType("aParams");
                          aParams->setTypeOfChildren("expr");
@@ -351,7 +350,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"stat", []{
-                         auto stat = std::make_shared<StatNode>();
+                         auto stat = new StatNode();
                          stat->setNumberOfChildren(1);
                          stat->setType("stat");
                          stat->setTypeOfChildren("ifStat");
@@ -367,7 +366,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"dotParam", []{
-                         auto dotParam = std::make_shared<DotParamNode>();
+                         auto dotParam = new DotParamNode();
                          dotParam->setNumberOfChildren(1);
                          dotParam->setType("dotParam");
                          dotParam->setTypeOfChildren("dataMember");
@@ -379,7 +378,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"membDecl", []{
-                         auto membDecl = std::make_shared<MembDeclNode>();
+                         auto membDecl = new MembDeclNode();
                          membDecl->setNumberOfChildren(1);
                          membDecl->setType("membDecl");
                          membDecl->setTypeOfChildren("varDecl");
@@ -391,7 +390,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"expr", []{
-                         auto expr= std::make_shared<ExprNode>();
+                         auto expr= new ExprNode();
                          expr->setNumberOfChildren(1);
                          expr->setType("expr");
                          expr->setTypeOfChildren("relExpr");
@@ -402,7 +401,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"arithExpr", []{
-                         auto arithExpr = std::make_shared<ArithExprNode>();
+                         auto arithExpr =new ArithExprNode();
                          arithExpr->setNumberOfChildren(1);
                          arithExpr->setType("arithExpr");
                          arithExpr->setTypeOfChildren("addOp");
@@ -412,7 +411,6 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
-     */
     factories.insert({"term", []{
                          auto term = new TermNode();
                          term->setNumberOfChildren(1);
@@ -424,9 +422,8 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
-/*
     factories.insert({"starOrVarDecl", []{
-                         auto statOrVarDecl = std::make_shared<StatOrVarDeclNode>();
+                         auto statOrVarDecl = new StatOrVarDeclNode();
                          statOrVarDecl->setNumberOfChildren(1);
                          statOrVarDecl->setType("starOrVarDecl");
                          statOrVarDecl->setTypeOfChildren("stat");
@@ -438,7 +435,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"factor", []{
-                         auto factor = std::make_shared<FactorNode>();
+                         auto factor = new FactorNode();
                          factor->setNumberOfChildren(1);
                          factor->setType("factor");
                          factor->setTypeOfChildren("dot");
@@ -453,7 +450,6 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
-    */
     factories.insert({"type", []{
                          auto type = new TypeNode();
                          type->setType("type");
@@ -462,9 +458,8 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
-/*
     factories.insert({"id", []{
-                         auto id = std::make_shared<IdNode>();
+                         auto id = new IdNode();
                          id->setType("id");
                          id->setIsLeaf(true);
                          return id;
@@ -473,7 +468,7 @@ NodeFactory::NodeFactory() {
     );
 
     factories.insert({"num", []{
-                         auto num = std::make_shared<NumNode>();
+                         auto num = new NumNode();
                          num->setType("num");
                          num->setIsLeaf(true);
                          return num;
@@ -481,7 +476,7 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({"relOp", []{
-                         auto relOp = std::make_shared<RelOpNode>();
+                         auto relOp = new RelOpNode();
                          relOp->setType("relOp");
                          relOp->setIsLeaf(true);
                          return relOp;
@@ -489,14 +484,13 @@ NodeFactory::NodeFactory() {
                      }
     );
     factories.insert({EPSILON, []{
-                         auto num = std::make_shared<EpsilonNode>();
+                         auto num = new EpsilonNode();
                          num->setType("Null");
                          num->setIsLeaf(true);
                          return num;
                      }
                      }
     );
-*/
 }
 Node* NodeFactory::makeNode(std::string type) {
     return factories[type]();
