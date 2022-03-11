@@ -19,12 +19,14 @@ protected:
     Node* parent;
     Node* leftMostSibling;
     Node* rightSibling;
-
+    Node* leftMostChild;
 public:
     Node();
     Node(Node const& toCopy);
     virtual ~Node();
     Node& operator = (const Node &toAssign);
+    std::vector<Node*> getSiblings();
+    static void traverse(Node *node, int depth);
     virtual void makeSiblings(Node *sibling);
     virtual void setType(std::string ty);
     virtual void setIsLeaf(bool isLeaf);
@@ -32,8 +34,11 @@ public:
     virtual void setLeftMostSibling(Node *leftMostSibling);
     virtual void setParent(Node *parent);
     virtual void adoptChildren(Node *child) = 0;
+    Node *getRightSibling();
 
-    Node *getRightSibling() const;
+    Node *getLeftMostChild() const;
+
+    const std::string &getType() const;
 };
 /*Class for inner nodes of the tree,
  * number of children is the number of cildren that are allowed for this node type, this
@@ -42,7 +47,7 @@ public:
 class InnerNode: public Node{
 private:
    int numberOfChildren;
-    Node* leftMostChild;
+
    std::unordered_set<std::string> typeOfChildren;
 public:
     InnerNode() = default;

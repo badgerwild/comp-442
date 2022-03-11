@@ -5,7 +5,13 @@
 #include "ast.h"
 #include "astFactory.h"
 
-Node::Node(){}
+Node::Node(){
+    parent = nullptr;
+    leftMostSibling = nullptr;
+    rightSibling = nullptr;
+    leftMostChild = nullptr;
+
+}
 Node::~Node(){}
 
 
@@ -32,6 +38,34 @@ Node& Node::operator=(const Node &toAssign) {
     return *this;
 }
 
+std::vector<Node*> Node::getSiblings() {
+    std::vector<Node*> kidList;
+    kidList.push_back(this);
+    auto right = rightSibling;
+    while (right != nullptr){
+       kidList.push_back(right);
+       right = right->rightSibling;
+
+    }
+    return kidList;
+}
+
+void Node::traverse(Node *node, int depth) {
+    std::string debug = node->getType();
+    std::cout << node->getType() <<std::endl;
+    if (node->leftMostChild != nullptr) {
+        depth++;
+        for (auto &a: node->leftMostChild->getSiblings()) {
+            auto temp = a->getType();
+            for(int i = 0; i < depth; i++){
+                std::cout<< "|";
+            }
+
+            traverse(a, depth);
+        }
+    }
+}
+
 
 
 int InnerNode::getNumberOfChildren() {
@@ -39,11 +73,16 @@ int InnerNode::getNumberOfChildren() {
 }
 
 void InnerNode::adoptChildren(Node *child) {
+    if (leftMostChild == nullptr){
     this->leftMostChild = child;
     auto next = child;
     while (next!= nullptr){
        next->setParent( this);
        next = next-> getRightSibling();
+    }
+    }
+    else{
+        this->leftMostChild->makeSiblings(child);
     }
 
 }
@@ -83,8 +122,16 @@ void Node::setRightSibling(Node *rightSibling) {
     this->rightSibling = rightSibling;
 }
 
-Node *Node::getRightSibling() const {
+Node *Node::getRightSibling(){
     return rightSibling;
+}
+
+const std::string &Node::getType() const {
+    return type;
+}
+
+Node *Node::getLeftMostChild() const {
+    return leftMostChild;
 }
 
 //TODO
@@ -123,9 +170,20 @@ const std::string &IntermediateInnerNode::getData() const {
 }
 
 void IntermediateInnerNode::adoptChildren(Node *child) {
-    adoptChildren(child);
-
+    if (leftMostChild == nullptr){
+        this->leftMostChild = child;
+        auto next = child;
+        while (next!= nullptr){
+            next->setParent( this);
+            next = next-> getRightSibling();
+        }
+    }
+    else{
+        this->leftMostChild->makeSiblings(child);
+    }
 }
+
+
 
 IntermediateInnerNode::IntermediateInnerNode() {}
 
