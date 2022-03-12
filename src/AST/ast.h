@@ -27,6 +27,9 @@ public:
     Node& operator = (const Node &toAssign);
     std::vector<Node*> getSiblings();
     static void traverse(Node *node, int depth);
+    void deleteAll();
+    void deleteAllHelper(Node *node);
+    std::vector<Node *> reverse(std::vector<Node*> rev);
     virtual void makeSiblings(Node *sibling);
     virtual void setType(std::string ty);
     virtual void setIsLeaf(bool isLeaf);
@@ -35,9 +38,7 @@ public:
     virtual void setParent(Node *parent);
     virtual void adoptChildren(Node *child) = 0;
     Node *getRightSibling();
-
     Node *getLeftMostChild() const;
-
     const std::string &getType() const;
 };
 /*Class for inner nodes of the tree,

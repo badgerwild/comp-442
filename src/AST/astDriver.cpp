@@ -78,8 +78,8 @@ int main(){
 
     std::vector<Node*> kids11 = {classList, func, program};
     auto prog = InnerNode::makeFamily("prog", kids11);
-    Node::traverse(prog,0);
-
+    //Node::traverse(prog,0);
+    prog->deleteAll();
 
     //std::vector<Node*> kids;
     //kids.push_back(kid1);

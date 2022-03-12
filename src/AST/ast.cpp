@@ -50,6 +50,33 @@ std::vector<Node*> Node::getSiblings() {
     return kidList;
 }
 
+std::vector<Node*> Node::reverse(std::vector<Node*> rev) {
+    std::vector<Node*> revSibblings;
+    for (auto &a: rev){
+        revSibblings.push_back((rev.back()));
+        rev.pop_back();
+    }
+    return revSibblings;
+}
+
+void Node::deleteAll() {
+    deleteAllHelper(this);
+}
+
+//delete function that does a postorder traversal and delete of all nodes.
+void Node::deleteAllHelper(Node *node) {
+    if (node->leftMostChild != nullptr) {
+        auto siblingList =reverse(node->leftMostChild->getSiblings());
+        for (auto &a: siblingList) {
+            auto temp1 = a->getType();
+            deleteAllHelper(a);
+        }
+    }
+//    std::cout << node->getType() <<std::endl;
+    delete(node);
+}
+
+//preorder traverse of AST
 void Node::traverse(Node *node, int depth) {
     std::string debug = node->getType();
     std::cout << node->getType() <<std::endl;
@@ -88,7 +115,6 @@ void InnerNode::adoptChildren(Node *child) {
 }
 
 void InnerNode::deleteChild() {
-    delete leftMostChild;
 }
 void Node::makeSiblings(Node *sibling) {
     if (this->rightSibling == nullptr){
