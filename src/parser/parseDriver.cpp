@@ -13,9 +13,11 @@ const string V = "variableAndIdnest";
 const string X = "expression";
 const string F = "class_func_etc";
 
+const string A = "ast_demo_1";
+
 int main() {
     cout<< "Parser started " <<endl;
-    string file = S;
+    string file = D;
     Parser test = Parser(file);
     test.readSource();
     cout<<"****************************************************" <<endl;

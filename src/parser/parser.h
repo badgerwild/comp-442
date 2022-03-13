@@ -9,16 +9,26 @@
 #include <unordered_set>
 #include "../lexer/lexer.h"
 #include "../lexer/Token.h"
+#include "../AST/ast.h"
 const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/parser/";
 const std::string FOLLOW = "first_follow_v";
 const std::string PARSE = "parse_table_v";
-const std::string VERSION ="12.csv";
+const std::string VERSION ="14.csv";
 const int ERROR = -1;
 const std::string SRCSUFFIX = ".txt";
 const std::string OUT = ".outderivation";
 const std::string ERR = ".outsyntaxerrors";
 const std::string LOG ="logs/";
+//unordered map with function pointers.
+inline const std::unordered_map<std::string, std::string> SEMANTIC_ACTIONS = {
+        {"_addOp", "add op"},
+        {"_num", "num"},
+        {"_id", "id"},
+        {"_not", "not"},
+        {"_integer", "integer"},
+        {"_float", "float"}
 
+};
 class Parser {
 private:
     std::vector<std::vector<std::string>> parseTable;
@@ -26,6 +36,8 @@ private:
     std::unordered_set<std::string> terminals;
     Lexer lexer;
     std::vector<std::string> parseStack{};
+    std::vector<Node*> semanticStack{};
+    Node* semanticTree;
     std::string sourceFile;
     std::string outFiles[2];
 public:
@@ -41,6 +53,9 @@ public:
     void log();
     bool first(std::string top, std::string _lookAhead);
     bool follow(std::string top, std::string _lookAhead);
+    Node* createLeaf(Token tok);
+    Node* createSubTree();
+
 
 
 };

@@ -106,6 +106,10 @@ bool Parser::parse(){
                 success = false;
             }
         }
+        else if(SEMANTIC_ACTIONS.find(topStack) != SEMANTIC_ACTIONS.end()){
+            std::cout<<SEMANTIC_ACTIONS.at(topStack)<<std::endl;
+            parseStack.pop_back();
+        }
         else {
             int tokenIndex = find2dIndex<std::string>(topStack, parseTable, 'y');
             int nonTerminalIndex = find2dIndex<std::string>(token.getType(), parseTable, 'x');
