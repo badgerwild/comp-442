@@ -78,14 +78,14 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
-    factories.insert({"programBlock", []{
-                         auto programBlock = new ProgramBlock();
-                         programBlock->setNumberOfChildren(NOLIMIT);
-                         programBlock->setType("programBlock");
-                         programBlock->setTypeOfChildren("stat");
-                         programBlock->setTypeOfChildren("varDecl");
-                         programBlock->setIsLeaf(false);
-                         return programBlock;
+    factories.insert({"statBlock", []{
+                         auto statBlock = new ProgramBlock();
+                         statBlock->setNumberOfChildren(NOLIMIT);
+                         statBlock->setType("statBlock");
+                         statBlock->setTypeOfChildren("stat");
+                         statBlock->setTypeOfChildren("varDecl");
+                         statBlock->setIsLeaf(false);
+                         return statBlock;
                      }
                      }
     );
@@ -160,8 +160,8 @@ NodeFactory::NodeFactory() {
                          ifStat->setNumberOfChildren(3);
                          ifStat->setType("ifStat");
                          ifStat->setTypeOfChildren("relExpr");
-                         ifStat->setTypeOfChildren("programBlock");
-                         ifStat->setTypeOfChildren("programBlock");
+                         ifStat->setTypeOfChildren("statBlock");
+                         ifStat->setTypeOfChildren("statBlock");
                          ifStat->setIsLeaf(false);
                          return ifStat;
                      }
@@ -177,7 +177,7 @@ NodeFactory::NodeFactory() {
                          forStat->setTypeOfChildren("expr");
                          forStat->setTypeOfChildren("relExpr");
                          forStat->setTypeOfChildren("assignStat");
-                         forStat->setTypeOfChildren("programBlock");
+                         forStat->setTypeOfChildren("statBlock");
                          forStat->setIsLeaf(false);
                          return forStat;
                      }

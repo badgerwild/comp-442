@@ -60,6 +60,7 @@ Token Parser::getNextToken() {
     return lexer.nextToken();
 }
 
+//TODO change return type to node* for the semmantic action phase.
 bool Parser::parse(){
     //TODO make Logging class for all componets to use
    //logger open files
@@ -80,13 +81,6 @@ bool Parser::parse(){
             //DEBUG
             //std::cout<<token <<std::endl;
         }
-        /*
-        if (token.getType() == "eof"){
-            parseStack.push_back("$");
-            outPut[0]<< "eof";
-            //token = getNextToken();
-        }
-         */
         if ((terminals.find(topStack)!= terminals.end()) ||(topStack == "&epsilon")) {
             if (topStack == token.getType()) {
                 parseStack.pop_back();
@@ -106,8 +100,98 @@ bool Parser::parse(){
                 success = false;
             }
         }
+
         else if(SEMANTIC_ACTIONS.find(topStack) != SEMANTIC_ACTIONS.end()){
-            std::cout<<SEMANTIC_ACTIONS.at(topStack)<<std::endl;
+            char DebugTokenType = 'o';
+            //std::cout<<SEMANTIC_ACTIONS.at(topStack)<<std::endl;
+            int swithChoice = SEMANTIC_ACTIONS.at(topStack);
+            switch(swithChoice){
+                case ID:
+                    createLeaf(token);
+                    break;
+                case NUM:
+                    createLeaf(token);
+                    break;
+                case NOT:
+                    openNot(token);
+                    break;
+//                case INTEGER:
+  //                  createLeaf(token);
+    //                break;
+      //          case FLOAT:
+        //            createLeaf(token);
+          //          break;
+                case TYPE:
+                   createTypeLeaf(token);
+                   break;
+                case ADDOP:
+                    openAddOpTree(token);
+                    break;
+                case CLOSEADDOP:
+                    closeAddOpTree();
+                    break;
+                case ASSIGNOP:
+                    openAssignOp(token);
+                    break;
+                case CLOSEASSIGNOP:
+                    closeAssignOp();
+                    break;
+                case MULTOP:
+                    openMultOp(token);
+                    break;
+                case CLOSEMULTOP:
+                    closeMultOp();
+                    break;
+                case CLOSENOT:
+                    closeNot();
+                    break;
+                case SIGN:
+                    openSign(token);
+                    break;
+                case CLOSESIGN:
+                    closeSign();
+                    break;
+                case EMPTY:
+                    createEpsilon();
+                    break;
+                case VARDECL:
+                    createVarDecl(token);
+                    break;
+                case ENDVARDECL:
+                    endVrDecl();
+                    break;
+                case FUNCDEF:
+                    createFuncDef();
+                    break;
+                case ENDFUNCDEF:
+                    endFuncDef();
+                    break;
+                case FPARAMLIST:
+                    createFparamList();
+                    break;
+                case ENDFPARAMLIST:
+                    endFparamList();
+                    break;
+                case DIMLIST:
+                    createDimList();
+                    break;
+                case ENDDIMLIST:
+                    endDimList();
+                case FPARAM:
+                    createFparam();
+                    break;
+                case ENDFPARAM:
+                    endFparam();
+                    break;
+                case STATBLOCK:
+                    createStatBlock();
+                    break;
+                case ENDSTATBLOCK:
+                    endStatBlock();
+                    break;
+                default:
+                    std::cout<<"why are you even here"<<std::endl;
+            }
             parseStack.pop_back();
         }
         else {
@@ -146,6 +230,9 @@ bool Parser::parse(){
         else {
             outPut[0].close();
             outPut[1].close();
+            //TODO retunr AST
+            //debug print:
+            Node::traverse(semanticStack.back(), 0);
             return true;
         }
 }
@@ -221,5 +308,242 @@ bool Parser::follow(std::string top, std::string _lookAhead) {
     return false;
 }
 
+//TODO optamize to remove redundancies
+void Parser::createLeaf(Token tok) {
+    std::string node_type = tok.getType();
+    if (TOKEN_NODE_TRANSLATIONS.find(node_type) !=TOKEN_NODE_TRANSLATIONS.end()){
+        node_type = TOKEN_NODE_TRANSLATIONS.at(node_type);
+    }
+    auto leaf = factory.makeNode(node_type);
+    leaf->setData(tok.getLexeme());
+    semanticStack.push_back(leaf);
+}
+
+void Parser::createTypeLeaf(Token tok) {
+    auto leaf = factory.makeNode("type");
+    leaf->setData(tok.getType());
+    semanticStack.push_back(leaf);
+}
+
+void Parser::openAddOpTree(Token tok) {
+    std::string node_type = tok.getType();
+    if (TOKEN_NODE_TRANSLATIONS.find(node_type) !=TOKEN_NODE_TRANSLATIONS.end()){
+        node_type = TOKEN_NODE_TRANSLATIONS.at(node_type);
+    }
+    std::vector<Node*> kids;
+    kids.push_back(semanticStack.back());
+    semanticStack.pop_back();
+    auto opNode = InnerNode::makeFamily(node_type,kids);
+    opNode->setData(tok.getLexeme());
+    semanticStack.push_back(opNode);
+}
+
+void Parser::closeAddOpTree() {
+    auto value = semanticStack.back();
+    semanticStack.pop_back();
+    auto opNode = semanticStack.back();
+    semanticStack.pop_back();
+    opNode->adoptChildren(value);
+    semanticStack.push_back(opNode);
+}
+
+void Parser::openAssignOp(Token tok) {
+    std::string node_type = tok.getType();
+    if (TOKEN_NODE_TRANSLATIONS.find(node_type) !=TOKEN_NODE_TRANSLATIONS.end()){
+        node_type = TOKEN_NODE_TRANSLATIONS.at(node_type);
+    }
+    std::vector<Node*> kids;
+    kids.push_back(semanticStack.back());
+    semanticStack.pop_back();
+    auto assignStatNode = InnerNode::makeFamily(node_type,kids);
+    semanticStack.push_back(assignStatNode);
+}
+
+void Parser::closeAssignOp() {
+    auto value = semanticStack.back();
+    semanticStack.pop_back();
+    auto opNode = semanticStack.back();
+    semanticStack.pop_back();
+    opNode->adoptChildren(value);
+    semanticStack.push_back(opNode);
+}
+
+void Parser::openMultOp(Token tok) {
+    std::string node_type = tok.getType();
+    if (TOKEN_NODE_TRANSLATIONS.find(node_type) !=TOKEN_NODE_TRANSLATIONS.end()){
+        node_type = TOKEN_NODE_TRANSLATIONS.at(node_type);
+    }
+    std::vector<Node*> kids;
+    kids.push_back(semanticStack.back());
+    semanticStack.pop_back();
+    auto multNode = InnerNode::makeFamily(node_type,kids);
+    multNode->setData(tok.getLexeme());
+    semanticStack.push_back(multNode);
+
+}
+
+void Parser::closeMultOp() {
+    auto value = semanticStack.back();
+    semanticStack.pop_back();
+    auto opNode = semanticStack.back();
+    semanticStack.pop_back();
+    opNode->adoptChildren(value);
+    semanticStack.push_back(opNode);
+
+}
 
 
+void Parser::openNot(Token tok) {
+    auto notNode = factory.makeNode(tok.getType());
+    notNode->setData(tok.getLexeme());
+    semanticStack.push_back(notNode);
+}
+
+void Parser::closeNot() {
+    auto value = semanticStack.back();
+    semanticStack.pop_back();
+    auto notNode = semanticStack.back();
+    semanticStack.pop_back();
+    notNode->adoptChildren(value);
+    semanticStack.push_back(notNode);
+}
+//TODO make this work????????
+void Parser::openSign(Token tok) {
+    //Find better way to do this
+    auto signNode = factory.makeNode("sign");
+    signNode->setData(tok.getLexeme());
+    semanticStack.push_back(signNode);
+}
+//TODO SIGN DOESN"T WORK AT ALL ??????
+void Parser::closeSign(){
+    auto value = semanticStack.back();
+    semanticStack.pop_back();
+    auto signNode = semanticStack.back();
+    semanticStack.pop_back();
+    signNode->adoptChildren(value);
+    semanticStack.push_back(signNode);
+}
+
+void Parser::createVarDecl(Token tok) {
+    std::string node_type = tok.getType();
+    if (TOKEN_NODE_TRANSLATIONS.find(node_type) !=TOKEN_NODE_TRANSLATIONS.end()){
+        node_type = TOKEN_NODE_TRANSLATIONS.at(node_type);
+    }
+    auto varDecl = factory.makeNode(node_type);
+    semanticStack.push_back(varDecl);
+
+}
+void Parser::endVrDecl() {
+   std::vector<Node*> temp;
+    for (int i = 0; i <3 ; ++i) {
+        temp.push_back(semanticStack.back());
+        semanticStack.pop_back();
+    }
+    auto varDecl = semanticStack.back();
+    semanticStack.pop_back();
+    //TODO reverse order of these assignments.
+    for(auto &a: temp){
+        varDecl->adoptChildren(a);
+    }
+    semanticStack.push_back(varDecl);
+
+}
+void Parser::createEpsilon() {
+    auto leaf = factory.makeNode(EPSILON);
+    semanticStack.push_back(leaf);
+}
+
+void Parser::createFuncDef() {
+    auto funDefNode = factory.makeNode("funcDef");
+    semanticStack.push_back(funDefNode);
+}
+
+void Parser::endFuncDef() {
+    std::vector<Node*> tempKids;
+    while (semanticStack.back()->getType() != "funcDef"){
+        tempKids.push_back(semanticStack.back());
+        semanticStack.pop_back();
+    }
+    auto funcDefNode = semanticStack.back();
+    semanticStack.pop_back();
+    for (auto &a: tempKids){
+       funcDefNode->adoptChildren(a);
+    }
+    semanticStack.push_back(funcDefNode);
+}
+
+void Parser::createDimList() {
+   auto dimList = factory.makeNode("dimList");
+   semanticStack.push_back(dimList);
+}
+
+void Parser::endDimList() {
+    std::vector<Node*> tempKids;
+    while (semanticStack.back()->getType() != "dimList"){
+        tempKids.push_back(semanticStack.back());
+        semanticStack.pop_back();
+    }
+    auto dimListNode = semanticStack.back();
+    semanticStack.pop_back();
+    for (auto &a: tempKids){
+        dimListNode->adoptChildren(a);
+    }
+    semanticStack.push_back(dimListNode);
+}
+
+void Parser::createFparam() {
+    auto dimList = factory.makeNode("fParam");
+    semanticStack.push_back(dimList);
+}
+
+void Parser::endFparam() {
+    std::vector<Node*> tempKids;
+    while (semanticStack.back()->getType() != "fParam"){
+        tempKids.push_back(semanticStack.back());
+        semanticStack.pop_back();
+    }
+    auto fParamNode = semanticStack.back();
+    semanticStack.pop_back();
+    for (auto &a: tempKids){
+        fParamNode->adoptChildren(a);
+    }
+    semanticStack.push_back(fParamNode);
+}
+
+void Parser::createFparamList() {
+    auto dimList = factory.makeNode("fParamList");
+    semanticStack.push_back(dimList);
+}
+
+void Parser::endFparamList(){
+    std::vector<Node*> tempKids;
+    while (semanticStack.back()->getType() != "fParamList"){
+        tempKids.push_back(semanticStack.back());
+        semanticStack.pop_back();
+    }
+    auto fParamNode = semanticStack.back();
+    semanticStack.pop_back();
+    for (auto &a: tempKids){
+        fParamNode->adoptChildren(a);
+    }
+    semanticStack.push_back(fParamNode);
+}
+
+void Parser::createStatBlock() {
+    auto dimList = factory.makeNode("statBlock");
+    semanticStack.push_back(dimList);
+}
+
+void Parser::endStatBlock(){
+    std::vector<Node*> tempKids;
+    while (semanticStack.back()->getType() != "statBlock"){
+        tempKids.push_back(semanticStack.back());
+        semanticStack.pop_back();
+    }
+    auto fParamNode = semanticStack.back();
+    semanticStack.pop_back();
+    for (auto &a: tempKids){
+        fParamNode->adoptChildren(a);
+    }
+    semanticStack.push_back(fParamNode);
+}

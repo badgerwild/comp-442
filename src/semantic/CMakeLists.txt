@@ -12,10 +12,9 @@ file(GLOB SOURCES
         ../AST/astFactory.cpp
         ../../DFA/DFA.cpp
         ../../DFA/DFA.h
-        parser.cpp
-        parser.h
-        parseDriver.cpp
+        ../parser/parser.cpp
+        ../parser/parser.h
         )
 set(SOURCES ${SOURCES})
-add_executable(${BINARY}_parser ${SOURCES})
-add_library(${BINARY}_par_lib STATIC ${SOURCES})
+add_executable(${BINARY}_semantic ${SOURCES})
+add_library(${BINARY}_sem_lib STATIC ${SOURCES})

@@ -20,6 +20,7 @@ protected:
     Node* leftMostSibling;
     Node* rightSibling;
     Node* leftMostChild;
+    std::string data;
 public:
     Node();
     Node(Node const& toCopy);
@@ -36,6 +37,7 @@ public:
     virtual void setRightSibling(Node *rightSibling);
     virtual void setLeftMostSibling(Node *leftMostSibling);
     virtual void setParent(Node *parent);
+    virtual void setData(const std::string &data);
     virtual void adoptChildren(Node *child) = 0;
     Node *getRightSibling();
     Node *getLeftMostChild() const;
@@ -48,7 +50,6 @@ public:
 class InnerNode: public Node{
 private:
    int numberOfChildren;
-
    std::unordered_set<std::string> typeOfChildren;
 public:
     InnerNode() = default;
@@ -68,14 +69,14 @@ public:
  */
 class IntermediateInnerNode: public InnerNode{
 private:
-    std::string data;
+
 public:
     IntermediateInnerNode();
 
     virtual ~IntermediateInnerNode();
 
     const std::string &getData() const;
-    void setData(const std::string &data);
+    void setData(const std::string &data) override;
     void adoptChildren(Node *child) override;
 };
 /* Leaf node
@@ -83,10 +84,9 @@ public:
  */
 class Leaf: public Node{
 private:
- std::string data;
 
 public:
-    void setData(const std::string &data);
+   // void setData(const std::string &data);
     void adoptChildren(Node *child);
 
 };

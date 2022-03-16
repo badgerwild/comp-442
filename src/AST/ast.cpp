@@ -19,6 +19,8 @@ void Node::setType(std::string ty) {
     this->type =ty;
 }
 
+
+
 Node::Node(Node const& toCopy){
     this->type = toCopy.type;
     this->isLeaf = toCopy.isLeaf;
@@ -181,8 +183,8 @@ void InnerNode::setTypeOfChildren(const std::string &typeOfChild) {
 }
 
 
-void Leaf::setData(const std::string &data) {
-    Leaf::data = data;
+void Node::setData(const std::string &data) {
+    this->data = data;
 }
 
 void Leaf::adoptChildren(Node *child) {};
