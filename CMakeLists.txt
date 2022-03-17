@@ -8,7 +8,7 @@ add_subdirectory(src/lexer)
 add_subdirectory(src/parser)
 add_subdirectory(DFA)
 add_subdirectory(src/AST)
-
+add_subdirectory(src/semantic)
 
 
 

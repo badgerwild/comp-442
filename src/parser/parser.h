@@ -110,7 +110,6 @@ private:
     Lexer lexer;
     std::vector<std::string> parseStack{};
     std::vector<Node*> semanticStack{};
-    Node* semanticTree;
     NodeFactory factory{};
     std::string sourceFile;
     std::string outFiles[2];
@@ -119,7 +118,7 @@ public:
     ~Parser();
     std::vector<std::vector<std::string>>loadTable(std::string fileName);
     void readSource();
-    bool parse();
+    Node * parse();
     void skipError();
     void inverseRHSMultiPush(std::string rules);
     Token getNextToken();
@@ -130,7 +129,6 @@ public:
     //AST creation functions
     void createLeaf(Token tok);
     void createTypeLeaf(Token tok);
-    Node* createSubTree();
     void openAddOpTree(Token tok);
     void closeAddOpTree();
     void openAssignOp(Token tok);

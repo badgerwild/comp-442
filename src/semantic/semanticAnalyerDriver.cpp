@@ -1,8 +1,8 @@
 //
-// Created by jason on 2/13/22.
+// Created by jason on 3/16/22.
 //
 #include <iostream>
-#include "parser.h"
+#include "../parser/parser.h"
 
 using namespace std;
 const string D = "short_demo";
@@ -21,9 +21,11 @@ int main() {
     Parser test = Parser(file);
     test.readSource();
     cout<<"****************************************************" <<endl;
-    /*
-    if(test.parse()){
+    auto ast = test.parse();
+    if(ast->getType() != "Null"){
         cout<< file << " Sucessfully parsed" <<endl;
+        Node::traverse(ast, 0);
+        ast->deleteAll();
     }
     else{
         cout<< file << " had errors parsed" <<endl;
@@ -31,5 +33,5 @@ int main() {
     cout<<"*****************************************************" <<endl;
 
     cout<<"Parser Finished" <<endl;
-*/
+
 }

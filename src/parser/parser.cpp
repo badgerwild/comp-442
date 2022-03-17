@@ -61,7 +61,7 @@ Token Parser::getNextToken() {
 }
 
 //TODO change return type to node* for the semmantic action phase.
-bool Parser::parse(){
+Node * Parser::parse(){
     //TODO make Logging class for all componets to use
    //logger open files
   std::ofstream outPut[2];
@@ -225,15 +225,14 @@ bool Parser::parse(){
         if (!success) {
             outPut[0].close();
             outPut[1].close();
-            return false;
+            return factory.makeNode(EPSILON);
         }
         else {
             outPut[0].close();
             outPut[1].close();
-            //TODO retunr AST
             //debug print:
-            Node::traverse(semanticStack.back(), 0);
-            return true;
+            //Node::traverse(semanticStack.back(), 0);
+            return semanticStack.back();
         }
 }
 

@@ -14,6 +14,11 @@ file(GLOB SOURCES
         ../../DFA/DFA.h
         ../parser/parser.cpp
         ../parser/parser.h
+        SymbolTable.h
+        SymbolTable.cpp
+        semanticAnalyzer.h
+        semanticAnalyzer.cpp
+       semanticAnalyerDriver.cpp
         )
 set(SOURCES ${SOURCES})
 add_executable(${BINARY}_semantic ${SOURCES})
