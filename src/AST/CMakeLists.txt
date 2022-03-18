@@ -6,7 +6,10 @@ file(GLOB SOURCES
         astFactory.h
         astFactory.cpp
         astDriver.cpp
-
+        ../semantic/SymbolTable.cpp
+        ../semantic/SymbolTable.h
+        ../semantic/visitors.h
+        ../semantic/visitors.cpp
         )
 set(SOURCES ${SOURCES})
 

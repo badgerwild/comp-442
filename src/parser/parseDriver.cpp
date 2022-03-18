@@ -21,6 +21,7 @@ int main() {
     Parser test = Parser(file);
     test.readSource();
     cout<<"****************************************************" <<endl;
+    test.parse();
     /*
     if(test.parse()){
         cout<< file << " Sucessfully parsed" <<endl;

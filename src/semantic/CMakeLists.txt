@@ -14,6 +14,8 @@ file(GLOB SOURCES
         ../../DFA/DFA.h
         ../parser/parser.cpp
         ../parser/parser.h
+        visitors.cpp
+        visitors.h
         SymbolTable.h
         SymbolTable.cpp
         semanticAnalyzer.h

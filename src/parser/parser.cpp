@@ -231,7 +231,7 @@ Node * Parser::parse(){
             outPut[0].close();
             outPut[1].close();
             //debug print:
-            //Node::traverse(semanticStack.back(), 0);
+            Node::traverse(semanticStack.back(), 0);
             return semanticStack.back();
         }
 }

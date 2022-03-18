@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include "../parser/parser.h"
+#include "SymbolTable.h"
 
 using namespace std;
 const string D = "short_demo";
@@ -16,6 +17,8 @@ const string F = "class_func_etc";
 const string A = "ast_demo_1";
 
 int main() {
+    //TODO: IMPORTANT FOR DEMO
+    /*
     cout<< "Parser started " <<endl;
     string file = D;
     Parser test = Parser(file);
@@ -33,5 +36,17 @@ int main() {
     cout<<"*****************************************************" <<endl;
 
     cout<<"Parser Finished" <<endl;
+     */
+
+    //temp test of Symbiltable
+    vector<int> param;
+    SymbolTable test1 = SymbolTable("Global", nullptr, 0);
+    SymbolTable test3 = SymbolTable("foot", &test1, 0);
+    FuncTableRow test2 = FuncTableRow("bean", "Void", "Function", param, nullptr);
+    FuncTableRow test4 = FuncTableRow("spud", "int", "Function", param, &test3);
+    test1.insert(test2);
+    test1.insert(test4);
+
+    cout << test1;
 
 }
