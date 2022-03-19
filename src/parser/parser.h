@@ -15,7 +15,7 @@
 const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/parser/";
 const std::string FOLLOW = "first_follow_v";
 const std::string PARSE = "parse_table_v";
-const std::string VERSION ="25.csv";
+const std::string VERSION ="29.csv";
 //int constants
 const int ADDOP =1;
 const int CLOSEADDOP = 2;
@@ -45,6 +45,14 @@ const int FPARAM = 25;
 const int ENDFPARAM = 26;
 const int STATBLOCK = 27;
 const int ENDSTATBLOCK = 28;
+const int CLASSDECL = 29;
+const int ENDCLASSDECL = 30;
+const int MEMBDECL = 31;
+const int ENDMEMBDECL = 32;
+const int FUNCDECL = 33;
+const int ENDFUNCDECL = 34;
+const int PROG = 35;
+const int ENDPROG = 36;
 
 
 
@@ -85,7 +93,15 @@ inline const std::unordered_map<std::string, int> SEMANTIC_ACTIONS = {
         {"_fParam", FPARAM},
         {"_endFparam", ENDFPARAM},
         {"_statBlock", STATBLOCK},
-        {"_endStatBlock", ENDSTATBLOCK}
+        {"_endStatBlock", ENDSTATBLOCK},
+        {"_classDecl", CLASSDECL},
+        {"_endClassDecl", ENDCLASSDECL},
+        {"_membDecl",MEMBDECL},
+        {"_endMembDecl", ENDMEMBDECL},
+        {"_funcDecl", FUNCDECL},
+        {"_endFuncDecl", ENDFUNCDECL},
+        {"_prog", PROG},
+        {"_endProg", ENDPROG}
 
 };
 
@@ -152,12 +168,12 @@ public:
     void endFparam();
     void createStatBlock();
     void endStatBlock();
-
-
-
-
-
-
+    void createClassDef();
+    void endClassDef();
+    void membDecl();
+    void endMembDecl();
+    void generalDecl(std::string type);
+    void endGeneralDecl(std::string type);
 };
 
 

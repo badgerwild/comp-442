@@ -33,7 +33,7 @@ SymbolTable *SymbolTableRow::getSubTable() const {
 
 SymbolTableRow::SymbolTableRow() {}
 
-SymbolTable::SymbolTable() {}
+
 
 FuncTableRow::FuncTableRow() {}
 
@@ -43,7 +43,7 @@ FuncTableRow::FuncTableRow(const std::string &name, const std::string &kind, con
 FuncTableRow::~FuncTableRow() {
 
 }
-
+SymbolTable::SymbolTable() {}
 SymbolTable::SymbolTable(std::string scope, SymbolTable *parent, int level) {
     this->scope = scope;
     this-> parentTable = parent;
@@ -59,7 +59,7 @@ const std::string &SymbolTable::getScope() const {
 }
 
 void SymbolTable::setScope(const std::string &scope) {
-    SymbolTable::scope = scope;
+    this->scope = scope;
 }
 /*
 SymbolTableRow SymbolTable::createNewTable(std::string scope){
@@ -95,10 +95,10 @@ SymbolTableRow SymbolTable::search(std::string id_) {
 std::ostream &operator << (std::ostream &out, SymbolTable &S){
     out <<"------------------------------------------------------" <<std::endl;
     out<<"table name --> " << S.scope<<std::endl;
-    if (S.parentTable != nullptr) {
+    /*if (S.parentTable != nullptr) {
         out<<"Parent table -->" <<S.parentTable->scope <<std::endl;
     }
-
+*/
     out<< "Name | Kind  | Symbol Type | SubTable "<< std::endl;
     out <<"------------------------------------------------------" <<std::endl;
     for (auto &a : S.tableEntries) {
@@ -107,7 +107,7 @@ std::ostream &operator << (std::ostream &out, SymbolTable &S){
             out<< a.getSubTable()->getScope()<< std::endl;
         }
         else{
-            out<<std::endl;
+            out<<"no sub table" <<std::endl;
         }
     }
     out <<"------------------------------------------------------" <<std::endl;
@@ -115,6 +115,12 @@ std::ostream &operator << (std::ostream &out, SymbolTable &S){
    }
 
 
+VarDeclROW::VarDeclROW(const std::string &name, const std::string &kind, const std::string &symbolType,
+                       SymbolTable *subTable, const std::vector<std::string> &dims) : SymbolTableRow(name, kind, symbolType,
+                                                                                        subTable), dims(dims) {}
 
+VarDeclROW::VarDeclROW() {}
 
+VarDeclROW::~VarDeclROW() {
 
+}

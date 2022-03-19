@@ -1,5 +1,5 @@
 //
-// Created by jason on 3/5/22.
+// Created by jason on 3/5/22->
 //
 #include <iostream>
 #include "ast.h"
@@ -43,11 +43,13 @@ Node& Node::operator=(const Node &toAssign) {
 std::vector<Node*> Node::getSiblings() {
     std::vector<Node*> kidList;
     kidList.push_back(this);
-    auto right = rightSibling;
-    while (right != nullptr){
-       kidList.push_back(right);
-       right = right->rightSibling;
+    if (rightSibling != nullptr) {
+        auto right = rightSibling;
+        while (right != nullptr) {
+            kidList.push_back(right);
+            right = right->rightSibling;
 
+        }
     }
     return kidList;
 }
@@ -191,8 +193,16 @@ void IntermediateInnerNode::setData(const std::string &data) {
     IntermediateInnerNode::data = data;
 }
 
-const std::string &IntermediateInnerNode::getData() const {
+const std::string &Node::getData() const {
     return data;
+}
+
+const SymbolTableRow &Node::getSymbolTableEntry() const {
+    return symbolTableEntry;
+}
+
+Node *Node::getParent() const {
+    return parent;
 }
 
 void IntermediateInnerNode::adoptChildren(Node *child) {
@@ -224,7 +234,6 @@ ProgNode::~ProgNode() {
     delete leftMostSibling;
     delete rightSibling;
     deleteChild();
-std::cout <<"deleteing prog" << std::endl;
 }
 
 
@@ -269,6 +278,10 @@ VarDecl::VarDecl() {}
 
 VarDecl::~VarDecl() {
 
+}
+
+void VarDecl::addEntry(VarDeclROW vec) {
+    symbolTableEntry = vec;
 }
 
 DimList::DimList() {}
@@ -423,7 +436,6 @@ ArithExprNode::~ArithExprNode() {
 TermNode::TermNode() {}
 
 TermNode::~TermNode() {
- std::cout<< "deleting temr" <<std::endl;
 }
 StatOrVarDeclNode::StatOrVarDeclNode() {}
 
@@ -439,7 +451,6 @@ FactorNode::~FactorNode() {
 TypeNode::TypeNode() {}
 
 TypeNode::~TypeNode() {
-std::cout<<"delete type"<<std::endl;
 }
 IdNode::IdNode() {}
 
@@ -477,127 +488,137 @@ IndexList::~IndexList() {
 
 }
 /// All accept methods for the visitor patter are here:
-void ProgNode::accept(Visitor visitor) {
-    visitor.visit(this);
+void ProgNode::accept(Visitor* visitor) {
+    visitor->visit(this);
 }
-void ClassListNode::accept(Visitor visitor) {
-    visitor.visit(this);
+void ClassListNode::accept(Visitor* visitor) {
+    visitor->visit(this);
 }
-void FuncDefList::accept(Visitor visitor) {
-    visitor.visit(this);
+void FuncDefList::accept(Visitor* visitor) {
+    visitor->visit(this);
 }
-void ClassDeclNode::accept(Visitor visitor) {
-    visitor.visit(this);
+void ClassDeclNode::accept(Visitor* visitor) {
+    visitor->visit(this);
 }
-void FuncDefNode::accept(Visitor visitor) {
-    visitor.visit(this);
+void FuncDefNode::accept(Visitor* visitor) {
+    visitor->visit(this);
 }
-void MembListNode::accept(Visitor visitor) {
-    visitor.visit(this);
+void MembListNode::accept(Visitor* visitor) {
+    visitor->visit(this);
 }
-void ProgramBlock::accept(Visitor visitor) {
-    visitor.visit(this);
+void ProgramBlock::accept(Visitor* visitor) {
+    visitor->visit(this);
 }
-void VarDecl::accept(Visitor visitor) {
-    visitor.visit(this);
+void VarDecl::accept(Visitor* visitor) {
+    visitor->visit(this);
 }
-void DimList::accept(Visitor visitor) {
-    visitor.visit(this);
+void DimList::accept(Visitor* visitor) {
+    visitor->visit(this);
 }
-void AssignStat::accept(Visitor visitor) {
-    visitor.visit(this);
+void AssignStat::accept(Visitor* visitor) {
+    visitor->visit(this);
 }
-void PutStat::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void ReturnStat::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void GetStat::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void IfStat::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void ForStat::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void AddOp::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void MultOp::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void NotNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void SignNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void DotNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void DataMemberNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void FCallNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void RelOpNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void FuncDeclNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void FPAramNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void InherListNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void ScopeSpec::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void IndexList::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void FParamList::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void AParamsNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void StatNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void DotParamNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void MembDeclNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void TermNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void StatOrVarDeclNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void FactorNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void TypeNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void IdNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void NumNode::accept(Visitor visitor) {
-    visitor.visit(this);
-}
-void EpsilonNode::accept(Visitor visitor) {
-    visitor.visit(this);
+void ArithExprNode::accept(Visitor *visitor) {
+    visitor->visit(this);
 }
 
+void PutStat::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void ReturnStat::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void RelExprNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void GetStat::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void IfStat::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void ForStat::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void AddOp::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void MultOp::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void NotNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void SignNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void DotNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void DataMemberNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void FCallNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void RelOpNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void FuncDeclNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void FPAramNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void InherListNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void ScopeSpec::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void IndexList::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void FParamList::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void AParamsNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void StatNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void DotParamNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void MembDeclNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void TermNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void StatOrVarDeclNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void FactorNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void TypeNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void IdNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void NumNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+void EpsilonNode::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+
+void ExprNode::accept(Visitor *visitor) {
+    visitor->visit(this);
+}
 
 
 

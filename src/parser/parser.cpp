@@ -105,6 +105,7 @@ Node * Parser::parse(){
             char DebugTokenType = 'o';
             //std::cout<<SEMANTIC_ACTIONS.at(topStack)<<std::endl;
             int swithChoice = SEMANTIC_ACTIONS.at(topStack);
+            //TODO make this a function to make this look a little less insane
             switch(swithChoice){
                 case ID:
                     createLeaf(token);
@@ -177,6 +178,7 @@ Node * Parser::parse(){
                     break;
                 case ENDDIMLIST:
                     endDimList();
+                    break;
                 case FPARAM:
                     createFparam();
                     break;
@@ -188,6 +190,31 @@ Node * Parser::parse(){
                     break;
                 case ENDSTATBLOCK:
                     endStatBlock();
+                    break;
+                case CLASSDECL:
+                    createClassDef();
+                    break;
+                case ENDCLASSDECL:
+                    endClassDef();
+                    break;
+                case MEMBDECL:
+                    //membDecl();
+                    generalDecl("membDecl");
+                    break;
+                case ENDMEMBDECL:
+                    endGeneralDecl("membDecl");
+                    break;
+                case FUNCDECL:
+                    generalDecl("funcDecl");
+                    break;
+                case ENDFUNCDECL:
+                    endGeneralDecl("funcDecl");
+                    break;
+                case PROG:
+                    generalDecl("prog");
+                    break;
+                case ENDPROG:
+                    endGeneralDecl("prog");
                     break;
                 default:
                     std::cout<<"why are you even here"<<std::endl;
@@ -231,7 +258,7 @@ Node * Parser::parse(){
             outPut[0].close();
             outPut[1].close();
             //debug print:
-            Node::traverse(semanticStack.back(), 0);
+           // Node::traverse(semanticStack.back(), 0);
             return semanticStack.back();
         }
 }
@@ -545,4 +572,47 @@ void Parser::endStatBlock(){
         fParamNode->adoptChildren(a);
     }
     semanticStack.push_back(fParamNode);
+}
+
+void Parser::createClassDef() {
+    auto dimList = factory.makeNode("classDecl");
+    semanticStack.push_back(dimList);
+
+
+}
+
+void Parser::endClassDef() {
+    std::vector<Node*> tempKids;
+    while (semanticStack.back()->getType() != "classDecl"){
+        tempKids.push_back(semanticStack.back());
+        semanticStack.pop_back();
+    }
+    auto fParamNode = semanticStack.back();
+    semanticStack.pop_back();
+    for (auto &a: tempKids){
+        fParamNode->adoptChildren(a);
+    }
+    semanticStack.push_back(fParamNode);
+}
+
+void Parser::generalDecl(std::string type) {
+    auto dimList = factory.makeNode(type);
+    semanticStack.push_back(dimList);
+}
+
+void Parser::endGeneralDecl(std::string type) {
+    std::vector<Node*> tempKids;
+    while (semanticStack.back()->getType() !=  type){
+        tempKids.push_back(semanticStack.back());
+        semanticStack.pop_back();
+    }
+    auto fParamNode = semanticStack.back();
+    semanticStack.pop_back();
+    for (auto &a: tempKids){
+        fParamNode->adoptChildren(a);
+    }
+    semanticStack.push_back(fParamNode);
+
+
+
 }

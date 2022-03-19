@@ -12,9 +12,16 @@ file(GLOB SOURCES
         ../AST/astFactory.cpp
         ../../DFA/DFA.cpp
         ../../DFA/DFA.h
+       ../semantic/semanticAnalyzer.cpp
+        ../semantic/semanticAnalyzer.h
+        ../semantic/SymbolTable.h
+        ../semantic/SymbolTable.cpp
+        ../semantic/visitors.cpp
+        ../semantic/visitors.h
         parser.cpp
         parser.h
         parseDriver.cpp
+
         )
 set(SOURCES ${SOURCES})
 add_executable(${BINARY}_parser ${SOURCES})

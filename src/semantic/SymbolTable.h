@@ -35,13 +35,24 @@ private:
     std::vector<int> params;
 public:
     FuncTableRow();
-
     FuncTableRow(const std::string &name, const std::string &kind, const std::string &symbolType,
                  const std::vector<int> &params, SymbolTable *subTable);
-
     virtual ~FuncTableRow();
 
 };
+
+class VarDeclROW: public SymbolTableRow{
+private:
+    std::vector<std::string> dims;
+public:
+    VarDeclROW();
+
+    VarDeclROW(const std::string &name, const std::string &kind, const std::string &symbolType, SymbolTable *subTable,
+               const std::vector<std::string> &dims);
+
+    virtual ~VarDeclROW();
+};
+
 
 class SymbolTable {
 private:

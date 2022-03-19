@@ -106,6 +106,7 @@ NodeFactory::NodeFactory() {
                          dimList->setNumberOfChildren(NOLIMIT);
                          dimList->setType("dimList");
                          dimList->setTypeOfChildren("num");
+                        // dimList->setData(nullptr); ///might need to fix
                          dimList->setIsLeaf(false);
                          return dimList;
                      }

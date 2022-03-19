@@ -48,10 +48,16 @@ class TypeNode;
 class IdNode;
 class NumNode;
 class EpsilonNode;
+class RelExprNode;
 
 class Visitor {
 public:
-   virtual void visit(ProgNode* node){};
+    Visitor() {}
+
+    virtual ~Visitor() {
+
+    }
+    virtual void visit(ProgNode* node){};
     virtual void visit(ClassListNode* node){};
     virtual void visit(FuncDefList* node){};
     virtual void visit(ClassDeclNode* node){};
@@ -93,22 +99,29 @@ public:
     virtual void visit(IdNode* node){};
     virtual void visit(NumNode* node){};
     virtual void visit(EpsilonNode* node){};
+    virtual void visit(RelExprNode* node){}
 };
 
 
 class SemanticTableVisitor: public Visitor{
-    void visit(FuncDefNode* node) override{};
-    void visit(ProgramBlock* node) override{};
-    void visit(AssignStat* node) override{};
-    void visit(IdNode* node) override{};
-    void visit(NotNode* node) override{};
-    void visit(AddOp* node) override{};
-    void visit(NumNode* node) override{};
-    void visit(VarDecl* node) override{};
-    void visit(TypeNode* node) override{};
-    void visit(FParamList* node) override{};
-    void visit(FPAramNode* node) override{};
-    void visit(DimList* node) override{};
+public:
+    SemanticTableVisitor() {}
+
+    virtual ~SemanticTableVisitor() {
+
+    }
+    void visit(FuncDefNode* node) override;
+    void visit(ProgramBlock* node) override;
+    void visit(AssignStat* node) override;
+    void visit(IdNode* node) override;
+    void visit(NotNode* node) override;
+    void visit(AddOp* node) override;
+    void visit(NumNode* node) override;
+    void visit(VarDecl* node) override;
+    void visit(TypeNode* node) override;
+    void visit(FParamList* node) override;
+    void visit(FPAramNode* node) override;
+    void visit(DimList* node) override;
 
 
 
