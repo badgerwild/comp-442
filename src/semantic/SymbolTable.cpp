@@ -33,16 +33,25 @@ SymbolTable *SymbolTableRow::getSubTable() const {
 
 SymbolTableRow::SymbolTableRow() {}
 
+SymbolTableRow::SymbolTableRow(const std::string &name, const std::string &kind, SymbolTable *subTable) : name(name),
+                                                                                                          kind(kind),
+                                                                                                          subTable(
+                                                                                                                  subTable) {}
 
 
 FuncTableRow::FuncTableRow() {}
 
+//TODO deal with param here
 FuncTableRow::FuncTableRow(const std::string &name, const std::string &kind, const std::string &symbolType,
                            const std::vector<int> &params, SymbolTable *subTable) : SymbolTableRow(name, kind, symbolType, subTable), params(params) {}
 
 FuncTableRow::~FuncTableRow() {
 
 }
+
+FuncTableRow::FuncTableRow(const std::string &name, const std::string &kind, const std::string &symbolType,
+                           SymbolTable *subTable) : SymbolTableRow(name, kind, symbolType, subTable) {}
+
 SymbolTable::SymbolTable() {}
 SymbolTable::SymbolTable(std::string scope, SymbolTable *parent, int level) {
     this->scope = scope;

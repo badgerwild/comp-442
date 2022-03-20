@@ -18,6 +18,9 @@ private:
     SymbolTable* subTable;
 public:
     SymbolTableRow();
+
+    SymbolTableRow(const std::string &name, const std::string &kind, SymbolTable *subTable);
+
     SymbolTableRow(const std::string &name, const std::string &kind, const std::string &symbolType,
                    SymbolTable *subTable);
     virtual ~SymbolTableRow();
@@ -35,6 +38,10 @@ private:
     std::vector<int> params;
 public:
     FuncTableRow();
+
+    FuncTableRow(const std::string &name, const std::string &kind, const std::string &symbolType,
+                 SymbolTable *subTable);
+
     FuncTableRow(const std::string &name, const std::string &kind, const std::string &symbolType,
                  const std::vector<int> &params, SymbolTable *subTable);
     virtual ~FuncTableRow();

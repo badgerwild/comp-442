@@ -110,6 +110,10 @@ public:
     virtual ~SemanticTableVisitor() {
 
     }
+    void visit(ProgNode* node) override;
+    void visit(ClassDeclNode* node) override;
+    void visit(MembDeclNode* node) override;
+    void visit(FuncDeclNode* node) override;
     void visit(FuncDefNode* node) override;
     void visit(ProgramBlock* node) override;
     void visit(AssignStat* node) override;

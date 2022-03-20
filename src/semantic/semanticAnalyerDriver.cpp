@@ -30,7 +30,7 @@ int main() {
         cout<< file << " Sucessfully parsed" <<endl;
         Node::traverse(ast, 0);
 
-//        tableBuilder->visit(dynamic_cast<FuncDefNode*>(ast));
+        tableBuilder->visit(dynamic_cast<ProgNode*>(ast));
         ast->deleteAll();
         delete(tableBuilder);
     }
