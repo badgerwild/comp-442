@@ -169,10 +169,10 @@ NodeFactory::NodeFactory() {
                      }
     );
 
-    factories.insert({"forStat", []{
+    factories.insert({"whileStat", []{
                          auto forStat = new ForStat();
                          forStat->setNumberOfChildren(6);
-                         forStat->setType("forStat");
+                         forStat->setType("whileStat");
                          forStat->setTypeOfChildren("type");
                          forStat->setTypeOfChildren("id");
                          forStat->setTypeOfChildren("expr");
@@ -356,7 +356,7 @@ NodeFactory::NodeFactory() {
                          stat->setType("stat");
                          stat->setTypeOfChildren("ifStat");
                          stat->setTypeOfChildren("assignStat");
-                         stat->setTypeOfChildren("forStat");
+                         stat->setTypeOfChildren("whileStat");
                          stat->setTypeOfChildren("getStat");
                          stat->setTypeOfChildren("putStat");
                          stat->setTypeOfChildren("returnStat");

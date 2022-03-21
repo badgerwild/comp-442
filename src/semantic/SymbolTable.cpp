@@ -82,7 +82,6 @@ void  SymbolTable::insert(SymbolTableRow row) {
     tableEntries.push_back(row);
 }
 
-//TODO create nulltable entry.....
 SymbolTableRow SymbolTable::search(std::string id_) {
     SymbolTableRow foundValue;
     bool found = false;
@@ -103,7 +102,7 @@ SymbolTableRow SymbolTable::search(std::string id_) {
 }
 std::ostream &operator << (std::ostream &out, SymbolTable &S){
     out <<"------------------------------------------------------" <<std::endl;
-    out<<"table name --> " << S.scope<<std::endl;
+    out<<"table scope --> " << S.scope<<std::endl;
     /*if (S.parentTable != nullptr) {
         out<<"Parent table -->" <<S.parentTable->scope <<std::endl;
     }
@@ -113,7 +112,7 @@ std::ostream &operator << (std::ostream &out, SymbolTable &S){
     for (auto &a : S.tableEntries) {
         out<< a.getName() <<" | " << a.getKind() << " | " << a.getSymbolType() << " | ";
         if (a.getSubTable() != nullptr ){
-            out<< a.getSubTable()->getScope()<< std::endl;
+        out<< a.getSubTable()->getScope()<< "-->"<<a.getName()<< std::endl;
         }
         else{
             out<<"no sub table" <<std::endl;

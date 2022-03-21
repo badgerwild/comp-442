@@ -15,7 +15,7 @@
 const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/parser/";
 const std::string FOLLOW = "first_follow_v";
 const std::string PARSE = "parse_table_v";
-const std::string VERSION ="29.csv";
+const std::string VERSION ="40.csv";
 //int constants
 const int ADDOP =1;
 const int CLOSEADDOP = 2;
@@ -53,6 +53,30 @@ const int FUNCDECL = 33;
 const int ENDFUNCDECL = 34;
 const int PROG = 35;
 const int ENDPROG = 36;
+const int ARITHEXPR = 37;
+const int ENDARITHEXPR = 38;
+const int FACTOR = 39;
+const int ENDFACTOR = 40;
+const int TERM = 41;
+const int ENDTERM = 42;
+const int EXPR = 43;
+const int ENDEXPR = 44;
+const int RELOP = 45;
+const int RELEXPR = 46;
+const int ENDRELEXPR = 47;
+const int IF = 48;
+const int ENDIF = 49;
+const int WHILE = 50;
+const int ENDWHILE = 51;
+const int GET = 52;
+const int ENDGET = 53;
+const int PUT = 54;
+const int RETURN = 56;
+const int ENDRETURN = 57;
+const int ENDPUT = 58;
+const int SCOPE = 59;
+const int ENDSCOPE = 60;
+
 
 
 
@@ -71,8 +95,6 @@ inline const std::unordered_map<std::string, int> SEMANTIC_ACTIONS = {
         {"_id", ID},
         {"_not", NOT},
         {"_type", TYPE},
-       // {"_integer", INTEGER},
-        // {"_float", FLOAT},
         {"_assignOp", ASSIGNOP},
         {"_closeAssignOp", CLOSEASSIGNOP},
         {"_multOp", MULTOP},
@@ -101,7 +123,30 @@ inline const std::unordered_map<std::string, int> SEMANTIC_ACTIONS = {
         {"_funcDecl", FUNCDECL},
         {"_endFuncDecl", ENDFUNCDECL},
         {"_prog", PROG},
-        {"_endProg", ENDPROG}
+        {"_endProg", ENDPROG},
+        {"_arithExpr", ARITHEXPR},
+        {"_endArithExpr", ENDARITHEXPR},
+        {"_factor", FACTOR},
+        {"_endFactor", ENDFACTOR},
+        {"_term",TERM},
+        {"_endTerm", ENDTERM},
+        {"_expr", EXPR},
+        {"_endExpr", ENDEXPR},
+        {"_relOp", RELOP},
+        {"_relExpr", RELEXPR},
+        {"_endRelExpr", ENDRELEXPR},
+        {"_if",IF},
+        {"_endIf", ENDIF},
+        {"_while", WHILE},
+        {"_endWhile", ENDWHILE},
+        {"_get", GET},
+        {"_endGet", ENDGET},
+        {"_put", PUT},
+        {"_endPut", ENDPUT},
+        {"_return", RETURN},
+        {"_endReturn", ENDRETURN},
+        {"_scopeSpec", SCOPE},
+        {"_endScope", ENDSCOPE}
 
 };
 
@@ -116,7 +161,14 @@ inline const std::unordered_map<std::string, std::string> TOKEN_NODE_TRANSLATION
         {"and", "multOp"},
         {"equal", "assignStat"},
         {"not", "not"},
-        {"let", "varDecl"}
+        {"let", "varDecl"},
+        {"eq", "relOp"},
+        {"neq", "relOp"},
+        {"lt", "relOp"},
+        {"gt", "relOp"},
+        {"leq", "relOp"},
+        {"geq", "relOp"},
+
 };
 class Parser {
 private:
@@ -142,6 +194,7 @@ public:
     void log();
     bool first(std::string top, std::string _lookAhead);
     bool follow(std::string top, std::string _lookAhead);
+    void handleSemanticActions(int choice, Token token);
     //AST creation functions
     void createLeaf(Token tok);
     void createTypeLeaf(Token tok);

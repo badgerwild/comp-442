@@ -18,8 +18,6 @@ file(GLOB SOURCES
         visitors.h
         SymbolTable.h
         SymbolTable.cpp
-        semanticAnalyzer.h
-        semanticAnalyzer.cpp
        semanticAnalyerDriver.cpp
         )
 set(SOURCES ${SOURCES})

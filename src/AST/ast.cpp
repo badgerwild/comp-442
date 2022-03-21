@@ -42,13 +42,17 @@ Node& Node::operator=(const Node &toAssign) {
 
 std::vector<Node*> Node::getSiblings() {
     std::vector<Node*> kidList;
-    kidList.push_back(this);
-    if (rightSibling != nullptr) {
-        auto right = rightSibling;
-        while (right != nullptr) {
-            kidList.push_back(right);
-            right = right->rightSibling;
+    if (this == NULL){
+        kidList.push_back(nullptr);
+    }else {
+        kidList.push_back(this);
+        if (rightSibling != nullptr) {
+            auto right = rightSibling;
+            while (right != nullptr) {
+                kidList.push_back(right);
+                right = right->rightSibling;
 
+            }
         }
     }
     return kidList;

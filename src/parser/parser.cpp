@@ -103,122 +103,8 @@ Node * Parser::parse(){
 
         else if(SEMANTIC_ACTIONS.find(topStack) != SEMANTIC_ACTIONS.end()){
             char DebugTokenType = 'o';
-            //std::cout<<SEMANTIC_ACTIONS.at(topStack)<<std::endl;
             int swithChoice = SEMANTIC_ACTIONS.at(topStack);
-            //TODO make this a function to make this look a little less insane
-            switch(swithChoice){
-                case ID:
-                    createLeaf(token);
-                    break;
-                case NUM:
-                    createLeaf(token);
-                    break;
-                case NOT:
-                    openNot(token);
-                    break;
-//                case INTEGER:
-  //                  createLeaf(token);
-    //                break;
-      //          case FLOAT:
-        //            createLeaf(token);
-          //          break;
-                case TYPE:
-                   createTypeLeaf(token);
-                   break;
-                case ADDOP:
-                    openAddOpTree(token);
-                    break;
-                case CLOSEADDOP:
-                    closeAddOpTree();
-                    break;
-                case ASSIGNOP:
-                    openAssignOp(token);
-                    break;
-                case CLOSEASSIGNOP:
-                    closeAssignOp();
-                    break;
-                case MULTOP:
-                    openMultOp(token);
-                    break;
-                case CLOSEMULTOP:
-                    closeMultOp();
-                    break;
-                case CLOSENOT:
-                    closeNot();
-                    break;
-                case SIGN:
-                    openSign(token);
-                    break;
-                case CLOSESIGN:
-                    closeSign();
-                    break;
-                case EMPTY:
-                    createEpsilon();
-                    break;
-                case VARDECL:
-                    createVarDecl(token);
-                    break;
-                case ENDVARDECL:
-                    endVrDecl();
-                    break;
-                case FUNCDEF:
-                    createFuncDef();
-                    break;
-                case ENDFUNCDEF:
-                    endFuncDef();
-                    break;
-                case FPARAMLIST:
-                    createFparamList();
-                    break;
-                case ENDFPARAMLIST:
-                    endFparamList();
-                    break;
-                case DIMLIST:
-                    createDimList();
-                    break;
-                case ENDDIMLIST:
-                    endDimList();
-                    break;
-                case FPARAM:
-                    createFparam();
-                    break;
-                case ENDFPARAM:
-                    endFparam();
-                    break;
-                case STATBLOCK:
-                    createStatBlock();
-                    break;
-                case ENDSTATBLOCK:
-                    endStatBlock();
-                    break;
-                case CLASSDECL:
-                    createClassDef();
-                    break;
-                case ENDCLASSDECL:
-                    endClassDef();
-                    break;
-                case MEMBDECL:
-                    //membDecl();
-                    generalDecl("membDecl");
-                    break;
-                case ENDMEMBDECL:
-                    endGeneralDecl("membDecl");
-                    break;
-                case FUNCDECL:
-                    generalDecl("funcDecl");
-                    break;
-                case ENDFUNCDECL:
-                    endGeneralDecl("funcDecl");
-                    break;
-                case PROG:
-                    generalDecl("prog");
-                    break;
-                case ENDPROG:
-                    endGeneralDecl("prog");
-                    break;
-                default:
-                    std::cout<<"why are you even here"<<std::endl;
-            }
+            handleSemanticActions(swithChoice, token);
             parseStack.pop_back();
         }
         else {
@@ -275,6 +161,191 @@ void Parser::skipError() {
             lookahead = getNextToken(); //scan
         }
     }
+
+
+}
+
+void Parser::handleSemanticActions(int choice, Token token) {
+    switch(choice){
+        case ID:
+            createLeaf(token);
+            break;
+        case NUM:
+            createLeaf(token);
+            break;
+        case NOT:
+            openNot(token);
+            break;
+        case TYPE:
+            createTypeLeaf(token);
+            break;
+        case ADDOP:
+            openAddOpTree(token);
+            break;
+        case CLOSEADDOP:
+            closeAddOpTree();
+            break;
+        case ASSIGNOP:
+            openAssignOp(token);
+            break;
+        case CLOSEASSIGNOP:
+            closeAssignOp();
+            break;
+        case MULTOP:
+            openMultOp(token);
+            break;
+        case CLOSEMULTOP:
+            closeMultOp();
+            break;
+        case CLOSENOT:
+            closeNot();
+            break;
+        case SIGN:
+            openSign(token);
+            break;
+        case CLOSESIGN:
+            closeSign();
+            break;
+        case EMPTY:
+            createEpsilon();
+            break;
+        case VARDECL:
+            createVarDecl(token);
+            break;
+        case ENDVARDECL:
+            endVrDecl();
+            break;
+        case FUNCDEF:
+            createFuncDef();
+            break;
+        case ENDFUNCDEF:
+            endFuncDef();
+            break;
+        case FPARAMLIST:
+            createFparamList();
+            break;
+        case ENDFPARAMLIST:
+            endFparamList();
+            break;
+        case DIMLIST:
+            createDimList();
+            break;
+        case ENDDIMLIST:
+            endDimList();
+            break;
+        case FPARAM:
+            createFparam();
+            break;
+        case ENDFPARAM:
+            endFparam();
+            break;
+        case STATBLOCK:
+            createStatBlock();
+            break;
+        case ENDSTATBLOCK:
+            endStatBlock();
+            break;
+        case CLASSDECL:
+            createClassDef();
+            break;
+        case ENDCLASSDECL:
+            endClassDef();
+            break;
+        case MEMBDECL:
+            //membDecl();
+            generalDecl("membDecl");
+            break;
+        case ENDMEMBDECL:
+            endGeneralDecl("membDecl");
+            break;
+        case FUNCDECL:
+            generalDecl("funcDecl");
+            break;
+        case ENDFUNCDECL:
+            endGeneralDecl("funcDecl");
+            break;
+        case PROG:
+            generalDecl("prog");
+            break;
+        case ENDPROG:
+            endGeneralDecl("prog");
+            break;
+        case ARITHEXPR:
+            generalDecl("arithExpr");
+            break;
+        case ENDARITHEXPR:
+            endGeneralDecl("arithExpr");
+            break;
+        case FACTOR:
+            generalDecl("factor");
+            break;
+        case ENDFACTOR:
+            endGeneralDecl("factor");
+            break;
+        case TERM:
+            generalDecl("term");
+            break;
+        case ENDTERM:
+            endGeneralDecl("term");
+            break;
+        case EXPR:
+            generalDecl("expr");
+            break;
+        case ENDEXPR:
+            endGeneralDecl("expr");
+            break;
+        case RELOP:
+            createLeaf(token);
+            break;
+        case RELEXPR:
+            generalDecl("relExpr");
+            break;
+        case ENDRELEXPR:
+            endGeneralDecl("relExpr");
+            break;
+        case IF:
+            generalDecl("ifStat");
+            break;
+        case ENDIF:
+            endGeneralDecl("ifStat");
+            break;
+        //
+        case WHILE:
+            generalDecl("whileStat");
+            break;
+        case ENDWHILE:
+            endGeneralDecl("whileStat");
+            break;
+        case GET:
+            generalDecl("getStat");
+            break;
+        case ENDGET:
+            endGeneralDecl("getStat");
+            break;
+        case PUT:
+            generalDecl("putStat");
+            break;
+        case ENDPUT:
+            endGeneralDecl("putStat");
+            break;
+        case RETURN:
+            generalDecl("returnStat");
+            break;
+        case ENDRETURN:
+            endGeneralDecl("returnStat");
+            break;
+        case SCOPE:
+            generalDecl("scopeSpec");
+            break;
+        case ENDSCOPE:
+            endGeneralDecl("scopeSpec");
+            break;
+        default:
+            std::cout<<"why are you even here"<<std::endl;
+    }
+
+
+
 
 
 }
@@ -461,13 +532,12 @@ void Parser::createVarDecl(Token tok) {
 }
 void Parser::endVrDecl() {
    std::vector<Node*> temp;
-    for (int i = 0; i <3 ; ++i) {
+    while (semanticStack.back()->getType() != "varDecl") {
         temp.push_back(semanticStack.back());
         semanticStack.pop_back();
     }
     auto varDecl = semanticStack.back();
     semanticStack.pop_back();
-    //TODO reverse order of these assignments.
     for(auto &a: temp){
         varDecl->adoptChildren(a);
     }
