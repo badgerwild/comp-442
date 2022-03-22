@@ -24,6 +24,7 @@ protected:
     Node* rightSibling;
     Node* leftMostChild;
     std::string data;
+    std::string name;
 public:
     SymbolTable* symbolTable;
     SymbolTableRow symbolTableEntry;
@@ -44,15 +45,16 @@ public:
     virtual void setLeftMostSibling(Node *leftMostSibling);
     virtual void setParent(Node *parent);
     virtual void setData(const std::string &data);
+    void setName(const std::string &name);
+
+    const std::string &getName() const;
+
     virtual const std::string &getData() const;
     virtual void adoptChildren(Node *child) = 0;
     //Accept function for visitor pattern
     virtual void accept(Visitor* visitor){};
-
     const SymbolTableRow &getSymbolTableEntry() const;
-
     Node *getParent() const;
-
     Node *getRightSibling();
     Node *getLeftMostChild() const;
     const std::string &getType() const;

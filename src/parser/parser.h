@@ -15,7 +15,7 @@
 const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/parser/";
 const std::string FOLLOW = "first_follow_v";
 const std::string PARSE = "parse_table_v";
-const std::string VERSION ="40.csv";
+const std::string VERSION ="41.csv";
 //int constants
 const int ADDOP =1;
 const int CLOSEADDOP = 2;
@@ -76,6 +76,8 @@ const int ENDRETURN = 57;
 const int ENDPUT = 58;
 const int SCOPE = 59;
 const int ENDSCOPE = 60;
+const int APARAMS = 61;
+const int ENDAPARAMS = 62;
 
 
 
@@ -146,7 +148,9 @@ inline const std::unordered_map<std::string, int> SEMANTIC_ACTIONS = {
         {"_return", RETURN},
         {"_endReturn", ENDRETURN},
         {"_scopeSpec", SCOPE},
-        {"_endScope", ENDSCOPE}
+        {"_endScope", ENDSCOPE},
+        {"_aParams", APARAMS},
+        {"_endAParams", ENDAPARAMS}
 
 };
 

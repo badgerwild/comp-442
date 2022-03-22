@@ -1,7 +1,16 @@
-func printArray(arr: integer[6]) -> void
+func printArray() -> void
 {
+  let i: integer[3];
+
+  /*
   let n: integer;
-  let i: integer;
   n = size;
-  i = 1+2;
+
+  i = 1<6;
+
+  while (i<n) {
+      write(arr[i]);
+        i = i+1;
+    };
+     */
  }

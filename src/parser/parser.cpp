@@ -340,6 +340,12 @@ void Parser::handleSemanticActions(int choice, Token token) {
         case ENDSCOPE:
             endGeneralDecl("scopeSpec");
             break;
+        case APARAMS:
+            generalDecl("aParams");
+            break;
+        case ENDAPARAMS:
+            endGeneralDecl("aParams");
+            break;
         default:
             std::cout<<"why are you even here"<<std::endl;
     }

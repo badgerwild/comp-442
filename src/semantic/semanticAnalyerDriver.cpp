@@ -19,7 +19,7 @@ const string A = "ast_demo_1";
 
 int main() {
     cout<< "Parser started " <<endl;
-    string file = C;
+    string file = A;
     Parser test = Parser(file);
     SemanticTableVisitor* tableBuilder = new SemanticTableVisitor();
     LogVisitor* log = new LogVisitor(file);
@@ -28,12 +28,12 @@ int main() {
     auto ast = test.parse();
     if(ast->getType() != "Null"){
         cout<< file << " Sucessfully parsed" <<endl;
-        //Node::traverse(ast, 0);
-        tableBuilder->visit(dynamic_cast<ProgNode*>(ast));
-        log->visit(dynamic_cast<ProgNode*>(ast));
+        Node::traverse(ast, 0);
+        //tableBuilder->visit(dynamic_cast<ProgNode*>(ast));
+        //log->visit(dynamic_cast<ProgNode*>(ast));
         ast->deleteAll();
-        delete(tableBuilder);
-        delete(log);
+        //delete(tableBuilder);
+        //delete(log);
     }
     else{
         cout<< file << " had errors parsed" <<endl;

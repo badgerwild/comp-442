@@ -86,11 +86,11 @@ void Node::deleteAllHelper(Node *node) {
 
 //preorder traverse of AST
 void Node::traverse(Node *node, int depth) {
-    std::string debug = node->getType();
-    std::cout << node->getType() <<std::endl;
+    //std::string debug = node->getType();
+    std::cout << node->getType() << "--> $ " <<node->getData()<< " $ " <<std::endl;
     if (node->leftMostChild != nullptr) {
         depth++;
-        for (auto &a: node->leftMostChild->getSiblings()) {
+        for (auto &a: node->reverse(node->leftMostChild->getSiblings())) {
             auto temp = a->getType();
             for(int i = 0; i < depth; i++){
                 std::cout<< "|";
@@ -207,6 +207,14 @@ const SymbolTableRow &Node::getSymbolTableEntry() const {
 
 Node *Node::getParent() const {
     return parent;
+}
+
+void Node::setName(const std::string &name) {
+    this->name = name;
+}
+
+const std::string &Node::getName() const {
+    return name;
 }
 
 void IntermediateInnerNode::adoptChildren(Node *child) {
