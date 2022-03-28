@@ -346,14 +346,27 @@ void Parser::handleSemanticActions(int choice, Token token) {
         case ENDAPARAMS:
             endGeneralDecl("aParams");
             break;
+        case FCALL:
+            openMakeFamily("fCall");
+            break;
+        case ENDFCALL:
+            endGeneralDecl("fCall");
+            break;
+        case DOT:
+            openMakeFamily("dot");
+            break;
+        case ENDDOT:
+            endGeneralDecl("dot");
+            break;
+        case INHERLIST:
+            generalDecl("inherList");
+            break;
+        case ENDINHERLIST:
+            endGeneralDecl("inherList");
+            break;
         default:
             std::cout<<"why are you even here"<<std::endl;
     }
-
-
-
-
-
 }
 
 std::vector<std::string> Parser::whitespace_split(const std::string &str) {
@@ -688,7 +701,15 @@ void Parser::endGeneralDecl(std::string type) {
         fParamNode->adoptChildren(a);
     }
     semanticStack.push_back(fParamNode);
-
-
-
 }
+//TODO continue this
+void Parser::openMakeFamily(std::string type) {
+    std::vector<Node *> kids;
+    kids.push_back(semanticStack.back());
+    semanticStack.pop_back();
+    auto fCallNode = InnerNode::makeFamily(type, kids);
+    fCallNode->setData(kids[0]->getData());
+    semanticStack.push_back(fCallNode);
+}
+
+

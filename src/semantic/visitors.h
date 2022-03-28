@@ -157,6 +157,8 @@ public:
     LogVisitor(std::string file);
 
     virtual ~LogVisitor();
+
+
     void visit(ProgNode *node) override;
 
     void visit(ClassDeclNode *node) override;

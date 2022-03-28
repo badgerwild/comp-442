@@ -54,11 +54,14 @@ void SemanticTableVisitor::visit(MembDeclNode* node){
 }
 
 void SemanticTableVisitor::visit(FuncDeclNode* node) {
+    //std::cout<<"debug func decl"<<std::endl;
     SymbolTable* funcTable = new SymbolTable();
     funcTable->setScope("Function");
     node->symbolTable = funcTable;
     std::string name, kind, type;
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    SymbolTableRow temp = node->symbolTable->search(node->getName());
+    std::cout<<"FOUND IN "<<node->getName()<<" " << temp;
     for (auto &a: children) {
         a->accept(this);
     }
@@ -115,13 +118,19 @@ void SemanticTableVisitor::visit(FuncDefNode* node){
         //Add a referance to the above symtable???
         a->accept(this);
     }
-    name = children[2]->getData();
-    type = children[0]->getData();
+    for (auto &a: children){
+        if (a->getType() == "id"){
+            name = a->getData();
+        }
+        else if (a->getType() == "type"){
+            type = a->getData();
+        }
+    }
     kind = "function";
     SymbolTableRow entry(name, kind, type, node->symbolTable);
     node->setData(name);
     node->getParent()->symbolTable->insert(entry);
-    // std::cout<< *node->symbolTable;
+    //SymbolTableRow temp = node->symbolTable->search(node->getName());
 }
 
 void SemanticTableVisitor::visit(ProgramBlock* node){
@@ -133,12 +142,7 @@ void SemanticTableVisitor::visit(ProgramBlock* node){
         //Add a referance to the above symtable???
         a->accept(this);
     }
-    for (auto &a: children){
-        if(a->getType() =="varDecl"){
-            node->symbolTable->insert(a->getSymbolTableEntry());
-        }
     }
-}
 void SemanticTableVisitor::visit(FPAramNode* node){
     node->symbolTable = node->getParent()->symbolTable;
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
@@ -276,8 +280,7 @@ void LogVisitor::visit(FuncDefNode *node) {
     for (auto &a: children) {
         a->accept(this);
     }
-};
-
+}
 void LogVisitor::visit(ProgramBlock *node) {};
 
 void LogVisitor::visit(AssignStat *node) {};

@@ -29,8 +29,7 @@ public:
     const std::string &getSymbolType() const;
     SymbolTable *getSubTable() const;
     void insertSubTable(SymbolTable* subTable);
-    //TODO this might be wonky with pointers, ngl?
-    //friend std::ostream &operator <<(std::ostream &out, SymbolTableRow &S);
+    friend std::ostream &operator << (std::ostream &out, SymbolTableRow &S);
 };
 
 class FuncTableRow: public SymbolTableRow{
@@ -45,6 +44,7 @@ public:
     FuncTableRow(const std::string &name, const std::string &kind, const std::string &symbolType,
                  const std::vector<int> &params, SymbolTable *subTable);
     virtual ~FuncTableRow();
+    friend std::ostream &operator << (std::ostream &out, FuncTableRow &S);
 
 };
 
@@ -58,6 +58,8 @@ public:
                const std::vector<std::string> &dims);
 
     virtual ~VarDeclROW();
+    friend std::ostream &operator << (std::ostream &out, VarDeclROW &S);
+
 };
 
 
@@ -65,8 +67,8 @@ class SymbolTable {
 private:
  std::vector<SymbolTableRow> tableEntries;
  std::string scope;
- int size;
- int table_level;
+ //int size;
+//int table_level;
  SymbolTable* parentTable;
 public:
     SymbolTable();

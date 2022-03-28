@@ -15,7 +15,7 @@
 const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/parser/";
 const std::string FOLLOW = "first_follow_v";
 const std::string PARSE = "parse_table_v";
-const std::string VERSION ="41.csv";
+const std::string VERSION ="46.csv";
 //int constants
 const int ADDOP =1;
 const int CLOSEADDOP = 2;
@@ -78,6 +78,12 @@ const int SCOPE = 59;
 const int ENDSCOPE = 60;
 const int APARAMS = 61;
 const int ENDAPARAMS = 62;
+const int FCALL = 63;
+const int ENDFCALL = 64;
+const int DOT = 65;
+const int ENDDOT = 66;
+const int INHERLIST = 67;
+const int ENDINHERLIST = 68;
 
 
 
@@ -150,13 +156,20 @@ inline const std::unordered_map<std::string, int> SEMANTIC_ACTIONS = {
         {"_scopeSpec", SCOPE},
         {"_endScope", ENDSCOPE},
         {"_aParams", APARAMS},
-        {"_endAParams", ENDAPARAMS}
+        {"_endAParams", ENDAPARAMS},
+        {"_fCall", FCALL},
+        {"_endFCall", ENDFCALL},
+        {"_dot", DOT},
+        {"_endDot", ENDDOT},
+        {"_inherList", INHERLIST},
+        {"_endInherList", ENDINHERLIST}
 
 };
 
 inline const std::unordered_map<std::string, std::string> TOKEN_NODE_TRANSLATIONS ={
         {"integer", "type"},
         {"intlit", "num"},
+        {"floatlit", "num"},
         {"plus", "addOp"},
         {"minus", "addOp"},
         {"or", "addOp"},
@@ -231,6 +244,8 @@ public:
     void endMembDecl();
     void generalDecl(std::string type);
     void endGeneralDecl(std::string type);
+    void openMakeFamily(std::string type);
+    void closeFCall();
 };
 
 

@@ -9,7 +9,6 @@ SymbolTableRow::SymbolTableRow(const std::string &name, const std::string &kind,
         name), kind(kind), symbolType(symbolType), subTable(subTable) {}
 
 SymbolTableRow::~SymbolTableRow() {
-
 }
 
 const std::string &SymbolTableRow::getName() const {
@@ -31,7 +30,9 @@ SymbolTable *SymbolTableRow::getSubTable() const {
     return subTable;
 }
 
-SymbolTableRow::SymbolTableRow() {}
+SymbolTableRow::SymbolTableRow() {
+    subTable = nullptr;
+}
 
 SymbolTableRow::SymbolTableRow(const std::string &name, const std::string &kind, SymbolTable *subTable) : name(name),
                                                                                                           kind(kind),
@@ -39,7 +40,18 @@ SymbolTableRow::SymbolTableRow(const std::string &name, const std::string &kind,
                                                                                                                   subTable) {}
 
 
-FuncTableRow::FuncTableRow() {}
+std::ostream &operator << (std::ostream &out, SymbolTableRow &S){
+   out << S.getName() << " | " << S.getKind() << " | " << S.getSymbolType() <<" | ";
+    if (S.getSubTable()!= nullptr){
+        out << S.getSubTable()->getScope()<< std::endl;
+    }
+    else{
+        out << "no subtable"<<std::endl;
+    }
+    return out;
+}
+FuncTableRow::FuncTableRow(){
+}
 
 //TODO deal with param here
 FuncTableRow::FuncTableRow(const std::string &name, const std::string &kind, const std::string &symbolType,
@@ -50,15 +62,53 @@ FuncTableRow::~FuncTableRow() {
 }
 
 FuncTableRow::FuncTableRow(const std::string &name, const std::string &kind, const std::string &symbolType,
-                           SymbolTable *subTable) : SymbolTableRow(name, kind, symbolType, subTable) {}
+                           SymbolTable *subTable) : SymbolTableRow(name, kind, symbolType, subTable) {
 
+}
+
+std::ostream &operator << (std::ostream &out, FuncTableRow &S){
+    out << S.getName() << " | " << S.getKind() << " | " << S.getSymbolType() <<" | ";
+    if (S.getSubTable()!= nullptr){
+        out << S.getSubTable()->getScope()<< std::endl;
+    }
+    else{
+        out << "no subtable"<<std::endl;
+    }
+    return out;
+}
+
+VarDeclROW::VarDeclROW(const std::string &name, const std::string &kind, const std::string &symbolType,
+                       SymbolTable *subTable, const std::vector<std::string> &dims) : SymbolTableRow(name, kind, symbolType,
+                                                                                                     subTable), dims(dims) {}
+
+VarDeclROW::VarDeclROW() {}
+
+VarDeclROW::~VarDeclROW() {
+
+}
+std::ostream &operator << (std::ostream &out, VarDeclROW &S){
+    out << S.getName()<< "( ";
+    for (std::string &s: S.dims){
+        out<< s << " ";
+    }
+    out <<")";
+    out<< " | " << S.getKind() << " | " << S.getSymbolType() <<" | ";
+    if (S.getSubTable()!= nullptr){
+        out << S.getSubTable()->getScope()<< std::endl;
+    }
+    else{
+        out << "no subtable"<<std::endl;
+    }
+    return out;
+}
 SymbolTable::SymbolTable() {}
+/*
 SymbolTable::SymbolTable(std::string scope, SymbolTable *parent, int level) {
     this->scope = scope;
     this-> parentTable = parent;
     this->table_level = level;
 }
-
+*/
 SymbolTable::~SymbolTable() {
 
 }
@@ -110,6 +160,7 @@ std::ostream &operator << (std::ostream &out, SymbolTable &S){
     out<< "Name | Kind  | Symbol Type | SubTable "<< std::endl;
     out <<"------------------------------------------------------" <<std::endl;
     for (auto &a : S.tableEntries) {
+        /*
         out<< a.getName() <<" | " << a.getKind() << " | " << a.getSymbolType() << " | ";
         if (a.getSubTable() != nullptr ){
         out<< a.getSubTable()->getScope()<< "-->"<<a.getName()<< std::endl;
@@ -117,18 +168,11 @@ std::ostream &operator << (std::ostream &out, SymbolTable &S){
         else{
             out<<"no sub table" <<std::endl;
         }
+         */
+        out<<a;
     }
     out <<"------------------------------------------------------" <<std::endl;
     return out;
    }
 
 
-VarDeclROW::VarDeclROW(const std::string &name, const std::string &kind, const std::string &symbolType,
-                       SymbolTable *subTable, const std::vector<std::string> &dims) : SymbolTableRow(name, kind, symbolType,
-                                                                                        subTable), dims(dims) {}
-
-VarDeclROW::VarDeclROW() {}
-
-VarDeclROW::~VarDeclROW() {
-
-}

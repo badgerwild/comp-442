@@ -10,6 +10,7 @@ Node::Node(){
     leftMostSibling = nullptr;
     rightSibling = nullptr;
     leftMostChild = nullptr;
+    symbolTable = nullptr;
 
 }
 Node::~Node(){}
