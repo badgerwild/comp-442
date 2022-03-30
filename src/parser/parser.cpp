@@ -364,6 +364,12 @@ void Parser::handleSemanticActions(int choice, Token token) {
         case ENDINHERLIST:
             endGeneralDecl("inherList");
             break;
+        case IMPL:
+            generalDecl("impl");
+            break;
+        case ENDIMPL:
+            endGeneralDecl("impl");
+            break;
         default:
             std::cout<<"why are you even here"<<std::endl;
     }

@@ -634,39 +634,12 @@ void ExprNode::accept(Visitor *visitor) {
 }
 
 
+ImplNode::ImplNode() {}
 
+ImplNode::~ImplNode() {
 
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void ImplNode::accept(Visitor *visitor) {
+    visitor->visit(this);
+}

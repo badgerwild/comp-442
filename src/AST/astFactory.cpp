@@ -484,6 +484,14 @@ NodeFactory::NodeFactory() {
                      }
                      }
     );
+    factories.insert({"impl", []{
+        auto impl = new ImplNode();
+        impl->setType("impl");
+        impl->setIsLeaf(false);
+        return impl;
+    }
+    }
+    );
     factories.insert({EPSILON, []{
                          auto num = new EpsilonNode();
                          num->setType("Null");

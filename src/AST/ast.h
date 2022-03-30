@@ -405,6 +405,14 @@ public:
     void accept(Visitor* visitor) override;
 };
 
+class ImplNode: public IntermediateInnerNode{
+public:
+    ImplNode();
+
+    virtual ~ImplNode();
+    void accept(Visitor* visitor) override;
+};
+
 class TypeNode: public Leaf{
 public:
     TypeNode();

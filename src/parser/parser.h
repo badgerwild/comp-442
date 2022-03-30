@@ -15,14 +15,12 @@
 const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/parser/";
 const std::string FOLLOW = "first_follow_v";
 const std::string PARSE = "parse_table_v";
-const std::string VERSION ="46.csv";
+const std::string VERSION ="47.csv";
 //int constants
 const int ADDOP =1;
 const int CLOSEADDOP = 2;
 const int NUM = 3;
 const int NOT = 4;
-const int INTEGER = 5;
-const int FLOAT = 6;
 const int ID = 7;
 const int ASSIGNOP = 8;
 const int CLOSEASSIGNOP = 9;
@@ -84,6 +82,8 @@ const int DOT = 65;
 const int ENDDOT = 66;
 const int INHERLIST = 67;
 const int ENDINHERLIST = 68;
+const int IMPL = 69;
+const int ENDIMPL = 70;
 
 
 
@@ -162,7 +162,9 @@ inline const std::unordered_map<std::string, int> SEMANTIC_ACTIONS = {
         {"_dot", DOT},
         {"_endDot", ENDDOT},
         {"_inherList", INHERLIST},
-        {"_endInherList", ENDINHERLIST}
+        {"_endInherList", ENDINHERLIST},
+        {"_impl", IMPL},
+        {"_endImpl", ENDIMPL}
 
 };
 
