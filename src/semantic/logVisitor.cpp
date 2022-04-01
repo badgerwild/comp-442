@@ -70,12 +70,22 @@ void LogVisitor::visit(MembDeclNode *node) {
     }
 };
 
+void LogVisitor::visit(ImplNode *node) {
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        a->accept(this);
+    }
+}
+
 void LogVisitor::visit(FuncDeclNode *node) {
+    /*
     outPut[0]<<"******************************************************"<<std::endl;
-    outPut[0] <<"SYMBOL TABLE FOR: " <<node->getType()<<" :: " <<node->getData()<< std::endl;
+    outPut[0]<<"FUNC DECL " <<std::endl;
+    outPut[0] <<"SYMBOL TABLE FOR: type:" <<node->getType() << " Name: " << node->getParent()->getName()<<" :: " <<node->getData()<< std::endl;
     outPut[0]<<*node->symbolTable;
     outPut[0]<<"******************************************************"<<std::endl;
     outPut[0]<<std::endl;
+
     outPut[1]<<"******************************************************"<<std::endl;
     outPut[1]<< "PLACE holder Error for " <<node->getType() << std::endl;
     outPut[1]<<"******************************************************"<<std::endl;
@@ -83,10 +93,12 @@ void LogVisitor::visit(FuncDeclNode *node) {
     for (auto &a: children) {
         a->accept(this);
     }
+     */
 };
 
 void LogVisitor::visit(FuncDefNode *node) {
     outPut[0]<<"******************************************************"<<std::endl;
+    outPut[0]<<"FUNC DEF " <<std::endl;
     outPut[0] <<"SYMBOL TABLE FOR: " <<node->getType()<< "::" <<node->getData()<<std::endl;
     outPut[0]<<*node->symbolTable;
     outPut[0]<<"******************************************************"<<std::endl;

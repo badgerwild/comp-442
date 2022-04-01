@@ -28,6 +28,7 @@ protected:
 public:
     SymbolTable* symbolTable;
     SymbolTableRow symbolTableEntry;
+    std::vector<std::string> errors;
 
     Node();
     Node(Node const& toCopy);
@@ -166,7 +167,7 @@ public:
     VarDecl();
     virtual ~VarDecl();
     void accept(Visitor* visitor) override;
-    void addEntry(VarDeclROW vec);
+    void addEntry(VarDeclRow vec);
 };
 
 class DimList: public InnerNode{

@@ -30,6 +30,9 @@ SymbolTable *SymbolTableRow::getSubTable() const {
     return subTable;
 }
 
+ void SymbolTableRow::insertSubTable(SymbolTable *subTable) {
+    this->subTable = subTable;
+}
 SymbolTableRow::SymbolTableRow() {
     subTable = nullptr;
 }
@@ -50,6 +53,11 @@ std::ostream &operator << (std::ostream &out, SymbolTableRow &S){
     }
     return out;
 }
+
+void SymbolTableRow::setSubTable(SymbolTable *subTable) {
+    SymbolTableRow::subTable = subTable;
+}
+
 FuncTableRow::FuncTableRow(){
 }
 
@@ -77,16 +85,20 @@ std::ostream &operator << (std::ostream &out, FuncTableRow &S){
     return out;
 }
 
-VarDeclROW::VarDeclROW(const std::string &name, const std::string &kind, const std::string &symbolType,
+const std::vector<int> &FuncTableRow::getParams() const {
+    return params;
+}
+
+VarDeclRow::VarDeclRow(const std::string &name, const std::string &kind, const std::string &symbolType,
                        SymbolTable *subTable, const std::vector<std::string> &dims) : SymbolTableRow(name, kind, symbolType,
                                                                                                      subTable), dims(dims) {}
 
-VarDeclROW::VarDeclROW() {}
+VarDeclRow::VarDeclRow() {}
 
-VarDeclROW::~VarDeclROW() {
+VarDeclRow::~VarDeclRow() {
 
 }
-std::ostream &operator << (std::ostream &out, VarDeclROW &S){
+std::ostream &operator << (std::ostream &out, VarDeclRow &S){
     out << S.getName()<< "( ";
     for (std::string &s: S.dims){
         out<< s << " ";
@@ -102,13 +114,6 @@ std::ostream &operator << (std::ostream &out, VarDeclROW &S){
     return out;
 }
 SymbolTable::SymbolTable() {}
-/*
-SymbolTable::SymbolTable(std::string scope, SymbolTable *parent, int level) {
-    this->scope = scope;
-    this-> parentTable = parent;
-    this->table_level = level;
-}
-*/
 SymbolTable::~SymbolTable() {
 
 }
@@ -120,13 +125,6 @@ const std::string &SymbolTable::getScope() const {
 void SymbolTable::setScope(const std::string &scope) {
     this->scope = scope;
 }
-/*
-SymbolTableRow SymbolTable::createNewTable(std::string scope){
-    SymbolTable* temp = new SymbolTable(scope);
-
-
-}
- */
 
 void  SymbolTable::insert(SymbolTableRow row) {
     tableEntries.push_back(row);
@@ -150,29 +148,22 @@ SymbolTableRow SymbolTable::search(std::string id_) {
         return foundValue;
     }
 }
+
+
+
 std::ostream &operator << (std::ostream &out, SymbolTable &S){
     out <<"------------------------------------------------------" <<std::endl;
     out<<"table scope --> " << S.scope<<std::endl;
-    /*if (S.parentTable != nullptr) {
-        out<<"Parent table -->" <<S.parentTable->scope <<std::endl;
-    }
-*/
     out<< "Name | Kind  | Symbol Type | SubTable "<< std::endl;
     out <<"------------------------------------------------------" <<std::endl;
     for (auto &a : S.tableEntries) {
-        /*
-        out<< a.getName() <<" | " << a.getKind() << " | " << a.getSymbolType() << " | ";
-        if (a.getSubTable() != nullptr ){
-        out<< a.getSubTable()->getScope()<< "-->"<<a.getName()<< std::endl;
-        }
-        else{
-            out<<"no sub table" <<std::endl;
-        }
-         */
         out<<a;
     }
     out <<"------------------------------------------------------" <<std::endl;
     return out;
    }
+   std::vector<SymbolTableRow> &SymbolTable::getTableEntries() {
+    return tableEntries;
+}
 
 

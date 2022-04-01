@@ -293,7 +293,7 @@ VarDecl::~VarDecl() {
 
 }
 
-void VarDecl::addEntry(VarDeclROW vec) {
+void VarDecl::addEntry(VarDeclRow vec) {
     symbolTableEntry = vec;
 }
 
@@ -500,6 +500,12 @@ IndexList::IndexList() {}
 IndexList::~IndexList() {
 
 }
+ImplNode::ImplNode() {}
+
+ImplNode::~ImplNode() {
+
+}
+
 /// All accept methods for the visitor patter are here:
 void ProgNode::accept(Visitor* visitor) {
     visitor->visit(this);
@@ -634,11 +640,7 @@ void ExprNode::accept(Visitor *visitor) {
 }
 
 
-ImplNode::ImplNode() {}
 
-ImplNode::~ImplNode() {
-
-}
 
 void ImplNode::accept(Visitor *visitor) {
     visitor->visit(this);

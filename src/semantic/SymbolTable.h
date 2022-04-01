@@ -16,6 +16,8 @@ private:
     std::string kind;
     std::string symbolType;
     SymbolTable* subTable;
+    int size;
+    int offSet;
 public:
     SymbolTableRow();
 
@@ -23,6 +25,9 @@ public:
 
     SymbolTableRow(const std::string &name, const std::string &kind, const std::string &symbolType,
                    SymbolTable *subTable);
+
+    void setSubTable(SymbolTable *subTable);
+
     virtual ~SymbolTableRow();
     const std::string &getName() const;
     const std::string &getKind() const;
@@ -43,22 +48,25 @@ public:
 
     FuncTableRow(const std::string &name, const std::string &kind, const std::string &symbolType,
                  const std::vector<int> &params, SymbolTable *subTable);
+
+    const std::vector<int> &getParams() const;
+
     virtual ~FuncTableRow();
     friend std::ostream &operator << (std::ostream &out, FuncTableRow &S);
 
 };
 
-class VarDeclROW: public SymbolTableRow{
+class VarDeclRow: public SymbolTableRow{
 private:
     std::vector<std::string> dims;
 public:
-    VarDeclROW();
+    VarDeclRow();
 
-    VarDeclROW(const std::string &name, const std::string &kind, const std::string &symbolType, SymbolTable *subTable,
+    VarDeclRow(const std::string &name, const std::string &kind, const std::string &symbolType, SymbolTable *subTable,
                const std::vector<std::string> &dims);
 
-    virtual ~VarDeclROW();
-    friend std::ostream &operator << (std::ostream &out, VarDeclROW &S);
+    virtual ~VarDeclRow();
+    friend std::ostream &operator << (std::ostream &out, VarDeclRow &S);
 
 };
 
@@ -77,6 +85,9 @@ public:
     const std::string &getScope() const;
     void setScope(const std::string &scope);
     void insert(SymbolTableRow row);
+
+    std::vector<SymbolTableRow> &getTableEntries();
+
     SymbolTableRow createNewTable(std::string scope);
     //TODO figure out what this method is supposed to return
     SymbolTableRow search(std::string id_);

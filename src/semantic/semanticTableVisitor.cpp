@@ -2,12 +2,15 @@
 // Created by jason on 3/30/22.
 //
 #include <fstream>
+#include <iostream>
 #include "SymbolTable.h"
 #include "./AST/ast.h"
 #include "semanticTableVisitor.h"
+
 void SemanticTableVisitor::visit(ProgNode* node){
     SymbolTable* globalTable = new SymbolTable();
     globalTable->setScope("Global");
+    std::cout<<"Creating prog node table" <<std::endl;
     node->symbolTable = globalTable;
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     for (auto &a: children) {
@@ -19,10 +22,10 @@ void SemanticTableVisitor::visit(ProgNode* node){
 void SemanticTableVisitor::visit(ClassDeclNode *node) {
     SymbolTable* classTable = new SymbolTable();
     classTable->setScope("Class");
+    std::cout<<"Creating class node table" <<std::endl;
+    std::string name;
     node->symbolTable = classTable;
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
-    std::string name;
-    //temp until I add in member declist and finialize the number of children of the classdecl node
     for (auto &a: children){
         if (a->getType() =="id"){
             name = a->getData();
@@ -59,18 +62,34 @@ void SemanticTableVisitor::visit(MembDeclNode* node){
 }
 
 void SemanticTableVisitor::visit(FuncDeclNode* node) {
-    //std::cout<<"debug func decl"<<std::endl;
+    std::cout<<"Creating funcDecl node table" <<std::endl;
+    /*
     SymbolTable* funcTable = new SymbolTable();
     funcTable->setScope("Function");
     node->symbolTable = funcTable;
+     */
     std::string name, kind, type;
+    std::vector<std::string> dimList;
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
-
+/*
     for (auto &a: children) {
         a->accept(this);
     }
-    name = children[2]->getData();
-    type = children[0]->getData();
+    */
+    for(auto &a:children){
+        if (a->getType() =="id"){
+            name=a->getData();
+        }
+        else if (a->getType() == "type"){
+            type = a->getData();
+        }
+        else if (a->getType() == "dimList"){
+            std::vector<Node *> dimListItems = a->getLeftMostChild()->getSiblings();
+            for (auto &a: dimListItems) {
+                dimList.push_back(a->getData());
+            }
+        }
+    }
     kind = "function";
     SymbolTableRow entry(name, kind, type, node->symbolTable);
     node->setData(name);
@@ -81,6 +100,7 @@ void SemanticTableVisitor::visit(FuncDeclNode* node) {
     node->getParent()->symbolTable->insert(entry);
 }
 void SemanticTableVisitor::visit(VarDecl* node){
+    std::cout<<"Creating vardecl node table" <<std::endl;
     std::vector<Node *> children = node->reverse(node->getLeftMostChild()->getSiblings());
     std::string name, kind, type;
     std::vector<std::string> dimList;
@@ -112,13 +132,14 @@ void SemanticTableVisitor::visit(VarDecl* node){
         }
     }
     type = "variable";
-    VarDeclROW entry(name, kind, type, nullptr, dimList);
+    VarDeclRow entry(name, kind, type, nullptr, dimList);
     node->getParent()->symbolTable->insert(entry);
 }
 
 void SemanticTableVisitor::visit(FuncDefNode* node){
+    std::cout<<"Creating func def node node table" <<std::endl;
     SymbolTable* funcTable = new SymbolTable();
-    funcTable->setScope("Function");
+    funcTable->setScope("function");
     node->symbolTable = funcTable;
     std::string name, kind, type;
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
@@ -135,9 +156,11 @@ void SemanticTableVisitor::visit(FuncDefNode* node){
         }
     }
     kind = "function";
-    SymbolTableRow entry(name, kind, type, node->symbolTable);
     node->setData(name);
-    node->getParent()->symbolTable->insert(entry);
+    if (node->getParent()->getType() !="impl") {
+        SymbolTableRow entry(name, kind, type, nullptr);
+        node->getParent()->symbolTable->insert(entry);
+    }
     //SymbolTableRow temp = node->symbolTable->search(node->getName());
 }
 
@@ -160,8 +183,27 @@ void SemanticTableVisitor::visit(FPAramNode* node){
         //Add a referance to the above symtable???
         a->accept(this);
     }
-    name = children[2]->getData();
-    kind = children[1]->getData();
+    for (auto &a: children){
+        if (a->getType() == "id"){
+            name = a->getData();
+        }
+        else if (a->getType() == "type"){
+            type = a->getData();
+        }
+        else if (a->getType() == "dimList")
+            if(a->getLeftMostChild() != nullptr){
+            std::vector<Node *> dimListItems = a->getLeftMostChild()->getSiblings();
+                for (auto &d: dimListItems) {
+                    dimList.push_back(d->getData());
+                }
+            }
+            else{
+                dimList.push_back("Null");
+            }
+        }
+    //name = children[2]->getData();
+    //kind = children[1]->getData();
+    /*
     if (children[0]->getType() != "Null" && children[0]->getLeftMostChild() != NULL) {
         std::vector<Node *> dimListItems = children[0]->getLeftMostChild()->getSiblings();
         for (auto &a: dimListItems) {
@@ -171,16 +213,16 @@ void SemanticTableVisitor::visit(FPAramNode* node){
     else{
         dimList.push_back("Null");
     }
-    type = "parameter";
-    //VarDeclROW entry(name, kind, type, nullptr, dimList);
-    VarDeclROW entry(name, kind, type, nullptr, dimList);
+     */
+    kind = "parameter";
+    //VarDeclRow entry(name, kind, type, nullptr, dimList);
+    VarDeclRow entry(name, kind, type, nullptr, dimList);
     //node->addEntry(entry);
     node->symbolTable->insert(entry);
 }
 void SemanticTableVisitor::visit(FParamList* node){
     node->symbolTable = node->getParent()->symbolTable;
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
-    //TODO here
     if (children[0] != nullptr) {
         for (auto &a: children) {
             //Add a referance to the above symtable???
@@ -189,6 +231,7 @@ void SemanticTableVisitor::visit(FParamList* node){
     }
 
 }
+//do nothing with these ones:
 void SemanticTableVisitor::visit(AssignStat* node){
 }
 void SemanticTableVisitor::visit(IdNode* node){

@@ -14,8 +14,13 @@ file(GLOB SOURCES
         ../../DFA/DFA.h
         ../parser/parser.cpp
         ../parser/parser.h
-        visitors.cpp
         visitors.h
+        logVisitor.cpp
+        logVisitor.h
+        semanticTableVisitor.h
+        semanticTableVisitor.cpp
+        linkerVisitor.cpp
+        linkerVisitor.h
         SymbolTable.h
         SymbolTable.cpp
        semanticAnalyerDriver.cpp

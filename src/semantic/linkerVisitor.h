@@ -2,21 +2,16 @@
 // Created by jason on 3/30/22.
 //
 
-#ifndef COMP_442_LOGVISITOR_H
-#define COMP_442_LOGVISITOR_H
+#ifndef COMP_442_LINKERVISITOR_H
+#define COMP_442_LINKERVISITOR_H
 #include "visitors.h"
 
 
-class LogVisitor: public Visitor{
-private:
-    std::string outputFiles[2];
-    std::ofstream outPut[2];
+class LinkerVisitor: public Visitor {
 public:
-    LogVisitor();
-    LogVisitor(std::string file);
+    virtual ~LinkerVisitor();
 
-    virtual ~LogVisitor();
-
+    LinkerVisitor();
 
     void visit(ProgNode *node) override;
 
@@ -29,6 +24,7 @@ public:
     void visit(FuncDefNode *node) override;
 
     void visit(ProgramBlock *node) override;
+    /*
 
     void visit(AssignStat *node) override;
 
@@ -43,14 +39,15 @@ public:
     void visit(VarDecl *node) override;
 
     void visit(TypeNode *node) override;
-
+*/
     void visit(FParamList *node) override;
 
     void visit(FPAramNode *node) override;
 
     void visit(DimList *node) override;
 
-    void visit(ImplNode *node)override;
+    void visit(ImplNode *node) override;
 };
 
-#endif //COMP_442_LOGVISITOR_H
+
+#endif //COMP_442_LINKERVISITOR_H
