@@ -6,7 +6,8 @@
 
 SymbolTableRow::SymbolTableRow(const std::string &name, const std::string &kind, const std::string &symbolType,
                                SymbolTable *subTable) : name(
-        name), kind(kind), symbolType(symbolType), subTable(subTable) {}
+        name), kind(kind), symbolType(symbolType), subTable(subTable) {
+}
 
 SymbolTableRow::~SymbolTableRow() {
 }
@@ -44,7 +45,7 @@ SymbolTableRow::SymbolTableRow(const std::string &name, const std::string &kind,
 
 
 std::ostream &operator << (std::ostream &out, SymbolTableRow &S){
-   out << S.getName() << " | " << S.getKind() << " | " << S.getSymbolType() <<" | ";
+   out << S.getName() << " | " << S.getKind() << " | " << S.getSymbolType() <<" | "<<"Size: "<< S.getSize() <<" | ";
     if (S.getSubTable()!= nullptr){
         out << S.getSubTable()->getScope()<< std::endl;
     }

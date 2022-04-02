@@ -16,8 +16,8 @@ private:
     std::string kind;
     std::string symbolType;
     SymbolTable* subTable;
-    int size;
-    int offSet;
+    int size{};
+    int offSet{};
 
 public:
     SymbolTableRow();

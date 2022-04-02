@@ -10,8 +10,8 @@ file(GLOB SOURCES
         ../AST/ast.cpp
         ../AST/astFactory.h
         ../AST/astFactory.cpp
-        ../../DFA/DFA.cpp
-        ../../DFA/DFA.h
+        ../DFA/DFA.cpp
+        ../DFA/DFA.h
         ../parser/parser.cpp
         ../parser/parser.h
         visitors.h
@@ -23,6 +23,10 @@ file(GLOB SOURCES
         linkerVisitor.h
         SymbolTable.h
         SymbolTable.cpp
+        sizeVisitor.h
+        sizeVisitor.cpp
+        typeCheckVisitors.cpp
+        typeCheckVisitors.h
        semanticAnalyerDriver.cpp
         )
 set(SOURCES ${SOURCES})

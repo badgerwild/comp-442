@@ -5,6 +5,7 @@
 #include "../parser/parser.h"
 #include "semanticTableVisitor.h"
 #include "linkerVisitor.h"
+#include "sizeVisitor.h"
 #include "logVisitor.h"
 using namespace std;
 const string D = "short_demo";
@@ -24,6 +25,7 @@ int main() {
     Parser test = Parser(file);
     SemanticTableVisitor* tableBuilder = new SemanticTableVisitor();
     LinkerVisitor* tableLinker = new LinkerVisitor();
+    SizeVisitor* sizeMaker = new SizeVisitor();
     LogVisitor* log = new LogVisitor(file);
     test.readSource();
     cout<<"****************************************************" <<endl;
@@ -32,6 +34,7 @@ int main() {
         cout<< file << " Sucessfully parsed" <<endl;
         tableBuilder->visit(dynamic_cast<ProgNode*>(ast));
         tableLinker->visit(dynamic_cast<ProgNode*>(ast));
+        sizeMaker->visit(dynamic_cast<ProgNode*>(ast));
         log->visit(dynamic_cast<ProgNode*>(ast));
         Node::traverse(ast, 0);
         ast->deleteAll();

@@ -246,6 +246,7 @@ ProgNode::~ProgNode() {
     delete parent;
     delete leftMostSibling;
     delete rightSibling;
+    delete symbolTable;
     deleteChild();
 }
 
@@ -254,7 +255,7 @@ ProgNode::~ProgNode() {
 ClassListNode::ClassListNode() {}
 
 ClassListNode::~ClassListNode() {
-
+    delete symbolTable;
 }
 
 FuncDefList::FuncDefList() {}
@@ -384,6 +385,7 @@ RelExprNode::~RelExprNode() {
 FuncDeclNode::FuncDeclNode() {}
 
 FuncDeclNode::~FuncDeclNode() {
+    delete symbolTable;
 
 }
 
