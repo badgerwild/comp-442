@@ -10,8 +10,8 @@ file(GLOB SOURCES
         ../AST/ast.cpp
         ../AST/astFactory.h
         ../AST/astFactory.cpp
-        ../../DFA/DFA.cpp
-        ../../DFA/DFA.h
+        ../DFA/DFA.cpp
+        ../DFA/DFA.h
        ../semantic/semanticAnalyzer.cpp
         ../semantic/semanticAnalyzer.h
         ../semantic/SymbolTable.h

@@ -7,12 +7,13 @@
 
 class SemanticTableVisitor: public Visitor {
 public:
-    SemanticTableVisitor() {}
+    int tempVarNum = 0;
 
+    SemanticTableVisitor() {}
     virtual ~SemanticTableVisitor() {
 
     }
-
+    std::string createTempVarName();
     void visit(ProgNode *node) override;
 
     void visit(ClassDeclNode *node) override;
@@ -25,6 +26,28 @@ public:
 
     void visit(ProgramBlock *node) override;
 
+    void visit(VarDecl *node) override;
+    void visit(FParamList *node) override;
+
+    void visit(FPAramNode *node) override;
+
+    void visit(ImplNode *node) override;
+
+    void visit(AssignStat *node) override;
+
+    void visit(ExprNode *node) override;
+
+    void visit(ArithExprNode *node) override;
+
+    void visit(AddOp *node) override;
+
+    void visit(MultOp *node) override;
+
+    void visit(TermNode *node) override;
+    void visit(FactorNode *node) override;
+
+    /*
+
     void visit(AssignStat *node) override;
 
     void visit(IdNode *node) override;
@@ -35,17 +58,11 @@ public:
 
     void visit(NumNode *node) override;
 
-    void visit(VarDecl *node) override;
-
     void visit(TypeNode *node) override;
-
-    void visit(FParamList *node) override;
-
-    void visit(FPAramNode *node) override;
 
     void visit(DimList *node) override;
 
-    void visit(ImplNode *node) override;
+*/
 };
 
 #endif //COMP_442_SEMANTICTABLEVISITOR_H

@@ -17,7 +17,7 @@
 //TODO create a large delete function that completly iterates through tree and deletes everything
 class Node{
 protected:
-    std::string type;
+
     bool isLeaf;
     Node* parent;
     Node* leftMostSibling;
@@ -25,6 +25,8 @@ protected:
     Node* leftMostChild;
     std::string data;
     std::string name;
+    std::string type;
+    std::string dataType;
 public:
     SymbolTable* symbolTable;
     SymbolTableRow symbolTableEntry;

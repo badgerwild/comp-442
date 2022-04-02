@@ -5,8 +5,8 @@ file(GLOB SOURCES
         Token.h
         lexer.cpp
         lexer.h
-        ../../DFA/DFA.cpp
-        ../../DFA/DFA.h
+        ../DFA/DFA.cpp
+        ../DFA/DFA.h
         lexdriver.cpp
         )
 set(SOURCES ${SOURCES})

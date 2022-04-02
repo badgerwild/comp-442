@@ -18,6 +18,7 @@ private:
     SymbolTable* subTable;
     int size;
     int offSet;
+
 public:
     SymbolTableRow();
 
@@ -35,6 +36,14 @@ public:
     SymbolTable *getSubTable() const;
     void insertSubTable(SymbolTable* subTable);
     friend std::ostream &operator << (std::ostream &out, SymbolTableRow &S);
+
+    int getSize() const;
+
+    void setSize(int size);
+
+    int getOffSet() const;
+
+    void setOffSet(int offSet);
 };
 
 class FuncTableRow: public SymbolTableRow{

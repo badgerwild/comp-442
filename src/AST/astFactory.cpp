@@ -4,7 +4,7 @@
 
 #include "astFactory.h"
 NodeFactory::~NodeFactory() {}
-/*Abstract factory using a map with Lamdba functions as for node creation.
+/*Abstract factory using a map with Lambda functions as for node creation.
  * Node type is given by a string that is passed through semantic action in the parser.
  *
  */

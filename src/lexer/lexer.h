@@ -4,10 +4,36 @@
 
 #ifndef COMP_442_LEXER_H
 #define COMP_442_LEXER_H
+#include <memory>
 #include <string>
 #include <vector>
 #include "Token.h"
-#include "../../DFA/DFA.h"
+#include "../DFA/DFA.h"
+
+class DfaSingleton {
+private:
+    DFA dfa;
+    //static std::shared_ptr<DfaSingleton> inst_;
+    DfaSingleton();
+    DfaSingleton(const DfaSingleton&);
+    DfaSingleton& operator=(const DfaSingleton);
+
+public:
+    static std::shared_ptr<DfaSingleton>& getInstance();
+    std::vector<int> getDfaState();
+    std::vector<char> getAlphabet();
+    std::vector<std::vector<int>> getTable(std::vector<int> alpha, std::vector<char> states);
+
+};
+
+
+
+
+
+
+
+
+
 
 class Lexer{
 private:

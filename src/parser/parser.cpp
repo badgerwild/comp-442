@@ -2,18 +2,18 @@
 // Created by jason on 2/13/22.
 //
 #include <iostream>
-#include <fstream>
+//#include <fstream>
 #include <sstream>
 #include<iterator>
 #include <memory>
 
 #include "parser.h"
-#include "../../DFA/indexTemplate.h"
+#include "../DFA/indexTemplate.h"
 
 //using namespace Lexer;
 
 
-Parser::Parser(std::string src) {
+Parser::Parser(std::string src) : lexer() {
     parseTable = loadTable(PATH+PARSE+VERSION) ;
     //index 0 = non-terminal; 1 = first set; 2 = follow set
     firstFollow = loadTable(PATH + FOLLOW + VERSION);

@@ -7,6 +7,11 @@
 #include "./AST/ast.h"
 #include "semanticTableVisitor.h"
 
+std::string SemanticTableVisitor::createTempVarName() {
+    std::string returnValue;
+    returnValue = "Temp" + std::to_string(++tempVarNum);
+    return returnValue;
+}
 void SemanticTableVisitor::visit(ProgNode* node){
     SymbolTable* globalTable = new SymbolTable();
     globalTable->setScope("Global");
@@ -231,7 +236,63 @@ void SemanticTableVisitor::visit(FParamList* node){
     }
 
 }
+
+void SemanticTableVisitor::visit(AssignStat *node){
+    //SymbolTable statTable;
+    node->symbolTable = node->getParent()->symbolTable;
+    //statTable.setScope(node->getType());
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        //Add a referance to the above symtable???
+        a->accept(this);
+    }
+
+}
+
+void SemanticTableVisitor::visit(ExprNode *node){
+    //SymbolTable statTable;
+    node->symbolTable = node->getParent()->symbolTable;
+    //statTable.setScope(node->getType());
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        //Add a referance to the above symtable???
+        a->accept(this);
+    }
+
+}
+
+void SemanticTableVisitor::visit(ArithExprNode *node){
+    //SymbolTable statTable;
+    node->symbolTable = node->getParent()->symbolTable;
+    //statTable.setScope(node->getType());
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        //Add a referance to the above symtable???
+        a->accept(this);
+    }
+
+}
+
+void SemanticTableVisitor::visit(AddOp *node){
+    std::vector<Node *> children = node->reverse(node->getLeftMostChild()->getSiblings());
+    std::string name, kind, type;
+     name = this->createTempVarName();
+     kind = "temp";
+     type = "int";
+    SymbolTableRow entry(name, kind, type, nullptr);
+    node->getParent()->symbolTable->insert(entry);
+    //std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+}
+
+void SemanticTableVisitor::visit(MultOp *node){
+}
+void SemanticTableVisitor::visit(TermNode *node){
+}
+void SemanticTableVisitor::visit(FactorNode *node){
+}
+
 //do nothing with these ones:
+/*
 void SemanticTableVisitor::visit(AssignStat* node){
 }
 void SemanticTableVisitor::visit(IdNode* node){
@@ -247,3 +308,4 @@ void SemanticTableVisitor::visit(DimList* node){
 
 void SemanticTableVisitor::visit(TypeNode* node){
 }
+*/

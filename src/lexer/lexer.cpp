@@ -5,9 +5,9 @@
 #include <fstream>
 #include <unordered_set>
 #include "lexer.h"
-#include "../../DFA/indexTemplate.h"
+#include "../DFA/indexTemplate.h"
 
-#include "../../DFA/DFA.h"
+#include "../DFA/DFA.h"
 const int FINAL = -2;
 const int NOTFINAL = -3;
 const int BACKTRACK = -4;
@@ -15,9 +15,9 @@ const int NORMAL = -5;
 const char SYMBOLS[20] = {'|','+', ',','&', '*', ';', '!', '.', '[',']','(', ')', '{','}', '>','<','=',':','-', '/'};
 const std::unordered_set<char> NOTADD{'\t', ' '};
 
-Lexer::Lexer() {
 
-    DFA dfa = DFA();
+DfaSingleton::DfaSingleton() {
+    dfa = DFA();
     dfa.addState(State(1,false, false));
     dfa.addState(State(2,false, false));
     dfa.addState(State(3,false, false));
@@ -237,7 +237,7 @@ Lexer::Lexer() {
         dfa.addTransition(18, 11, c);
     }
 
-   //float with single digit to accept on symbol
+    //float with single digit to accept on symbol
     for (const char &c: SYMBOLS){
         dfa.addTransition(18, 12, c);
     }
@@ -257,7 +257,7 @@ Lexer::Lexer() {
     }
     dfa.addTransition(15, 14, '+');
     dfa.addTransition(15, 14, '-');
-   // panik
+    // panik
     for (char i = '0'; i<= '9' ; ++i) {
         dfa.addTransition(17, 14, i);
     }
@@ -350,7 +350,7 @@ Lexer::Lexer() {
     }
     dfa.addTransition(17, 17, '.');
     for (char i = '0'; i < '9'; ++i) {
-            dfa.addTransition(17, 17, i);
+        dfa.addTransition(17, 17, i);
     }
 
     //kalm
@@ -375,7 +375,7 @@ Lexer::Lexer() {
 
     //kalm
     for (const char &c: SYMBOLS){
-            dfa.addTransition(53, 52, c);
+        dfa.addTransition(53, 52, c);
     }
     dfa.addTransition(53, 52, '\n');
     dfa.addTransition(53, 52, '\r');
@@ -462,29 +462,51 @@ Lexer::Lexer() {
     }
     for (char i = '0'; i < '9'; ++i) {
 
-            dfa.addTransition(60, 54, i);
+        dfa.addTransition(60, 54, i);
 
     }
     for (const char &c: SYMBOLS){
         if( c != '/' && c!= '*') {
             dfa.addTransition(60, 54, c);
-    }
+        }
     }
     dfa.addTransition(60, 54, '\n');
     dfa.addTransition(60, 54, '\t');
     dfa.addTransition(60, 54, ' ');
 
+    // inst_ = nullptr;
 
-// creating state and alphabet vectors
-    std::vector<int> dfaStates = dfa.stateList();
-    std::vector<char> alphabet = dfa.alphabet();
-// generating the look up table
-    std::vector<std::vector<int>> tableau = dfa.generateTable(dfaStates, alphabet);
-    this->states = dfaStates;
-    this->inputs = alphabet;
-    this->lookUpTable = tableau;
+}
+
+std::shared_ptr<DfaSingleton>& DfaSingleton::getInstance() {
+    static std::shared_ptr<DfaSingleton> inst_ = nullptr;
+    if (!inst_){
+        inst_.reset(new DfaSingleton());
+    }
+    return inst_;
+}
+
+std::vector<char> DfaSingleton::getAlphabet() {
+    return dfa.alphabet();
+}
+
+std::vector<int> DfaSingleton::getDfaState() {
+    return dfa.stateList();
+}
+
+std::vector<std::vector<int>> DfaSingleton::getTable(std::vector<int> alpha, std::vector<char> states){
+    return dfa.generateTable(alpha, states);
+}
+
+Lexer::Lexer() {
+    std::shared_ptr<DfaSingleton> dfa = DfaSingleton::getInstance();
+    this->states = dfa->getDfaState();
+    this->inputs = dfa->getAlphabet();
+    this->lookUpTable = dfa->getTable(this->states, this->inputs);
     this->lineNumber = 0;
     this->charPosition = 0;
+    std::vector<std::string> outFiles = {fileName+".outlexerrors", fileName+".outlextokens"};
+
 }
 
 Lexer::Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std::vector<int>> lookUpTable) {

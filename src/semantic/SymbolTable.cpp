@@ -58,6 +58,22 @@ void SymbolTableRow::setSubTable(SymbolTable *subTable) {
     SymbolTableRow::subTable = subTable;
 }
 
+int SymbolTableRow::getSize() const {
+    return size;
+}
+
+void SymbolTableRow::setSize(int size) {
+    SymbolTableRow::size = size;
+}
+
+int SymbolTableRow::getOffSet() const {
+    return offSet;
+}
+
+void SymbolTableRow::setOffSet(int offSet) {
+    SymbolTableRow::offSet = offSet;
+}
+
 FuncTableRow::FuncTableRow(){
 }
 
