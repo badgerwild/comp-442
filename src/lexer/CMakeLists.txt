@@ -11,6 +11,6 @@ file(GLOB SOURCES
         )
 set(SOURCES ${SOURCES})
 
-add_executable(${BINARY}_lexer ${SOURCES} ../AST/ast.cpp)
+add_executable(${BINARY}_lexer ${SOURCES})
 
 add_library(${BINARY}_lib STATIC ${SOURCES})

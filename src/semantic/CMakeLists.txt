@@ -33,4 +33,4 @@ file(GLOB SOURCES
         )
 set(SOURCES ${SOURCES})
 add_executable(${BINARY}_semantic ${SOURCES})
-add_library(${BINARY}_sem_lib STATIC ${SOURCES})
+#add_library(${BINARY}_sem_lib STATIC ${SOURCES})

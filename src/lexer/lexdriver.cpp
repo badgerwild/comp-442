@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "../../DFA/DFA.h"
+#include "../DFA/DFA.h"
 #include "lexer.h"
 
 using namespace std;

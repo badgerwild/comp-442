@@ -25,4 +25,4 @@ file(GLOB SOURCES
         )
 set(SOURCES ${SOURCES})
 add_executable(${BINARY}_parser ${SOURCES})
-add_library(${BINARY}_par_lib STATIC ${SOURCES})
+#add_library(${BINARY}_par_lib STATIC ${SOURCES})
