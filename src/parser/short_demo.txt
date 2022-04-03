@@ -1,16 +1,33 @@
-func printArray() -> void
-{
-  let i: integer[3];
+struct QUADRATIC {
+	private let a: float;
+	private let b: float;
+	private let c: float;
 
-  /*
-  let n: integer;
-  n = size;
+	public let evaluate: integer;
 
-  i = 1<6;
+	public  func evaluate(x: float) -> float;
+};
+impl QUADRATIC {
+  func evaluate(x: float) -> float
+  {
+    let result: float;
+    result = a;
+    result = result * x + b;
+    result = result * x + c;
+    return (result);
 
-  while (i<n) {
-      write(arr[i]);
-        i = i+1;
-    };
-     */
- }
+  }
+  }
+/*
+  impl Thing {
+    func bean(x: float) -> float
+    {
+      let result: float;
+      result = a;
+      result = result * x + b;
+      result = result * x + c;
+      return (result);
+
+    }
+    }
+*/
