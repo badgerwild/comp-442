@@ -25,6 +25,8 @@ file(GLOB SOURCES
         SymbolTable.cpp
         sizeVisitor.h
         sizeVisitor.cpp
+        tempVariableVisitor.cpp
+        tempVariableVisitor.h
         typeCheckVisitors.cpp
         typeCheckVisitors.h
        semanticAnalyerDriver.cpp

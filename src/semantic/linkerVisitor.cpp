@@ -118,5 +118,7 @@ void LinkerVisitor::visit(ImplNode *node) {
                 a.setSubTable(funcTable);
             }
         }
+        //possible linking the table to the parent table???
+        funcTable->setParentTable(classTable);
     }
 }

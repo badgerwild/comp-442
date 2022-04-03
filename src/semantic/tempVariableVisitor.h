@@ -1,17 +1,20 @@
 //
-// Created by jason on 4/1/22.
+// Created by jason on 4/3/22.
 //
 
-#ifndef COMP_442_SIZEVISITOR_H
-#define COMP_442_SIZEVISITOR_H
+#ifndef COMP_442_TEMPVARIABLEVISITOR_H
+#define COMP_442_TEMPVARIABLEVISITOR_H
 #include "visitors.h"
 
-class SizeVisitor: public Visitor  {
+class TempVariableVisitor: public Visitor {
 public:
-    SizeVisitor();
+    int tempVarNum = 0;
 
-    virtual ~SizeVisitor();
+    virtual ~TempVariableVisitor();
 
+    TempVariableVisitor();
+
+    std::string createTempVarName();
     void visit(ProgNode *node) override;
 
     void visit(ClassDeclNode *node) override;
@@ -43,7 +46,6 @@ public:
 
     void visit(TermNode *node) override;
     void visit(FactorNode *node) override;
-
 
 };
 

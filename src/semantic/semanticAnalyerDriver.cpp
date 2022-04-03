@@ -5,6 +5,8 @@
 #include "../parser/parser.h"
 #include "semanticTableVisitor.h"
 #include "linkerVisitor.h"
+#include "typeCheckVisitors.h"
+#include "tempVariableVisitor.h"
 #include "sizeVisitor.h"
 #include "logVisitor.h"
 using namespace std;
@@ -25,6 +27,8 @@ int main() {
     Parser test = Parser(file);
     SemanticTableVisitor* tableBuilder = new SemanticTableVisitor();
     LinkerVisitor* tableLinker = new LinkerVisitor();
+    TypeVisitor* typer = new TypeVisitor();
+    TempVariableVisitor* tempVariables = new TempVariableVisitor();
     SizeVisitor* sizeMaker = new SizeVisitor();
     LogVisitor* log = new LogVisitor(file);
     test.readSource();
@@ -34,11 +38,17 @@ int main() {
         cout<< file << " Sucessfully parsed" <<endl;
         tableBuilder->visit(dynamic_cast<ProgNode*>(ast));
         tableLinker->visit(dynamic_cast<ProgNode*>(ast));
+        typer->visit(dynamic_cast<ProgNode*>(ast));
+        tempVariables->visit(dynamic_cast<ProgNode*>(ast));
         sizeMaker->visit(dynamic_cast<ProgNode*>(ast));
         log->visit(dynamic_cast<ProgNode*>(ast));
-        Node::traverse(ast, 0);
+        //DEBUG print
+        //Node::traverse(ast, 0);
         ast->deleteAll();
         delete(tableBuilder);
+        delete(typer);
+        delete(tempVariables);
+        delete(sizeMaker);
         delete(tableLinker);
         delete(log);
     }

@@ -88,21 +88,21 @@ private:
 //int table_level;
  SymbolTable* parentTable;
 public:
+    int tableOffset{};
     SymbolTable();
     SymbolTable(std::string scope, SymbolTable *parent, int level);
     virtual ~SymbolTable();
     const std::string &getScope() const;
     void setScope(const std::string &scope);
     void insert(SymbolTableRow row);
-
     std::vector<SymbolTableRow> &getTableEntries();
 
-    SymbolTableRow createNewTable(std::string scope);
-    //TODO figure out what this method is supposed to return
+    SymbolTable *getParentTable() const;
+
+    void setParentTable(SymbolTable *parentTable);
+
     SymbolTableRow search(std::string id_);
     friend std::ostream &operator << (std::ostream &out, SymbolTable &S);
-    void printAll();
-    void deleteAll();
 
 
 };

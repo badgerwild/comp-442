@@ -46,7 +46,8 @@ SymbolTableRow::SymbolTableRow(const std::string &name, const std::string &kind,
 
 std::ostream &operator << (std::ostream &out, SymbolTableRow &S){
    out << S.getName() << " | " << S.getKind() << " | " << S.getSymbolType() <<" | "<<"Size: "<< S.getSize() <<" | ";
-    if (S.getSubTable()!= nullptr){
+   out << "Offset: "<< S.getOffSet()<<" | ";
+   if (S.getSubTable()!= nullptr){
         out << S.getSubTable()->getScope()<< std::endl;
     }
     else{
@@ -154,7 +155,8 @@ SymbolTableRow SymbolTable::search(std::string id_) {
         if (a.getName() == id_) {
             foundValue = a;
             found = true;
-
+            // return foundValue;
+        }
         }
         if (!found) {
             if (parentTable != nullptr) {
@@ -162,15 +164,14 @@ SymbolTableRow SymbolTable::search(std::string id_) {
                 found = true;
             }
         }
-        return foundValue;
-    }
+    return foundValue;
 }
 
 
 
 std::ostream &operator << (std::ostream &out, SymbolTable &S){
     out <<"------------------------------------------------------" <<std::endl;
-    out<<"table scope --> " << S.scope<<std::endl;
+    out<<"table scope --> " << S.scope<< " Offset --> " << S.tableOffset<< std::endl ;
     out<< "Name | Kind  | Symbol Type | SubTable "<< std::endl;
     out <<"------------------------------------------------------" <<std::endl;
     for (auto &a : S.tableEntries) {
@@ -181,6 +182,14 @@ std::ostream &operator << (std::ostream &out, SymbolTable &S){
    }
    std::vector<SymbolTableRow> &SymbolTable::getTableEntries() {
     return tableEntries;
+}
+
+SymbolTable *SymbolTable::getParentTable() const {
+    return parentTable;
+}
+
+void SymbolTable::setParentTable(SymbolTable *parentTable) {
+    this->parentTable = parentTable;
 }
 
 

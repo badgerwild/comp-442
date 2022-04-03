@@ -48,7 +48,8 @@ public:
     virtual void setLeftMostSibling(Node *leftMostSibling);
     virtual void setParent(Node *parent);
     virtual void setData(const std::string &data);
-    void setName(const std::string &name);
+    virtual void setName(const std::string &name);
+    virtual SymbolTableRow& searchTableEntries(Node *node, std::string &id);
 
     const std::string &getName() const;
 
@@ -56,6 +57,11 @@ public:
     virtual void adoptChildren(Node *child) = 0;
     //Accept function for visitor pattern
     virtual void accept(Visitor* visitor){};
+
+    const std::string &getDataType() const;
+
+    void setDataType(const std::string &dataType);
+
     const SymbolTableRow &getSymbolTableEntry() const;
     Node *getParent() const;
     Node *getRightSibling();

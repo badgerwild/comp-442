@@ -232,6 +232,17 @@ void IntermediateInnerNode::adoptChildren(Node *child) {
     }
 }
 
+SymbolTableRow& Node::searchTableEntries(Node *node, std::string &id) {
+
+}
+
+const std::string &Node::getDataType() const {
+    return dataType;
+}
+
+void Node::setDataType(const std::string &dataType) {
+    this->dataType = dataType;
+}
 
 
 IntermediateInnerNode::IntermediateInnerNode() {}
@@ -247,7 +258,7 @@ ProgNode::~ProgNode() {
     delete leftMostSibling;
     delete rightSibling;
     delete symbolTable;
-    deleteChild();
+   // deleteChild();
 }
 
 

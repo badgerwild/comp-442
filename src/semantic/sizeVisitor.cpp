@@ -10,6 +10,21 @@ void SizeVisitor::visit(ProgNode* node){
     for (auto &a: children) {
         a->accept(this);
     }
+    for (auto &entry: node->symbolTable->getTableEntries()){
+        if (entry.getSymbolType() == "integer"){
+            entry.setSize(4);
+            node->symbolTable->tableOffset-=4;
+            entry.setOffSet(node->symbolTable->tableOffset);
+        }
+        else if(entry.getSymbolType() == "float"){
+            entry.setSize(8);
+            node->symbolTable->tableOffset-=8;
+            entry.setOffSet(node->symbolTable->tableOffset);
+        }
+        else{
+            entry.setSize(0);
+        }
+    }
 //    std::cout<< *node->symbolTable;
 }
 
@@ -17,6 +32,21 @@ void SizeVisitor::visit(ClassDeclNode *node) {
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     for (auto &a: children) {
         a->accept(this);
+    }
+    for (auto &entry: node->symbolTable->getTableEntries()){
+        if (entry.getSymbolType() == "integer"){
+            entry.setSize(4);
+            node->symbolTable->tableOffset-=4;
+            entry.setOffSet(node->symbolTable->tableOffset);
+        }
+        else if(entry.getSymbolType() == "float"){
+            entry.setSize(8);
+            node->symbolTable->tableOffset-=8;
+            entry.setOffSet(node->symbolTable->tableOffset);
+        }
+        else{
+            entry.setSize(0);
+        }
     }
 }
 
@@ -53,11 +83,15 @@ void SizeVisitor::visit(FuncDefNode* node){
         a->accept(this);
     }
     for (auto &entry: node->symbolTable->getTableEntries()){
-        if (entry.getSymbolType() == "int"){
+        if (entry.getSymbolType() == "integer"){
             entry.setSize(4);
+            node->symbolTable->tableOffset-=4;
+            entry.setOffSet(node->symbolTable->tableOffset);
         }
         else if(entry.getSymbolType() == "float"){
             entry.setSize(8);
+            node->symbolTable->tableOffset-=8;
+            entry.setOffSet(node->symbolTable->tableOffset);
         }
         else{
             entry.setSize(0);

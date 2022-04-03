@@ -2,15 +2,19 @@
 // Created by jason on 4/1/22.
 //
 
-#ifndef COMP_442_SIZEVISITOR_H
-#define COMP_442_SIZEVISITOR_H
+#ifndef COMP_442_TYPECHECKVISITORS_H
+#define COMP_442_TYPECHECKVISITORS_H
+#include <vector>
+#include "SymbolTable.h"
+#include "../AST/ast.h"
 #include "visitors.h"
 
-class SizeVisitor: public Visitor  {
-public:
-    SizeVisitor();
 
-    virtual ~SizeVisitor();
+class TypeVisitor : public Visitor {
+public:
+    TypeVisitor();
+
+    virtual ~TypeVisitor();
 
     void visit(ProgNode *node) override;
 
@@ -42,10 +46,14 @@ public:
     void visit(MultOp *node) override;
 
     void visit(TermNode *node) override;
+
     void visit(FactorNode *node) override;
+
+    void visit(IdNode *node) override;
 
 
 };
 
 
-#endif //COMP_442_TEMPVARIABLEVISITOR_H
+
+#endif //COMP_442_TYPECHECKVISITORS_H

@@ -26,6 +26,7 @@ void SemanticTableVisitor::visit(ProgNode* node){
 
 void SemanticTableVisitor::visit(ClassDeclNode *node) {
     SymbolTable* classTable = new SymbolTable();
+    classTable->setParentTable(node->getParent()->symbolTable);
     classTable->setScope("Class");
     std::cout<<"Creating class node table" <<std::endl;
     std::string name;
@@ -67,7 +68,8 @@ void SemanticTableVisitor::visit(MembDeclNode* node){
 }
 
 void SemanticTableVisitor::visit(FuncDeclNode* node) {
-    std::cout<<"Creating funcDecl node table" <<std::endl;
+    //classTable->setParentTable(node->getParent()->symbolTable);
+    //std::cout<<"Creating funcDecl node table" <<std::endl;
     /*
     SymbolTable* funcTable = new SymbolTable();
     funcTable->setScope("Function");
@@ -118,7 +120,7 @@ void SemanticTableVisitor::visit(VarDecl* node){
                 name=a->getData();
             }
             else if (a->getType() == "type"){
-                kind = a->getData();
+                type = a->getData();
             }
             else if (a->getType() == "dimList"){
                 std::vector<Node *> dimListItems = a->getLeftMostChild()->getSiblings();
@@ -136,7 +138,7 @@ void SemanticTableVisitor::visit(VarDecl* node){
             kind = kind +"[" +a+"]";
         }
     }
-    type = "variable";
+    kind = "variable";
     VarDeclRow entry(name, kind, type, nullptr, dimList);
     node->getParent()->symbolTable->insert(entry);
 }
@@ -144,6 +146,7 @@ void SemanticTableVisitor::visit(VarDecl* node){
 void SemanticTableVisitor::visit(FuncDefNode* node){
     std::cout<<"Creating func def node node table" <<std::endl;
     SymbolTable* funcTable = new SymbolTable();
+    //funcTable->setParentTable(node->getParent()->symbolTable);
     funcTable->setScope("function");
     node->symbolTable = funcTable;
     std::string name, kind, type;
@@ -224,10 +227,8 @@ void SemanticTableVisitor::visit(FParamList* node){
 void SemanticTableVisitor::visit(AssignStat *node){
     //SymbolTable statTable;
     node->symbolTable = node->getParent()->symbolTable;
-    //statTable.setScope(node->getType());
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
     for (auto &a: children) {
-        //Add a referance to the above symtable???
         a->accept(this);
     }
 
@@ -236,10 +237,8 @@ void SemanticTableVisitor::visit(AssignStat *node){
 void SemanticTableVisitor::visit(ExprNode *node){
     //SymbolTable statTable;
     node->symbolTable = node->getParent()->symbolTable;
-    //statTable.setScope(node->getType());
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
     for (auto &a: children) {
-        //Add a referance to the above symtable???
         a->accept(this);
     }
 
@@ -248,7 +247,6 @@ void SemanticTableVisitor::visit(ExprNode *node){
 void SemanticTableVisitor::visit(ArithExprNode *node){
     //SymbolTable statTable;
     node->symbolTable = node->getParent()->symbolTable;
-    //statTable.setScope(node->getType());
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
     for (auto &a: children) {
         a->accept(this);
@@ -258,31 +256,40 @@ void SemanticTableVisitor::visit(ArithExprNode *node){
 
 void SemanticTableVisitor::visit(AddOp *node){
     node->symbolTable = node->getParent()->symbolTable;
+
     std::vector<Node *> children = node->reverse(node->getLeftMostChild()->getSiblings());
+    /*
     std::string name, kind, type;
+     */
     for (auto &a: children) {
         a->accept(this);
     }
+    /*
      name = this->createTempVarName();
      kind = "tempvar";
-     type = "int";
+     type = "integer";
     SymbolTableRow entry(name, kind, type, nullptr);
     node->getParent()->symbolTable->insert(entry);
+     */
     //std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
 }
 
 void SemanticTableVisitor::visit(MultOp *node){
     node->symbolTable = node->getParent()->symbolTable;
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+   /*
     std::string name, kind, type;
+    */
     for (auto &a: children) {
         a->accept(this);
     }
+    /*
     name = this->createTempVarName();
     kind = "tempvar";
-    type = "int";
+    type = "integer";
     SymbolTableRow entry(name, kind, type, nullptr);
     node->getParent()->symbolTable->insert(entry);
+     */
 }
 void SemanticTableVisitor::visit(TermNode *node){
     node->symbolTable = node->getParent()->symbolTable;
