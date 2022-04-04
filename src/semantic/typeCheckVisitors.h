@@ -51,6 +51,16 @@ public:
 
     void visit(IdNode *node) override;
 
+    void visit(IfStat *node) override;
+
+    void visit(RelExprNode *node) override;
+
+    void visit(ForStat *node) override;
+
+    void visit(PutStat *node) override;
+
+  //  void visit(RelOpNode *node) override;
+
 
 };
 

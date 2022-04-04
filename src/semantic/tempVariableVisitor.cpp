@@ -151,6 +151,40 @@ void TempVariableVisitor::visit(FactorNode *node){
     }
 }
 
+void TempVariableVisitor::visit(IfStat *node) {
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        a->accept(this);
+    }
+}
+
+void TempVariableVisitor::visit(RelExprNode *node){
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    std::string name, kind, type;
+    for (auto &a: children) {
+        a->accept(this);
+    }
+    name = this->createTempVarName();
+    //TODO remove the rel
+    kind = "reltempvar";
+    type = "integer";//all boolians are integer
+    SymbolTableRow entry(name, kind, type, nullptr);
+    node->getParent()->symbolTable->insert(entry);
+}
+
+void TempVariableVisitor::visit(ForStat *node) {
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        a->accept(this);
+    }
+}
+
+void TempVariableVisitor::visit(PutStat *node) {
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        a->accept(this);
+    }
+}
 //do nothing with these ones:
 /*
 void TempVariableVisitor::visit(AssignStat* node){

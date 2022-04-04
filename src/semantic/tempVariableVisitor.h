@@ -45,7 +45,18 @@ public:
     void visit(MultOp *node) override;
 
     void visit(TermNode *node) override;
+
     void visit(FactorNode *node) override;
+
+   void visit(IfStat *node) override;
+
+   void visit(RelExprNode *node) override;
+
+   void visit(ForStat *node) override;
+
+   void visit(PutStat *node) override;
+
+
 
 };
 

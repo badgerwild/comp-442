@@ -437,6 +437,14 @@ void Parser::createLeaf(Token tok) {
         node_type = TOKEN_NODE_TRANSLATIONS.at(node_type);
     }
     auto leaf = factory.makeNode(node_type);
+    if (node_type == "num") {
+        if (tok.getType() == "intlit") {
+            leaf->setDataType("integer");
+        }
+        else if (tok.getType() == "floatlit"){
+            leaf->setDataType("float");
+        }
+    }
     leaf->setData(tok.getLexeme());
     semanticStack.push_back(leaf);
 }

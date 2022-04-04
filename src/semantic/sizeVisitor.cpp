@@ -83,12 +83,12 @@ void SizeVisitor::visit(FuncDefNode* node){
         a->accept(this);
     }
     for (auto &entry: node->symbolTable->getTableEntries()){
-        if (entry.getSymbolType() == "integer"){
+        if (entry.getSymbolType() == "integer" || entry.getSymbolType() == "intlit" ){
             entry.setSize(4);
             node->symbolTable->tableOffset-=4;
             entry.setOffSet(node->symbolTable->tableOffset);
         }
-        else if(entry.getSymbolType() == "float"){
+        else if(entry.getSymbolType() == "float" || entry.getSymbolType() == "floatlit"){
             entry.setSize(8);
             node->symbolTable->tableOffset-=8;
             entry.setOffSet(node->symbolTable->tableOffset);

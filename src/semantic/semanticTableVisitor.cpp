@@ -306,6 +306,36 @@ void SemanticTableVisitor::visit(FactorNode *node){
     }
 }
 
+void SemanticTableVisitor::visit(IfStat *node) {
+    node->symbolTable = node->getParent()->symbolTable;
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        a->accept(this);
+    }
+}
+
+void SemanticTableVisitor::visit(RelExprNode *node) {
+    node->symbolTable = node->getParent()->symbolTable;
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        a->accept(this);
+    }
+}
+
+void SemanticTableVisitor::visit(ForStat *node) {
+    node->symbolTable = node->getParent()->symbolTable;
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        a->accept(this);
+    }
+}
+void SemanticTableVisitor::visit(PutStat *node) {
+    node->symbolTable = node->getParent()->symbolTable;
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        a->accept(this);
+    }
+}
 //do nothing with these ones:
 /*
 void SemanticTableVisitor::visit(AssignStat* node){

@@ -61,8 +61,11 @@ void TypeVisitor::visit(VarDecl *node){
 } ;
 void TypeVisitor::visit(FParamList *node){
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
-    for (auto &a: children) {
-        a->accept(this);
+    if (children[0]!= nullptr) {
+        for (auto &a: children) {
+            a->accept(this);
+
+        }
     }
 } ;
 
@@ -116,7 +119,7 @@ void TypeVisitor::visit(AddOp *node){
     }
     else {
         node->setDataType("invalid");
-        node->errors.push_back("invlaid type at mult op");
+        node->errors.push_back("invlaid type at add op with variables");
     }
 } ;
 
@@ -153,7 +156,6 @@ void TypeVisitor::visit(FactorNode *node){
     }
     node->setDataType(node->getLeftMostChild()->getDataType());
 }
-//TODO figure out how to attach this to the temp variables that have been created already. WTF
 void TypeVisitor::visit(IdNode *node){
     if (node->getParent()->symbolTable != nullptr) {
         if (node->getParent()->getType() == "factor") {
@@ -162,6 +164,48 @@ void TypeVisitor::visit(IdNode *node){
         //     std::cout << temp;
         }
     }
-
 }
 
+void TypeVisitor::visit(IfStat *node)  {
+    std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
+    for (auto &a: children) {
+        a->accept(this);
+    }
+
+    //node->setDataType(node->getLeftMostChild()->getDataType());
+}
+
+void TypeVisitor::visit(RelExprNode *node){
+    std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
+    for (auto &a: children) {
+        a->accept(this);
+    }
+    std::string child1Type = children[0]->getDataType();
+    std::string child2Type = children[2]->getDataType();
+    if (child1Type == child2Type){
+        node->setDataType(node->getLeftMostChild()->getDataType());
+    }
+    else {
+        node->setDataType("invalid");
+
+        node->errors.push_back("invlaid type at rel Expr");
+    }
+}
+
+void TypeVisitor::visit(ForStat *node)  {
+    std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
+    for (auto &a: children) {
+        a->accept(this);
+    }
+
+    //node->setDataType(node->getLeftMostChild()->getDataType());
+}
+
+void TypeVisitor::visit(PutStat *node)  {
+    std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
+    for (auto &a: children) {
+        a->accept(this);
+    }
+
+    //node->setDataType(node->getLeftMostChild()->getDataType());
+}
