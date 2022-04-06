@@ -60,7 +60,6 @@ Token Parser::getNextToken() {
     return lexer.nextToken();
 }
 
-//TODO change return type to node* for the semmantic action phase.
 Node * Parser::parse(){
     //TODO make Logging class for all componets to use
    //logger open files

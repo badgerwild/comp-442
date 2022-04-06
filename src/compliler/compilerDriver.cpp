@@ -10,7 +10,10 @@
 #include "../semantic/tempVariableVisitor.h"
 #include "../semantic/sizeVisitor.h"
 #include "../semantic/logVisitor.h"
+
+#include "codeGenerationVisitor.h"
 using namespace std;
+/*
 const string D = "short_demo";
 const string E = "short_err";
 const string B = "bubble";
@@ -19,12 +22,19 @@ const string V = "variableAndIdnest";
 const string X = "expression";
 const string F = "class_func_etc";
 const string C = "shortClass_demo";
+ const string A = "ast_demo_1";
+ */
+//Compiler feature testing:
 
-const string A = "ast_demo_1";
+const string T = "basic_output"; //basic alloction + output to CLI
+const string EX = "expressions"; //expression testing
+
+
+
 
 int main() {
     cout<< "Parser started " <<endl;
-    string file = D;
+    string file = T;
     Parser test = Parser(file);
     SemanticTableVisitor* tableBuilder = new SemanticTableVisitor();
     LinkerVisitor* tableLinker = new LinkerVisitor();
@@ -32,6 +42,7 @@ int main() {
     TempVariableVisitor* tempVariables = new TempVariableVisitor();
     SizeVisitor* sizeMaker = new SizeVisitor();
     LogVisitor* log = new LogVisitor(file);
+    CodeGenerationVisitor* codeMaker = new CodeGenerationVisitor(file);
     test.readSource();
     cout<<"****************************************************" <<endl;
     auto ast = test.parse();
@@ -43,6 +54,8 @@ int main() {
         tempVariables->visit(dynamic_cast<ProgNode*>(ast));
         sizeMaker->visit(dynamic_cast<ProgNode*>(ast));
         log->visit(dynamic_cast<ProgNode*>(ast));
+        delete(log);
+        codeMaker->visit(dynamic_cast<ProgNode*>(ast));
         //DEBUG print
         //Node::traverse(ast, 0);
         ast->deleteAll();
@@ -51,7 +64,8 @@ int main() {
         delete(tempVariables);
         delete(sizeMaker);
         delete(tableLinker);
-        delete(log);
+        //delete(log);
+        delete(codeMaker);
     }
     else{
         cout<< file << " had errors parsed" <<endl;

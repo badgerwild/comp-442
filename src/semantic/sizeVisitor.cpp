@@ -30,9 +30,11 @@ void SizeVisitor::visit(ProgNode* node){
 
 void SizeVisitor::visit(ClassDeclNode *node) {
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
+   int nodeSize =0;
     for (auto &a: children) {
         a->accept(this);
     }
+
     for (auto &entry: node->symbolTable->getTableEntries()){
         if (entry.getSymbolType() == "integer"){
             entry.setSize(4);
@@ -48,6 +50,11 @@ void SizeVisitor::visit(ClassDeclNode *node) {
             entry.setSize(0);
         }
     }
+    for (auto &entry:node->symbolTable->getTableEntries()){
+        nodeSize+=entry.getSize();
+    }
+    node->symbolTable->tableSize = nodeSize;
+    node->size = nodeSize;
 }
 
 void SizeVisitor::visit(ImplNode *node) {
@@ -74,11 +81,23 @@ void SizeVisitor::visit(VarDecl* node){
         for (auto &a: children) {
             a->accept(this);
         }
+        for (auto &a: children){
+            if (a->getType() == "type"){
+                std::string tempType = a->getData();
+                if(tempType == "integer"){
+                    node->size = 4;
+                }
+                else if (tempType == "float"){
+                    node->size = 8;
+                }
+            }
+        }
     }
 }
 
 void SizeVisitor::visit(FuncDefNode* node){
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
+    int nodeSize= 0;
     for (auto &a: children) {
         a->accept(this);
     }
@@ -97,6 +116,11 @@ void SizeVisitor::visit(FuncDefNode* node){
             entry.setSize(0);
         }
     }
+    for (auto &entry:node->symbolTable->getTableEntries()){
+        nodeSize+=entry.getSize();
+    }
+    node->symbolTable->tableSize = nodeSize;
+    node->size = nodeSize;
 }
 
 void SizeVisitor::visit(ProgramBlock* node){
@@ -150,6 +174,7 @@ void SizeVisitor::visit(AddOp *node){
     for (auto &a: children) {
         a->accept(this);
     }
+    node->size = children[0]->size;
 }
 
 void SizeVisitor::visit(MultOp *node){
@@ -157,17 +182,51 @@ void SizeVisitor::visit(MultOp *node){
     for (auto &a: children) {
         a->accept(this);
     }
+    node->size = children[0]->size;
 }
 void SizeVisitor::visit(TermNode *node){
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
     for (auto &a: children) {
         a->accept(this);
     }
+    //back propigation...should be migrated into the AST
+    if (children[0]->getType() == "factor"){
+        node->setData(children[0]->getData());
+        node->size = children[0]->size;
+    }
+    else{
+        if (node->getDataType() =="integer"){
+            node->size = 4;
+        }
+        else if(node->getDataType() == "float"){
+            node->size = 8;
+        }
+    }
 }
 void SizeVisitor::visit(FactorNode *node){
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
     for (auto &a: children) {
         a->accept(this);
+    }
+    if (children[0]->getType() == "num"){
+        node->setData(children[0]->getData());
+        node->size = children[0]->size;
+    }
+    else{
+        if (node->getDataType() =="integer"){
+            node->size = 4;
+        }
+        else if(node->getDataType() == "float"){
+            node->size = 8;
+        }
+    }
+}
+void SizeVisitor::visit(NumNode* node){
+    if (node->getDataType() == "integer" || node->getDataType() == "intlit"){
+        node->size = 4;
+    }
+    else if (node->getDataType() == "float" || node->getDataType() == "floatlit"){
+        node->size = 8;
     }
 }
 

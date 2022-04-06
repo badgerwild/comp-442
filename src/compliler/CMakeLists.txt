@@ -34,6 +34,7 @@ file(GLOB SOURCES
         codeGenerationVisitor.cpp
         codeGenerationVisitor.h
         compilerDriver.cpp
+
 )
 set(SOURCES ${SOURCES})
 add_executable(${BINARY}_compiler ${SOURCES})

@@ -25,12 +25,16 @@ protected:
     Node* leftMostChild;
     std::string data;
     std::string name;
+    //added for assignment 4 and 5
     std::string type;
     std::string dataType;
 public:
+    //switched to public because I am tired of getters and setters
+    std::string moonTag;
     SymbolTable* symbolTable;
     SymbolTableRow symbolTableEntry;
     std::vector<std::string> errors;
+    int size;
 
     Node();
     Node(Node const& toCopy);

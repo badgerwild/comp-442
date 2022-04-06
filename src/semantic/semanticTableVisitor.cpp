@@ -15,7 +15,6 @@ std::string SemanticTableVisitor::createTempVarName() {
 void SemanticTableVisitor::visit(ProgNode* node){
     SymbolTable* globalTable = new SymbolTable();
     globalTable->setScope("Global");
-    std::cout<<"Creating prog node table" <<std::endl;
     node->symbolTable = globalTable;
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     for (auto &a: children) {
@@ -28,7 +27,6 @@ void SemanticTableVisitor::visit(ClassDeclNode *node) {
     SymbolTable* classTable = new SymbolTable();
     classTable->setParentTable(node->getParent()->symbolTable);
     classTable->setScope("Class");
-    std::cout<<"Creating class node table" <<std::endl;
     std::string name;
     node->symbolTable = classTable;
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
@@ -44,6 +42,7 @@ void SemanticTableVisitor::visit(ClassDeclNode *node) {
     SymbolTableRow entry(name, kind, node->symbolTable);
     node->setData(name);
     node->getParent()->symbolTable->insert(entry);
+    //node->symbolTableEntry = entry;
     //std::cout<<*node->symbolTable;
 }
 
@@ -107,7 +106,6 @@ void SemanticTableVisitor::visit(FuncDeclNode* node) {
     node->getParent()->symbolTable->insert(entry);
 }
 void SemanticTableVisitor::visit(VarDecl* node){
-    std::cout<<"Creating vardecl node table" <<std::endl;
     std::vector<Node *> children = node->reverse(node->getLeftMostChild()->getSiblings());
     std::string name, kind, type;
     std::vector<std::string> dimList;
@@ -141,10 +139,10 @@ void SemanticTableVisitor::visit(VarDecl* node){
     kind = "variable";
     VarDeclRow entry(name, kind, type, nullptr, dimList);
     node->getParent()->symbolTable->insert(entry);
+    node->symbolTableEntry = entry;
 }
 
 void SemanticTableVisitor::visit(FuncDefNode* node){
-    std::cout<<"Creating func def node node table" <<std::endl;
     SymbolTable* funcTable = new SymbolTable();
     //funcTable->setParentTable(node->getParent()->symbolTable);
     funcTable->setScope("function");

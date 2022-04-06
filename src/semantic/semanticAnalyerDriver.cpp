@@ -18,6 +18,8 @@ const string V = "variableAndIdnest";
 const string X = "expression";
 const string F = "class_func_etc";
 const string C = "shortClass_demo";
+const string S ="sampleMain";
+const string T = "test";
 
 const string A = "ast_demo_1";
 
@@ -38,12 +40,13 @@ int main() {
         cout<< file << " Sucessfully parsed" <<endl;
         tableBuilder->visit(dynamic_cast<ProgNode*>(ast));
         tableLinker->visit(dynamic_cast<ProgNode*>(ast));
+        //TODO THIS THROWS A SEGFAULT FOR POLYNOMIAL FUCK KNOWS WHY.
         typer->visit(dynamic_cast<ProgNode*>(ast));
         tempVariables->visit(dynamic_cast<ProgNode*>(ast));
         sizeMaker->visit(dynamic_cast<ProgNode*>(ast));
         log->visit(dynamic_cast<ProgNode*>(ast));
         //DEBUG print
-        //Node::traverse(ast, 0);
+        Node::traverse(ast, 0);
         ast->deleteAll();
         delete(tableBuilder);
         delete(typer);

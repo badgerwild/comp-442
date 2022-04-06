@@ -44,6 +44,8 @@ public:
     void visit(TermNode *node) override;
     void visit(FactorNode *node) override;
 
+    void visit(NumNode *node) override;
+
 
 };
 

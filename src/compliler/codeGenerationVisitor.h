@@ -4,11 +4,21 @@
 
 #ifndef COMP_442_CODEGENERATIONVISITOR_H
 #define COMP_442_CODEGENERATIONVISITOR_H
+#include <fstream>
+#include <vector>
 #include "../semantic/visitors.h"
 
 class CodeGenerationVisitor: public Visitor {
+    std::vector<std::string> registerPool{};
+    std::string fileName;
+    std::ofstream codeOutput;
+    std::vector<std::string> moonExecCode;//assembly is stored here
+    std::vector<std::string> moonDataCode;//space is allocated here
 public:
     CodeGenerationVisitor();
+
+    CodeGenerationVisitor(const std::string &fileName);
+
     virtual ~CodeGenerationVisitor();
     void visit(ProgNode* node) override;
     void visit(ClassListNode* node) override;

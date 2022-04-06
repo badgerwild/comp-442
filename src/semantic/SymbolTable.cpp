@@ -45,7 +45,7 @@ SymbolTableRow::SymbolTableRow(const std::string &name, const std::string &kind,
 
 
 std::ostream &operator << (std::ostream &out, SymbolTableRow &S){
-   out << S.getName() << " | " << S.getKind() << " | " << S.getSymbolType() <<" | "<<"Size: "<< S.getSize() <<" | ";
+   out << S.getName() << " | " << S.getKind() << " | " << S.moonTag<< " | " << S.getSymbolType() <<" | "<<"Size: "<< S.getSize() <<" | ";
    out << "Offset: "<< S.getOffSet()<<" | ";
    if (S.getSubTable()!= nullptr){
         out << S.getSubTable()->getScope()<< std::endl;
@@ -93,7 +93,7 @@ FuncTableRow::FuncTableRow(const std::string &name, const std::string &kind, con
 }
 
 std::ostream &operator << (std::ostream &out, FuncTableRow &S){
-    out << S.getName() << " | " << S.getKind() << " | " << S.getSymbolType() <<" | ";
+    out << S.getName() << " | " << S.moonTag <<" | " << S.getKind() << " | " << S.getSymbolType() <<" | ";
     if (S.getSubTable()!= nullptr){
         out << S.getSubTable()->getScope()<< std::endl;
     }
@@ -122,7 +122,7 @@ std::ostream &operator << (std::ostream &out, VarDeclRow &S){
         out<< s << " ";
     }
     out <<")";
-    out<< " | " << S.getKind() << " | " << S.getSymbolType() <<" | ";
+    out<< " | "<< S.moonTag<< " | " << S.getKind() << " | " << S.getSymbolType() <<" | ";
     if (S.getSubTable()!= nullptr){
         out << S.getSubTable()->getScope()<< std::endl;
     }
@@ -171,8 +171,9 @@ SymbolTableRow SymbolTable::search(std::string id_) {
 
 std::ostream &operator << (std::ostream &out, SymbolTable &S){
     out <<"------------------------------------------------------" <<std::endl;
+    out <<"Symbol table size --> " << S.tableSize<<std::endl;
     out<<"table scope --> " << S.scope<< " Offset --> " << S.tableOffset<< std::endl ;
-    out<< "Name | Kind  | Symbol Type | SubTable "<< std::endl;
+    out<< "Name | Moon tag | Kind  | Symbol Type | Size | offset | SubTable "<< std::endl;
     out <<"------------------------------------------------------" <<std::endl;
     for (auto &a : S.tableEntries) {
         out<<a;

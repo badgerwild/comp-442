@@ -20,6 +20,7 @@ private:
     int offSet{};
 
 public:
+    std::string moonTag;
     SymbolTableRow();
 
     SymbolTableRow(const std::string &name, const std::string &kind, SymbolTable *subTable);
@@ -89,6 +90,8 @@ private:
  SymbolTable* parentTable;
 public:
     int tableOffset{};
+    int tableSize{};
+    std::string moonTag;
     SymbolTable();
     SymbolTable(std::string scope, SymbolTable *parent, int level);
     virtual ~SymbolTable();

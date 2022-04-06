@@ -12,7 +12,7 @@ TempVariableVisitor::~TempVariableVisitor() {
 }
 std::string TempVariableVisitor::createTempVarName() {
     std::string returnValue;
-    returnValue = "Temp" + std::to_string(++tempVarNum);
+    returnValue = "T" + std::to_string(++tempVarNum);
     return returnValue;
 }
 void TempVariableVisitor::visit(ProgNode* node){
@@ -102,7 +102,7 @@ void TempVariableVisitor::visit(ExprNode *node){
     for (auto &a: children) {
         a->accept(this);
     }
-
+    node->moonTag =  children[0]->moonTag;
 }
 
 void TempVariableVisitor::visit(ArithExprNode *node){
@@ -110,7 +110,7 @@ void TempVariableVisitor::visit(ArithExprNode *node){
     for (auto &a: children) {
         a->accept(this);
     }
-
+    node->moonTag =  children[0]->moonTag;
 }
 
 void TempVariableVisitor::visit(AddOp *node){
@@ -123,6 +123,8 @@ void TempVariableVisitor::visit(AddOp *node){
     kind = "tempvar";
     type = node->getDataType();
     SymbolTableRow entry(name, kind, type, nullptr);
+    entry.moonTag = name;
+    node->moonTag = name;
     node->getParent()->symbolTable->insert(entry);
 }
 
@@ -136,6 +138,8 @@ void TempVariableVisitor::visit(MultOp *node){
     kind = "tempvar";
     type = node->getDataType();
     SymbolTableRow entry(name, kind, type, nullptr);
+    entry.moonTag = name;
+    node->moonTag = name;
     node->getParent()->symbolTable->insert(entry);
 }
 void TempVariableVisitor::visit(TermNode *node){
@@ -143,12 +147,14 @@ void TempVariableVisitor::visit(TermNode *node){
     for (auto &a: children) {
         a->accept(this);
     }
+    node->moonTag =  children[0]->moonTag;
 }
 void TempVariableVisitor::visit(FactorNode *node){
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
     for (auto &a: children) {
         a->accept(this);
     }
+    node->moonTag =  children[0]->moonTag;//MAYBE needs to be more specific later???
 }
 
 void TempVariableVisitor::visit(IfStat *node) {
@@ -169,6 +175,8 @@ void TempVariableVisitor::visit(RelExprNode *node){
     kind = "reltempvar";
     type = "integer";//all boolians are integer
     SymbolTableRow entry(name, kind, type, nullptr);
+    entry.moonTag = name;
+    node->moonTag = name;
     node->getParent()->symbolTable->insert(entry);
 }
 
@@ -184,6 +192,24 @@ void TempVariableVisitor::visit(PutStat *node) {
     for (auto &a: children) {
         a->accept(this);
     }
+}
+
+void TempVariableVisitor::visit(NumNode* node){
+    std::string name = this->createTempVarName();
+    //TODO remove lit
+    std::string kind = "littempvar";
+    std::string type = node->getDataType();//all boolians are integer
+    SymbolTableRow entry(name, kind, type, nullptr);
+    entry.moonTag = name;
+    node->moonTag = name;
+    node->getParent()->symbolTable->insert(entry);
+
+}
+
+void TempVariableVisitor::visit(IdNode* node){
+    //std::string name = node->getData()+std::to_string(++tempVarNum);
+    node->moonTag = node->getData();
+
 }
 //do nothing with these ones:
 /*
