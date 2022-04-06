@@ -29,8 +29,6 @@ file(GLOB SOURCES
         ../semantic/tempVariableVisitor.h
         ../semantic/typeCheckVisitors.cpp
         ../semantic/typeCheckVisitors.h
-        moonTagVisitor.cpp
-        moonTagVisitor.h
         codeGenerationVisitor.cpp
         codeGenerationVisitor.h
         compilerDriver.cpp
