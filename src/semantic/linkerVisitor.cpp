@@ -88,24 +88,47 @@ void LinkerVisitor::visit(FPAramNode *node) {
 
 void LinkerVisitor::visit(DimList *node) {}
 //TODO handle case where class is not implemented;
+
+
 void LinkerVisitor::visit(ImplNode *node) {
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     SymbolTable* classTable = nullptr;
     SymbolTable* funcTable = nullptr;
     std::string fName {};
     for (auto &a: children) {
-        if(a->getType() =="id"){
+        if (a->getType() == "id") {
             node->setData(a->getData());
         }
-        else if (a->getType() == "funcDef"){
+        else if (a->getType() == "funcDef") {
             fName = a->getData();
             funcTable = a->symbolTable;
+            for (auto &entry: node->getParent()->symbolTable->getTableEntries()) {
+                if (node->getData() == entry.getName()) {
+                    classTable = entry.getSubTable();
+                    int debug = 0;
+                }
+            }
         }
-        a->accept(this);
+        if (funcTable == nullptr) {
+            node->errors.push_back("FUNCTION " + fName + "has not been declared");
+            std::cout << "FUNCTION " + fName + "has not been declared" << std::endl;
+        }
+        else {
+            for (SymbolTableRow &row: classTable->getTableEntries()) {
+                if (fName == row.getName()) {
+                    row.setSubTable(funcTable);
+                }
+            }
+            //possible linking the table to the parent table???
+            funcTable->setParentTable(classTable);
+            a->accept(this);
+        }
     }
-    for (auto &a: node->symbolTable->getTableEntries()){
-        if (node->getData() == a.getName()) {
-            classTable = a.getSubTable();
+    /*
+    for (auto &entry: node->getParent()->symbolTable->getTableEntries()){
+        if (node->getData() == entry.getName()) {
+            classTable = entry.getSubTable();
+            int debug = 0;
         }
     }
     if(funcTable == nullptr){
@@ -121,4 +144,5 @@ void LinkerVisitor::visit(ImplNode *node) {
         //possible linking the table to the parent table???
         funcTable->setParentTable(classTable);
     }
+    */
 }

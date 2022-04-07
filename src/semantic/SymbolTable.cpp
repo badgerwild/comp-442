@@ -95,7 +95,7 @@ FuncTableRow::FuncTableRow(const std::string &name, const std::string &kind, con
 std::ostream &operator << (std::ostream &out, FuncTableRow &S){
     out << S.getName() << " | " << S.moonTag <<" | " << S.getKind() << " | " << S.getSymbolType() <<" | ";
     if (S.getSubTable()!= nullptr){
-        out << S.getSubTable()->getScope()<< std::endl;
+        out << S.getSubTable()->getScope()<<" -->" <<S.getSubTable()<< std::endl;
     }
     else{
         out << "no subtable"<<std::endl;

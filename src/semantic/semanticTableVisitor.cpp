@@ -145,7 +145,7 @@ void SemanticTableVisitor::visit(VarDecl* node){
 void SemanticTableVisitor::visit(FuncDefNode* node){
     SymbolTable* funcTable = new SymbolTable();
     //funcTable->setParentTable(node->getParent()->symbolTable);
-    funcTable->setScope("function");
+
     node->symbolTable = funcTable;
     std::string name, kind, type;
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
@@ -163,6 +163,7 @@ void SemanticTableVisitor::visit(FuncDefNode* node){
     }
     kind = "function";
     node->setData(name);
+    funcTable->setScope(node->getParent()->getData()+"-->"+node->getData());
     if (node->getParent()->getType() !="impl") {
         SymbolTableRow entry(name, kind, type, nullptr);
         node->getParent()->symbolTable->insert(entry);

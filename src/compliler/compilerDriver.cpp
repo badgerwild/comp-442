@@ -13,7 +13,7 @@
 
 #include "codeGenerationVisitor.h"
 using namespace std;
-/*
+
 const string D = "short_demo";
 const string E = "short_err";
 const string B = "bubble";
@@ -23,8 +23,8 @@ const string X = "expression";
 const string F = "class_func_etc";
 const string C = "shortClass_demo";
  const string A = "ast_demo_1";
- */
-//Compiler feature testing:
+
+//Implemented Compiler feature testing:
 
 const string T = "basic_output"; //basic alloction + output to CLI
 const string EX = "expressions"; //expression testing
@@ -34,7 +34,7 @@ const string EX = "expressions"; //expression testing
 
 int main() {
     cout<< "Parser started " <<endl;
-    string file = T;
+    string file = EX;
     Parser test = Parser(file);
     SemanticTableVisitor* tableBuilder = new SemanticTableVisitor();
     LinkerVisitor* tableLinker = new LinkerVisitor();
