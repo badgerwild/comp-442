@@ -13,9 +13,10 @@
 #include "../AST/astFactory.h"
 //Input file constants
 const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/parser/";
+const std::string SRCPATH = "/home/jason/collective/comp-442/comp-442/src/test_files/";
 const std::string FOLLOW = "first_follow_v";
 const std::string PARSE = "parse_table_v";
-const std::string VERSION ="47.csv";
+const std::string VERSION ="48.csv";
 //int constants
 const int ADDOP =1;
 const int CLOSEADDOP = 2;

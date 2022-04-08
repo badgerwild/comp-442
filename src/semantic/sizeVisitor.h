@@ -46,6 +46,8 @@ public:
 
     void visit(NumNode *node) override;
 
+    void visit(DimList *node) override;
+
 
 };
 

@@ -33,7 +33,7 @@ Parser::Parser(std::string src) : lexer() {
 Parser::~Parser() {}
 
 void Parser::readSource() {
-    lexer.addFile(PATH+sourceFile+SRCSUFFIX);
+    lexer.addFile(SRCPATH+sourceFile+SRCSUFFIX);
     lexer.readFile();
 }
 
@@ -77,10 +77,12 @@ Node * Parser::parse(){
         std::string topStack = parseStack.back();
         if (token.getType() == "cmt") {
             token = getNextToken();
+            int debug = 0;
             //DEBUG
             //std::cout<<token <<std::endl;
         }
-        if ((terminals.find(topStack)!= terminals.end()) ||(topStack == "&epsilon")) {
+        //changed this to else if so it can handle mor ethan one comment???
+        else if ((terminals.find(topStack)!= terminals.end()) ||(topStack == "&epsilon")) {
             if (topStack == token.getType()) {
                 parseStack.pop_back();
                 token = getNextToken();
@@ -482,6 +484,10 @@ void Parser::openAssignOp(Token tok) {
         node_type = TOKEN_NODE_TRANSLATIONS.at(node_type);
     }
     std::vector<Node*> kids;
+    while (semanticStack.back()->getType() != "id") {
+        kids.push_back(semanticStack.back());
+        semanticStack.pop_back();
+    }
     kids.push_back(semanticStack.back());
     semanticStack.pop_back();
     auto assignStatNode = InnerNode::makeFamily(node_type,kids);

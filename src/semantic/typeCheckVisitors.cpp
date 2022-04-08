@@ -156,6 +156,7 @@ void TypeVisitor::visit(FactorNode *node){
     }
     node->setDataType(node->getLeftMostChild()->getDataType());
 }
+//TODO add error for undeclared variable and don't segfault
 void TypeVisitor::visit(IdNode *node){
     if (node->getParent()->symbolTable != nullptr) {
         if (node->getParent()->getType() == "factor") {

@@ -20,12 +20,13 @@ const string F = "class_func_etc";
 const string C = "shortClass_demo";
 const string S ="sampleMain";
 const string T = "test";
+const string DEBUG = "debug";
 
 const string A = "ast_demo_1";
 
 int main() {
     cout<< "Parser started " <<endl;
-    string file = D;
+    string file = P;
     Parser test = Parser(file);
     SemanticTableVisitor* tableBuilder = new SemanticTableVisitor();
     LinkerVisitor* tableLinker = new LinkerVisitor();
@@ -46,7 +47,7 @@ int main() {
         sizeMaker->visit(dynamic_cast<ProgNode*>(ast));
         log->visit(dynamic_cast<ProgNode*>(ast));
         //DEBUG print
-        Node::traverse(ast, 0);
+        //Node::traverse(ast, 0);
         ast->deleteAll();
         delete(tableBuilder);
         delete(typer);

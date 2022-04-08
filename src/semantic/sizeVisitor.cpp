@@ -230,6 +230,13 @@ void SizeVisitor::visit(NumNode* node){
     }
 }
 
+void SizeVisitor::visit(DimList *node){
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        a->accept(this);
+    }
+}
+
 SizeVisitor::SizeVisitor() {}
 
 SizeVisitor::~SizeVisitor() {
