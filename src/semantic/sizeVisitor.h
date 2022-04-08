@@ -25,6 +25,7 @@ public:
     void visit(ProgramBlock *node) override;
 
     void visit(VarDecl *node) override;
+
     void visit(FParamList *node) override;
 
     void visit(FPAramNode *node) override;
@@ -42,13 +43,14 @@ public:
     void visit(MultOp *node) override;
 
     void visit(TermNode *node) override;
+
     void visit(FactorNode *node) override;
 
     void visit(NumNode *node) override;
 
     void visit(DimList *node) override;
 
-
+    void visit(IdNode *node) override;
 };
 
 

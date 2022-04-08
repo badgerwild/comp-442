@@ -100,12 +100,10 @@ void CodeGenerationVisitor::visit(VarDecl *node) {
     int arraySize = 1; // no items
     for (auto &a: children){
         if (a->getType() == "dimList"){
-            arraySize = std::stoi(a->getLeftMostChild()->getData());
+            arraySize = std::stoi(a->getLeftMostChild()->getData())+1;
         }
     }
-
     moonDataCode.push_back(INDENT_11 + "% Space for var " + children[0]->getData());
-    //TODO add in a way to automatically get the size here,
     //TODO go back to symbol table genration and make sure to assign an entry to each node.
     moonDataCode.push_back(children[0]->getData()+ INDENT_10 +" res " +std::to_string((node->size)*arraySize));
 
@@ -121,16 +119,29 @@ void CodeGenerationVisitor::visit(DimList *node) {
 }
 
 void CodeGenerationVisitor::visit(AssignStat *node) {
+    int offSet = 0;
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     for (auto &a: children) {
         a->accept(this);
     }
+    std::string addressRegister = registerPool.back();
+    registerPool.pop_back();
     std::string localRegister = registerPool.back();
     registerPool.pop_back();
     moonExecCode.push_back(INDENT_11+ "%Processing ,"+children[1]->moonTag+"->" +children[0]->moonTag);
-    moonExecCode.push_back(INDENT_11 + "lw "+ localRegister +","+children[0]->moonTag+"(r0)");
+    moonExecCode.push_back(INDENT_11+"% Assigning array access    ");
+    //TODO get this working for accessing elemets of an array
+    int condition = children.size();
+    if (condition > 2) {
+        offSet = std::stoi(children[2]->getData())*children[1]->size;
+    }
+    moonExecCode.push_back(INDENT_11 +"addi " +addressRegister+"," +"r0,"+std::to_string(offSet));
+    //moonExecCode.push_back(INDENT_11 + "lw "+ localRegister +","+children[0]->moonTag+"(r0)");
+    moonExecCode.push_back(INDENT_11 + "lw "+ localRegister +","+children[0]->moonTag+"("+addressRegister+")");
     moonExecCode.push_back(INDENT_11+"sw " + children[1]->moonTag+"(r0),"+localRegister);
+
     registerPool.push_back(localRegister);
+    registerPool.push_back(addressRegister);
 }
 
 void CodeGenerationVisitor::visit(PutStat *node) {
@@ -405,7 +416,7 @@ void CodeGenerationVisitor::visit(IdNode *node) {
 }
 
 void CodeGenerationVisitor::visit(NumNode *node) {
-    if (node->getParent()->getType() != "dimList") {
+    if ((node->getParent()->getType() != "dimList") && (node->moonTag != "")) {
         std::vector<Node *> children = node->reverse(node->getLeftMostChild()->getSiblings());
         std::string localRegister = registerPool.back();
         registerPool.pop_back();

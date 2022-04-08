@@ -92,6 +92,7 @@ void SizeVisitor::visit(VarDecl* node){
                 }
             }
         }
+
     }
 }
 
@@ -124,7 +125,7 @@ void SizeVisitor::visit(FuncDefNode* node){
 }
 
 void SizeVisitor::visit(ProgramBlock* node){
-    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     for (auto &a: children) {
         a->accept(this);
     }
@@ -150,7 +151,7 @@ void SizeVisitor::visit(AssignStat *node){
     for (auto &a: children) {
         a->accept(this);
     }
-
+int debug = 8;
 }
 
 void SizeVisitor::visit(ExprNode *node){
@@ -166,6 +167,9 @@ void SizeVisitor::visit(ArithExprNode *node){
     for (auto &a: children) {
         a->accept(this);
     }
+    //Back propigation of data up the tree
+    node->setData(children[0]->getData());
+    node->size = children[0]->size;
 
 }
 
@@ -235,8 +239,26 @@ void SizeVisitor::visit(DimList *node){
     for (auto &a: children) {
         a->accept(this);
     }
+    //back propigation of data from children
+    node->setData(children[0]->getData());
+    node->size = children[0]->size;
 }
 
+void SizeVisitor::visit(IdNode* node){
+    int debug =0;
+    if (node->getParent()->getType() == "assignStat") {
+        for (auto &entry: node->symbolTable->getTableEntries()){
+            if (node->getData() == entry.getName()){
+                if (entry.getSymbolType() == "integer"){
+                    node->size = 4;
+                }
+                else if (entry.getSymbolType() == "float"){
+                    node->size = 8;
+                }
+            }
+        }
+    }
+}
 SizeVisitor::SizeVisitor() {}
 
 SizeVisitor::~SizeVisitor() {

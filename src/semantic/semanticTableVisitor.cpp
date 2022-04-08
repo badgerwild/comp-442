@@ -335,6 +335,12 @@ void SemanticTableVisitor::visit(PutStat *node) {
         a->accept(this);
     }
 }
+void SemanticTableVisitor::visit(IdNode* node){
+    if (node->getParent()->getType() == "assignStat") {
+        node->symbolTable = node->getParent()->symbolTable;
+    }
+}
+
 //do nothing with these ones:
 /*
 void SemanticTableVisitor::visit(AssignStat* node){

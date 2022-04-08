@@ -28,13 +28,14 @@ const string C = "shortClass_demo";
 
 const string T = "basic_output"; //basic alloction + output to CLI
 const string EX = "expressions"; //expression testing
+const string AA = "arrayAccess";
 
 
 
 
 int main() {
     cout<< "Parser started " <<endl;
-    string file = EX;
+    string file = AA;
     Parser test = Parser(file);
     SemanticTableVisitor* tableBuilder = new SemanticTableVisitor();
     LinkerVisitor* tableLinker = new LinkerVisitor();
@@ -48,23 +49,26 @@ int main() {
     auto ast = test.parse();
     if(ast->getType() != "Null"){
         cout<< file << " Sucessfully parsed" <<endl;
+
         tableBuilder->visit(dynamic_cast<ProgNode*>(ast));
         tableLinker->visit(dynamic_cast<ProgNode*>(ast));
         typer->visit(dynamic_cast<ProgNode*>(ast));
         tempVariables->visit(dynamic_cast<ProgNode*>(ast));
         sizeMaker->visit(dynamic_cast<ProgNode*>(ast));
         log->visit(dynamic_cast<ProgNode*>(ast));
-        delete(log);
+
         codeMaker->visit(dynamic_cast<ProgNode*>(ast));
         //DEBUG print
-        //Node::traverse(ast, 0);
+        Node::traverse(ast, 0);
+
+        //Delete all the things!!!!
         ast->deleteAll();
         delete(tableBuilder);
         delete(typer);
         delete(tempVariables);
         delete(sizeMaker);
+        delete(log);
         delete(tableLinker);
-        //delete(log);
         delete(codeMaker);
     }
     else{

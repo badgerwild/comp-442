@@ -55,6 +55,7 @@ public:
 
     void visit(PutStat * node)  override;
 
+    void visit(IdNode *node) override;
     /*
 
     void visit(AssignStat *node) override;
