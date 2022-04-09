@@ -35,7 +35,7 @@ const string AA = "arrayAccess";
 
 int main() {
     cout<< "Parser started " <<endl;
-    string file = AA;
+    string file = T;
     Parser test = Parser(file);
     SemanticTableVisitor* tableBuilder = new SemanticTableVisitor();
     LinkerVisitor* tableLinker = new LinkerVisitor();
