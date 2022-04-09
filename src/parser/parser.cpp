@@ -16,7 +16,7 @@
 Parser::Parser(std::string src) : lexer() {
     parseTable = loadTable(PATH+PARSE+VERSION) ;
     //index 0 = non-terminal; 1 = first set; 2 = follow set
-    firstFollow = loadTable(PATH + FOLLOW + VERSION);
+    firstFollow = loadTable(PATH + FOLLOW);
     //load in terminals from the parse table
     parseTable[0][parseTable[0].size()-1].pop_back(); //deal with \r
     for (std::string &s: parseTable[0]){

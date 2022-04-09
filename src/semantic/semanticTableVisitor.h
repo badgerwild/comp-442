@@ -35,17 +35,17 @@ public:
 
     void visit(AssignStat *node) override;
 
-    void visit(ExprNode *node) override;
+    //void visit(ExprNode *node) override;
 
-    void visit(ArithExprNode *node) override;
+    //void visit(ArithExprNode *node) override;
 
     void visit(AddOp *node) override;
 
     void visit(MultOp *node) override;
 
-    void visit(TermNode *node) override;
+   // void visit(TermNode *node) override;
 
-    void visit(FactorNode *node) override;
+  //  void visit(FactorNode *node) override;
 
     void visit(IfStat *node) override;
 

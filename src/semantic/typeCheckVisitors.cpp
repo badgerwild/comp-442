@@ -91,6 +91,7 @@ void TypeVisitor::visit(AssignStat *node){
         a->accept(this);
     }
 } ;
+/*
 
 void TypeVisitor::visit(ExprNode *node){
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
@@ -106,7 +107,7 @@ void TypeVisitor::visit(ArithExprNode *node){
     }
     node->setDataType(node->getLeftMostChild()->getDataType());
 } ;
-
+*/
 void TypeVisitor::visit(AddOp *node){
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     for (auto &a: children) {
@@ -140,7 +141,7 @@ void TypeVisitor::visit(MultOp *node){
         node->errors.push_back("invlaid type at mult op");
     }
 } ;
-
+/*
 void TypeVisitor::visit(TermNode *node){
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     for (auto &a: children) {
@@ -156,14 +157,14 @@ void TypeVisitor::visit(FactorNode *node){
     }
     node->setDataType(node->getLeftMostChild()->getDataType());
 }
-//TODO add error for undeclared variable and don't segfault
+ */
 void TypeVisitor::visit(IdNode *node){
     if (node->getParent()->symbolTable != nullptr) {
-        if (node->getParent()->getType() == "factor") {
+        //if (node->getParent()->getType() == "factor") {
             SymbolTableRow temp = node->getParent()->symbolTable->search(node->getData());
             node->setDataType(temp.getSymbolType());
         //     std::cout << temp;
-        }
+        //}
     }
 }
 

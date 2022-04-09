@@ -41,13 +41,12 @@ int main() {
         cout<< file << " Sucessfully parsed" <<endl;
         tableBuilder->visit(dynamic_cast<ProgNode*>(ast));
         tableLinker->visit(dynamic_cast<ProgNode*>(ast));
-        //TODO THIS THROWS A SEGFAULT FOR POLYNOMIAL FUCK KNOWS WHY.
         typer->visit(dynamic_cast<ProgNode*>(ast));
         tempVariables->visit(dynamic_cast<ProgNode*>(ast));
         sizeMaker->visit(dynamic_cast<ProgNode*>(ast));
         log->visit(dynamic_cast<ProgNode*>(ast));
         //DEBUG print
-        //Node::traverse(ast, 0);
+        Node::traverse(ast, 0);
         ast->deleteAll();
         delete(tableBuilder);
         delete(typer);

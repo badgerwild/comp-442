@@ -21,8 +21,11 @@ void SizeVisitor::visit(ProgNode* node){
             node->symbolTable->tableOffset-=8;
             entry.setOffSet(node->symbolTable->tableOffset);
         }
+        else if(entry.getKind() == "function"){
+            entry.setSize(entry.getSubTable()->tableSize);
+        }
         else{
-            entry.setSize(0);
+            //entry.setSize(0);
         }
     }
 //    std::cout<< *node->symbolTable;
@@ -34,7 +37,7 @@ void SizeVisitor::visit(ClassDeclNode *node) {
     for (auto &a: children) {
         a->accept(this);
     }
-
+//calculate class size and offset
     for (auto &entry: node->symbolTable->getTableEntries()){
         if (entry.getSymbolType() == "integer"){
             entry.setSize(4);
@@ -53,8 +56,17 @@ void SizeVisitor::visit(ClassDeclNode *node) {
     for (auto &entry:node->symbolTable->getTableEntries()){
         nodeSize+=entry.getSize();
     }
+    //set class size
     node->symbolTable->tableSize = nodeSize;
     node->size = nodeSize;
+    //set class size in parent table
+    for (auto &entry: node->getParent()->symbolTable->getTableEntries()){
+        if (entry.getName() == node->getData()){
+            entry.setSize(nodeSize);
+            int debug;
+        }
+    }
+
 }
 
 void SizeVisitor::visit(ImplNode *node) {
@@ -73,6 +85,13 @@ void SizeVisitor::visit(MembDeclNode* node){
 
 void SizeVisitor::visit(FuncDeclNode* node) {
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
+    //find entry in parent table and assign the size from the subtable
+    for (auto &entry: node->getParent()->symbolTable->getTableEntries() ){
+        if (entry.getName() == node->getData()){
+            entry.setSize(entry.getSubTable()->tableSize);
+        }
+
+    }
 }
 void SizeVisitor::visit(VarDecl* node){
     std::vector<Node *> children = node->reverse(node->getLeftMostChild()->getSiblings());
@@ -188,6 +207,7 @@ void SizeVisitor::visit(MultOp *node){
     }
     node->size = children[0]->size;
 }
+
 void SizeVisitor::visit(TermNode *node){
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
     for (auto &a: children) {
@@ -207,6 +227,7 @@ void SizeVisitor::visit(TermNode *node){
         }
     }
 }
+
 void SizeVisitor::visit(FactorNode *node){
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
     for (auto &a: children) {
@@ -236,12 +257,14 @@ void SizeVisitor::visit(NumNode* node){
 
 void SizeVisitor::visit(DimList *node){
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
-    for (auto &a: children) {
-        a->accept(this);
+    if (children[0]!= nullptr) {
+        for (auto &a: children) {
+            a->accept(this);
+        }
+        //back propigation of data from children
+        node->setData(children[0]->getData());
+        node->size = children[0]->size;
     }
-    //back propigation of data from children
-    node->setData(children[0]->getData());
-    node->size = children[0]->size;
 }
 
 void SizeVisitor::visit(IdNode* node){

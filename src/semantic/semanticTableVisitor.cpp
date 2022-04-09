@@ -232,7 +232,7 @@ void SemanticTableVisitor::visit(AssignStat *node){
     }
 
 }
-
+/*
 void SemanticTableVisitor::visit(ExprNode *node){
     //SymbolTable statTable;
     node->symbolTable = node->getParent()->symbolTable;
@@ -252,6 +252,7 @@ void SemanticTableVisitor::visit(ArithExprNode *node){
     }
 
 }
+ */
 
 void SemanticTableVisitor::visit(AddOp *node){
     node->symbolTable = node->getParent()->symbolTable;
@@ -290,6 +291,7 @@ void SemanticTableVisitor::visit(MultOp *node){
     node->getParent()->symbolTable->insert(entry);
      */
 }
+/*
 void SemanticTableVisitor::visit(TermNode *node){
     node->symbolTable = node->getParent()->symbolTable;
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
@@ -304,6 +306,7 @@ void SemanticTableVisitor::visit(FactorNode *node){
         a->accept(this);
     }
 }
+ */
 
 void SemanticTableVisitor::visit(IfStat *node) {
     node->symbolTable = node->getParent()->symbolTable;

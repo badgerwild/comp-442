@@ -65,7 +65,7 @@ int SymbolTableRow::getSize() const {
 }
 
 void SymbolTableRow::setSize(int size) {
-    SymbolTableRow::size = size;
+    this->size = size;
 }
 
 int SymbolTableRow::getOffSet() const {
@@ -73,7 +73,7 @@ int SymbolTableRow::getOffSet() const {
 }
 
 void SymbolTableRow::setOffSet(int offSet) {
-    SymbolTableRow::offSet = offSet;
+    this->offSet = offSet;
 }
 
 FuncTableRow::FuncTableRow(){

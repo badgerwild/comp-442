@@ -41,6 +41,15 @@ void LinkerVisitor::visit(FuncDefNode *node) {
         //Add a referance to the above symtable???
         a->accept(this);
     }
+    if (node->getParent()->getType() != "impl"){
+        for(auto &entry: node->getParent()->symbolTable->getTableEntries()){
+            if (entry.getName() == node->getData()){
+                entry.insertSubTable(node->symbolTable);
+                node->symbolTable->setParentTable(node->getParent()->symbolTable);
+            }
+        }
+    }
+
 }
 void LinkerVisitor::visit(ProgramBlock *node) {
     std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
