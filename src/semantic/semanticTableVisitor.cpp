@@ -106,6 +106,7 @@ void SemanticTableVisitor::visit(FuncDeclNode* node) {
     node->getParent()->symbolTable->insert(entry);
 }
 void SemanticTableVisitor::visit(VarDecl* node){
+    node->symbolTable = node->getParent()->symbolTable;
     std::vector<Node *> children = node->reverse(node->getLeftMostChild()->getSiblings());
     std::string name, kind, type;
     std::vector<std::string> dimList;
@@ -339,9 +340,7 @@ void SemanticTableVisitor::visit(PutStat *node) {
     }
 }
 void SemanticTableVisitor::visit(IdNode* node){
-    if (node->getParent()->getType() == "assignStat") {
         node->symbolTable = node->getParent()->symbolTable;
-    }
 }
 
 //do nothing with these ones:

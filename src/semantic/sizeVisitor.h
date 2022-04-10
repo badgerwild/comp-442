@@ -51,6 +51,8 @@ public:
     void visit(DimList *node) override;
 
     void visit(IdNode *node) override;
+
+    void visit(PutStat *node) override;
 };
 
 

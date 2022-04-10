@@ -25,8 +25,7 @@ CodeGenerationVisitor::~CodeGenerationVisitor() {
 }
 
 void CodeGenerationVisitor::visit(ProgNode *node) {
-    moonExecCode.push_back(INDENT_11 +"entry");
-    moonExecCode.push_back(INDENT_11 + "addi r14,r0,topaddr");
+
 
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     for (auto &a: children) {
@@ -35,7 +34,7 @@ void CodeGenerationVisitor::visit(ProgNode *node) {
 
     moonDataCode.push_back("\n" + INDENT_11 + "%Buffer space for console output");
     moonDataCode.push_back("buf" +INDENT_11 +"res 20");
-    moonExecCode.push_back(INDENT_11 + "hlt");
+
     //output the exec
     for(std::string &execCode: moonExecCode ){
         codeOutput<<execCode<<std::endl;
@@ -57,10 +56,12 @@ void CodeGenerationVisitor::visit(ClassListNode *node) {
 }
 
 void CodeGenerationVisitor::visit(FuncDefList *node) {
+
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     for (auto &a: children) {
         a->accept(this);
     }
+
 }
 
 void CodeGenerationVisitor::visit(ClassDeclNode *node) {
@@ -71,9 +72,33 @@ void CodeGenerationVisitor::visit(ClassDeclNode *node) {
 }
 
 void CodeGenerationVisitor::visit(FuncDefNode *node) {
+    if (node->getData() == "main"){
+        moonExecCode.push_back(INDENT_11 +"entry");
+        moonExecCode.push_back(INDENT_11 + "addi r14,r0,topaddr");
+    }
+    else{
+        moonExecCode.push_back(INDENT_11 +"% func def for: " +node->getData());
+        moonExecCode.push_back(node->getData());
+        //Fix this for a type  once working
+        moonDataCode.push_back(node->getData()+"link"+INDENT_10+ "res 4");
+        moonExecCode.push_back(INDENT_11+"sw "+node->getData()+"link(r0),r15");
+
+        //return statement
+        moonDataCode.push_back(node->getData()+"return"+ INDENT_10+ "res 4");
+    }
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     for (auto &a: children) {
         a->accept(this);
+    }
+    if(node->getData() == "main") {
+        moonExecCode.push_back(INDENT_11 + "hlt");
+    }
+    else{
+        //jump back address
+        moonExecCode.push_back(INDENT_10+ "lw r15," +node->getData()+"link(r0)");
+        //jump to register 15
+        moonExecCode.push_back(INDENT_11 +"jr r15");
+
     }
 }
 
@@ -119,29 +144,48 @@ void CodeGenerationVisitor::visit(DimList *node) {
 }
 
 void CodeGenerationVisitor::visit(AssignStat *node) {
-    int offSet = 0;
+    int value_offSet = 0;
+    int target_offSet = 0;
+    int targetIndex = 0;
+    int valueIndex = 0;
+    std::string leftId{};
+    std::string rightID{};
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     for (auto &a: children) {
         a->accept(this);
     }
-    std::string addressRegister = registerPool.back();
+    //get index of target id
+    for (int i = 1; i<children.size(); i++){
+        if (children[i]->getType() =="id"){
+            targetIndex = i;
+        }
+    }
+    std::string ValueAddressRegister = registerPool.back();
+    registerPool.pop_back();
+    std::string TargetAddressRegister = registerPool.back();
     registerPool.pop_back();
     std::string localRegister = registerPool.back();
     registerPool.pop_back();
-    moonExecCode.push_back(INDENT_11+ "%Processing ,"+children[1]->moonTag+"->" +children[0]->moonTag);
+    moonExecCode.push_back(INDENT_11+ "%Processing ,"+children[targetIndex]->moonTag+"<-" +children[valueIndex]->moonTag);
     moonExecCode.push_back(INDENT_11+"% Assigning array access    ");
-    //TODO get this working for accessing elemets of an array
-    int condition = children.size();
-    if (condition > 2) {
-        offSet = std::stoi(children[2]->getData())*children[1]->size;
+    //calculate array offsets currently only setup for 1-d arrays
+    if (children.size()> 2) {
+        if (targetIndex != 1){
+            value_offSet = std::stoi(children[valueIndex+1]->getData())*children[valueIndex]->size;
+        }
+        if(targetIndex != (children.size()-1)){
+            target_offSet = std::stoi(children[targetIndex+1]->getData()) * children[targetIndex]->size;
+        }
     }
-    moonExecCode.push_back(INDENT_11 +"addi " +addressRegister+"," +"r0,"+std::to_string(offSet));
+    // register offsets for array access
+    moonExecCode.push_back(INDENT_11 +"addi " +ValueAddressRegister+"," +"r0,"+std::to_string(value_offSet));
+    moonExecCode.push_back(INDENT_11+"addi "+TargetAddressRegister+","+"r0,"+std::to_string(target_offSet));
     //moonExecCode.push_back(INDENT_11 + "lw "+ localRegister +","+children[0]->moonTag+"(r0)");
-    moonExecCode.push_back(INDENT_11 + "lw "+ localRegister +","+children[0]->moonTag+"("+addressRegister+")");
-    moonExecCode.push_back(INDENT_11+"sw " + children[1]->moonTag+"(r0),"+localRegister);
-
+    moonExecCode.push_back(INDENT_11 + "lw "+ localRegister +","+children[valueIndex]->moonTag+"("+ValueAddressRegister+")");
+    moonExecCode.push_back(INDENT_11+"sw " + children[targetIndex]->moonTag+"("+TargetAddressRegister+"),"+localRegister);
     registerPool.push_back(localRegister);
-    registerPool.push_back(addressRegister);
+    registerPool.push_back(TargetAddressRegister);
+    registerPool.push_back(ValueAddressRegister);
 }
 
 void CodeGenerationVisitor::visit(PutStat *node) {
@@ -210,7 +254,7 @@ void CodeGenerationVisitor::visit(AddOp *node) {
     std::string rightTermRegister = registerPool.back();
     registerPool.pop_back();
     //generate code
-    moonExecCode.push_back(INDENT_11+ "%"+ node->moonTag + "->" + children[0]->getData() +"+" + children[1]->getData());
+    moonExecCode.push_back(INDENT_11+ "%"+ node->moonTag + "<-" + children[0]->getData() +"+" + children[1]->getData());
     moonExecCode.push_back(INDENT_11 + "lw " + leftTermRegister + "," + children[0]->moonTag+"(r0)");
     moonExecCode.push_back(INDENT_11+"lw " +rightTermRegister+ "," +children[1]->moonTag+"(r0)");
     if (node->getData() == "+") {
@@ -294,6 +338,25 @@ void CodeGenerationVisitor::visit(FCallNode *node) {
     for (auto &a: children) {
         a->accept(this);
     }
+   std::string localRegister = registerPool.back();
+    registerPool.pop_back();
+
+    //Paramater passing will go here
+
+    //jump to the called function's code
+    //label is unqiue, currently al functions must have a unique name
+    moonExecCode.push_back(INDENT_11+ "jl r15,"+node->getData());
+//TODO get return value working!!!!
+    //return value, maybe add a condition to make this optional for void return
+   // moonDataCode.push_back(INDENT_11 + "%allocating space for return value");
+  //  moonDataCode.push_back(node->getData() + INDENT_11 + "res 4");
+    //moonExecCode.push_back(INDENT_11 + "lw " +localRegister +"," +node->getData()+"return(r0)");
+    //moonExecCode.push_back(INDENT_11 + "sw " + node->getData()+"(r0),"+localRegister );
+
+    registerPool.push_back(localRegister);
+
+
+
 }
 
 void CodeGenerationVisitor::visit(RelOpNode *node) {

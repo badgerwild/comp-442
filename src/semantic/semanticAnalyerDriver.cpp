@@ -26,7 +26,7 @@ const string A = "ast_demo_1";
 
 int main() {
     cout<< "Parser started " <<endl;
-    string file = P;
+    string file = DEBUG;
     Parser test = Parser(file);
     SemanticTableVisitor* tableBuilder = new SemanticTableVisitor();
     LinkerVisitor* tableLinker = new LinkerVisitor();

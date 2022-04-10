@@ -61,7 +61,6 @@ Token Parser::getNextToken() {
 }
 
 Node * Parser::parse(){
-    //TODO make Logging class for all componets to use
    //logger open files
   std::ofstream outPut[2];
   for (int i =0; i<2;++i){
@@ -75,6 +74,7 @@ Node * Parser::parse(){
     //tip != to end
     while(parseStack.back() != "$" ) {
         std::string topStack = parseStack.back();
+        // by pass comments
         if (token.getType() == "cmt") {
             token = getNextToken();
             int debug = 0;
@@ -139,6 +139,7 @@ Node * Parser::parse(){
         if (!success) {
             outPut[0].close();
             outPut[1].close();
+            //if not parse corretly will not generate an ast and compilation will crash
             return factory.makeNode(EPSILON);
         }
         else {
@@ -495,11 +496,16 @@ void Parser::openAssignOp(Token tok) {
 }
 
 void Parser::closeAssignOp() {
-    auto value = semanticStack.back();
-    semanticStack.pop_back();
+    std::vector<Node*> kids;
+    while (semanticStack.back()->getType() != "assignStat"){
+        kids.push_back(semanticStack.back());
+        semanticStack.pop_back();
+    }
     auto opNode = semanticStack.back();
     semanticStack.pop_back();
-    opNode->adoptChildren(value);
+    for (auto &node: kids) {
+        opNode->adoptChildren(node);
+    }
     semanticStack.push_back(opNode);
 }
 

@@ -269,9 +269,10 @@ void SizeVisitor::visit(DimList *node){
 
 void SizeVisitor::visit(IdNode* node){
     int debug =0;
-    if (node->getParent()->getType() == "assignStat") {
-        for (auto &entry: node->symbolTable->getTableEntries()){
-            if (node->getData() == entry.getName()){
+    std::string node_id = node->getData();
+    for (auto &entry: node->symbolTable->getTableEntries()){
+        std::string entry_id =entry.getName();
+            if (node_id == entry_id){
                 if (entry.getSymbolType() == "integer"){
                     node->size = 4;
                 }
@@ -280,7 +281,16 @@ void SizeVisitor::visit(IdNode* node){
                 }
             }
         }
+}
+
+void SizeVisitor::visit(PutStat *node) {
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    if (children[0]!= nullptr) {
+        for (auto &a: children) {
+            a->accept(this);
+        }
     }
+
 }
 SizeVisitor::SizeVisitor() {}
 
