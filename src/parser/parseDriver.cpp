@@ -5,15 +5,13 @@
 #include "parser.h"
 
 using namespace std;
-const string D = "short_demo";
-const string E = "short_err";
-const string B = "bubble";
-const string S = "poly";
-const string V = "variableAndIdnest";
-const string X = "expression";
-const string F = "class_func_etc";
+const string D = "short_demo.txt";
+const string B = "bubble.txt";
+const string S = "poly.txt";
+const string V = "variableAndIdnest.txt";
+const string X = "expression.txt";
+const string F = "class_func_etc.txt";
 
-const string A = "ast_demo_1";
 
 int main() {
     cout<< "Parser started " <<endl;
@@ -22,15 +20,4 @@ int main() {
     test.readSource();
     cout<<"****************************************************" <<endl;
     test.parse();
-    /*
-    if(test.parse()){
-        cout<< file << " Sucessfully parsed" <<endl;
-    }
-    else{
-        cout<< file << " had errors parsed" <<endl;
-    }
-    cout<<"*****************************************************" <<endl;
-
-    cout<<"Parser Finished" <<endl;
-*/
 }

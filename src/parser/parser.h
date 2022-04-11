@@ -13,6 +13,7 @@
 #include "../AST/astFactory.h"
 //Input file constants
 const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/parser/";
+const std::string FINALLOGPATH = "/home/jason/collective/comp-442/comp-442/src/logs/";
 const std::string SRCPATH = "/home/jason/collective/comp-442/comp-442/src/test_files/";
 const std::string FOLLOW = "first_follow";
 const std::string PARSE = "parse_table_v";

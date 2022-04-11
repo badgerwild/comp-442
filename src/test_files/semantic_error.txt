@@ -1,0 +1,10 @@
+func main () -> void
+{
+let c: integer;
+let x: float;
+let y: integer;
+x = 2.2;
+c = 3;
+y = c+x;
+
+}

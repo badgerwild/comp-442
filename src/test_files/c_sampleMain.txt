@@ -1,0 +1,21 @@
+func main() -> void
+{
+  let x: integer;
+  let y: integer;
+  let z: integer;
+
+  y = 1 + 2 * 3;
+  x = 30;
+  //read(x);
+  if (x > y + 10)
+  then
+    write(x+10);
+  else
+    write(x+1);
+  ;
+  z = 0;
+  while(z<=10){
+    write(z);
+    z = z +1;
+  };
+}

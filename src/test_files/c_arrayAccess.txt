@@ -1,0 +1,41 @@
+func main() -> void
+{
+    let x: integer;
+    let a: integer[2];
+    a[1] = 5;
+    //a[1] = 6;
+    //a[2] = 7;
+    x = a[1];
+    write(x);
+
+}
+/*
+  std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        a->accept(this);
+    }
+    std::string localRegister = registerPool.back();
+    registerPool.pop_back();
+    std::string leftTermRegister = registerPool.back();
+    registerPool.pop_back();
+    std::string rightTermRegister = registerPool.back();
+    registerPool.pop_back();
+    //generate code
+    moonExecCode.push_back(INDENT_11+ "%"+ node->moonTag + "->" + children[0]->getData() +"*" + children[1]->getData());
+    moonExecCode.push_back(INDENT_11 + "lw " + leftTermRegister + "," + children[0]->moonTag+"(r0)");
+    moonExecCode.push_back(INDENT_11+"lw " +rightTermRegister+ "," +children[1]->moonTag+"(r0)");
+    if (node->getData() == "*") {
+        moonExecCode.push_back(INDENT_11 + "mul " + localRegister + "," + leftTermRegister + "," + rightTermRegister);
+    }
+    else {
+        moonExecCode.push_back(INDENT_11 + "div " + localRegister + "," + leftTermRegister + "," + rightTermRegister);
+    }
+    moonDataCode.push_back(INDENT_11 +"% allocating space for " + node->moonTag + "->" + children[0]->getData() +"+" + children[1]->getData());
+    moonDataCode.push_back(node->moonTag+INDENT_10+ " res " + std::to_string(node->size));
+    moonExecCode.push_back(INDENT_11+ "sw " + node->moonTag +"(r0)," + localRegister);
+
+    registerPool.push_back(rightTermRegister);
+    registerPool.push_back(leftTermRegister);
+    registerPool.push_back(localRegister);
+}
+*/

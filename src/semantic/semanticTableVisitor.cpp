@@ -168,6 +168,7 @@ void SemanticTableVisitor::visit(FuncDefNode* node){
     if (node->getParent()->getType() !="impl") {
         SymbolTableRow entry(name, kind, type, nullptr);
         node->getParent()->symbolTable->insert(entry);
+        int debug =0;
     }
     //SymbolTableRow temp = node->symbolTable->search(node->getName());
 }

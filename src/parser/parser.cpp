@@ -28,10 +28,10 @@ Parser::Parser(std::string src) : lexer() {
     lexer = Lexer();
     sourceFile = src;
     outFileName = stripSuffix(src);
-    outFiles[0] = PATH+LOG+outFileName+OUT;
-    outFiles[1] = PATH+LOG+outFileName+ERR;
-    outFiles[2] = OUTPATH+outFileName+TOKENSTREAM;
-    outFiles[3] =OUTPATH+outFileName+ERRORSTREAM;
+    outFiles[0] = FINALLOGPATH+outFileName+OUT;
+    outFiles[1] = FINALLOGPATH+outFileName+ERR;
+    outFiles[2] = FINALLOGPATH+outFileName+TOKENSTREAM;
+    outFiles[3] = FINALLOGPATH+outFileName+ERRORSTREAM;
 }
 
 Parser::~Parser() {}

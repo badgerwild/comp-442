@@ -1,0 +1,17 @@
+func main() ->void
+{
+let x: integer;
+let y: integer;
+let z: integer;
+x = 8;
+y = 7;
+if (x >= y)
+then {
+    z= 9;
+}else {
+z = 10;
+};
+write(z);
+
+
+}

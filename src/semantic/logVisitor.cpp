@@ -8,9 +8,9 @@
 #include "SymbolTable.h"
 #include "./AST/ast.h"
 #include "../utils/remove_suffix.h"
-
-
-const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/semantic/logs/";
+//FINAL
+const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/logs/";
+//const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/semantic/logs/";
 const std::string OUTSYMBOLTABLES = ".outsymboltables";
 const std::string OUTERRORS = ".outerrors";
 
@@ -23,11 +23,14 @@ LogVisitor::LogVisitor() {
 LogVisitor::LogVisitor(std::string file) {
     std::string outName = stripSuffix(file);
     outputFiles[1] = PATH+outName+OUTERRORS;
-    outputFiles[0] = PATH + outName + OUTSYMBOLTABLES;
-
+    outputFiles[0] = PATH +outName+OUTSYMBOLTABLES;
+/*
     for (int i =0; i<2;++i){
         outPut[i].open(outputFiles[i]);
     }
+    */
+    outPut[0].open(outputFiles[0]);
+    outPut[1].open(outputFiles[1]);
 }
 
 LogVisitor::~LogVisitor() {
@@ -113,15 +116,39 @@ void LogVisitor::visit(FuncDefNode *node) {
         a->accept(this);
     }
 }
-void LogVisitor::visit(ProgramBlock *node) {};
+void LogVisitor::visit(ProgramBlock *node) {
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        a->accept(this);
+    }
 
-void LogVisitor::visit(AssignStat *node) {};
+};
+
+
+
+void LogVisitor::visit(AssignStat *node) {
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    for (auto &a: children) {
+        a->accept(this);
+    }
+
+};
 
 void LogVisitor::visit(IdNode *node) {};
 
 void LogVisitor::visit(NotNode *node) {};
 
-void LogVisitor::visit(AddOp *node) {};
+void LogVisitor::visit(AddOp *node) {
+    outPut[1]<<"******************************************************"<<std::endl;
+    outPut[1]<< " Error for " <<node->getType() << std::endl;
+    for (auto &a: node->errors){
+        outPut[1] << a<<std::endl;
+    }
+    outPut[1]<<"******************************************************"<<std::endl;
+
+};
+
+void LogVisitor::visit(MultOp *node) {}
 
 void LogVisitor::visit(NumNode *node) {};
 

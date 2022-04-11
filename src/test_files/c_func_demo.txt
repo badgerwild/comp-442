@@ -1,0 +1,10 @@
+func printSomething() -> void
+{
+    write(20);
+}
+
+func main () -> void
+{
+    printSomething();
+    write(0);
+}

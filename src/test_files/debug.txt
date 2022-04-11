@@ -1,0 +1,9 @@
+func printArray() -> void
+{
+  let n: integer;
+}
+
+func main() -> void
+{
+  bubbleSort(arr, 7);
+}

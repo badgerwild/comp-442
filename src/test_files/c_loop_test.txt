@@ -1,0 +1,13 @@
+func main() ->void
+{
+let x: integer;
+let y: integer;
+x = 8;
+y = 1;
+while(x > y)
+{
+write(x);
+x = x - 1;
+};
+
+}

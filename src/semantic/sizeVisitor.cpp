@@ -270,17 +270,18 @@ void SizeVisitor::visit(DimList *node){
 void SizeVisitor::visit(IdNode* node){
     int debug =0;
     std::string node_id = node->getData();
-    for (auto &entry: node->symbolTable->getTableEntries()){
-        std::string entry_id =entry.getName();
-            if (node_id == entry_id){
-                if (entry.getSymbolType() == "integer"){
+    if (node->symbolTable != nullptr) {
+        for (auto &entry: node->symbolTable->getTableEntries()) {
+            std::string entry_id = entry.getName();
+            if (node_id == entry_id) {
+                if (entry.getSymbolType() == "integer") {
                     node->size = 4;
-                }
-                else if (entry.getSymbolType() == "float"){
+                } else if (entry.getSymbolType() == "float") {
                     node->size = 8;
                 }
             }
         }
+    }
 }
 
 void SizeVisitor::visit(PutStat *node) {

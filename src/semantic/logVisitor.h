@@ -54,6 +54,8 @@ public:
 
     void visit(ForStat *node)override;
 
+    void visit(MultOp *node)override;
+
 };
 
 #endif //COMP_442_LOGVISITOR_H

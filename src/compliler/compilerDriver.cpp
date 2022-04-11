@@ -14,31 +14,21 @@
 #include "codeGenerationVisitor.h"
 using namespace std;
 
-const string D = "short_demo";
-const string E = "short_err";
-const string B = "bubble";
-const string P = "poly";
-const string V = "variableAndIdnest";
-const string X = "expression";
-const string F = "class_func_etc";
-const string C = "shortClass_demo";
- const string A = "ast_demo_1";
-
 //Implemented Compiler feature testing:
 
-const string T = "basic_output.txt"; //basic alloction + output to CLI
-const string EX = "expressions.txt"; //expression testing
-const string AA = "arrayAccess.txt";
-const string R = "rel_op.txt";
-const string FU = "func_demo.txt";
-const string DEBUG = "debug.txt";
-const string L = "loop_test.txt";
+const string T = "c_basic_output.txt"; //basic alloction + output to CLI
+const string EX = "c_expressions.txt"; //expression testing
+const string AA = "c_arrayAccess.txt";
+const string R = "c_rel_op.txt";
+const string FU = "c_func_demo.txt";
+const string L = "c_loop_test.txt";
+const string S = "c_sampleMain.txt";
 
 
 
 int main() {
     cout<< "Parser started " <<endl;
-    string file = FU;
+    string file = S;
     Parser test = Parser(file);
     SemanticTableVisitor* tableBuilder = new SemanticTableVisitor();
     LinkerVisitor* tableLinker = new LinkerVisitor();
@@ -62,7 +52,7 @@ int main() {
 
        codeMaker->visit(dynamic_cast<ProgNode*>(ast));
         //DEBUG print
-       Node::traverse(ast, 0);
+       //Node::traverse(ast, 0);
 
         //Delete all the things!!!!
         ast->deleteAll();

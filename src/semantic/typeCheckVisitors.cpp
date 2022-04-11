@@ -91,23 +91,7 @@ void TypeVisitor::visit(AssignStat *node){
         a->accept(this);
     }
 } ;
-/*
 
-void TypeVisitor::visit(ExprNode *node){
-    std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
-    for (auto &a: children) {
-        a->accept(this);
-    }
-} ;
-
-void TypeVisitor::visit(ArithExprNode *node){
-    std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
-    for (auto &a: children) {
-        a->accept(this);
-    }
-    node->setDataType(node->getLeftMostChild()->getDataType());
-} ;
-*/
 void TypeVisitor::visit(AddOp *node){
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
     for (auto &a: children) {
@@ -120,7 +104,7 @@ void TypeVisitor::visit(AddOp *node){
     }
     else {
         node->setDataType("invalid");
-        node->errors.push_back("invlaid type at add op with variables");
+        node->errors.push_back("invlaid type at add op with variables "+ children[0]->getData()+" "+ children[1]->getData());
     }
 } ;
 
@@ -137,27 +121,10 @@ void TypeVisitor::visit(MultOp *node){
     }
     else {
         node->setDataType("invalid");
-
-        node->errors.push_back("invlaid type at mult op");
+        node->errors.push_back("invlaid type at add op with variables "+ children[0]->getData()+" "+ children[1]->getData());
     }
 } ;
-/*
-void TypeVisitor::visit(TermNode *node){
-    std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
-    for (auto &a: children) {
-        a->accept(this);
-    }
-    node->setDataType(node->getLeftMostChild()->getDataType());
 
-} ;
-void TypeVisitor::visit(FactorNode *node){
-    std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
-    for (auto &a: children) {
-        a->accept(this);
-    }
-    node->setDataType(node->getLeftMostChild()->getDataType());
-}
- */
 void TypeVisitor::visit(IdNode *node){
     if (node->getParent()->symbolTable != nullptr) {
         //if (node->getParent()->getType() == "factor") {
