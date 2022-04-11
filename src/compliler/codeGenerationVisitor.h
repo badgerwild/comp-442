@@ -6,14 +6,17 @@
 #define COMP_442_CODEGENERATIONVISITOR_H
 #include <fstream>
 #include <vector>
+#include <unordered_map>
 #include "../semantic/visitors.h"
 
 class CodeGenerationVisitor: public Visitor {
+    int branchTagCounter = 0;
     std::vector<std::string> registerPool{};
     std::string fileName;
     std::ofstream codeOutput;
     std::vector<std::string> moonExecCode;//assembly is stored here
     std::vector<std::string> moonDataCode;//space is allocated here
+
 public:
     CodeGenerationVisitor();
 

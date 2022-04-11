@@ -11,6 +11,7 @@ add_subdirectory(src/DFA)
 add_subdirectory(src/AST)
 add_subdirectory(src/semantic)
 add_subdirectory(src/compliler)
+add_subdirectory(src/moon_compiler)
 
 
 #add_executable(comp_442 main.cpp src/demo_1.cpp)

@@ -1,5 +1,5 @@
 //
-// Created by jason on 4/3/22.
+// Created by jason on 4/10/22.
 //
 
 #include <iostream>
@@ -11,34 +11,11 @@
 #include "../semantic/sizeVisitor.h"
 #include "../semantic/logVisitor.h"
 
-#include "codeGenerationVisitor.h"
+#include "../compliler/codeGenerationVisitor.h"
 using namespace std;
 
-const string D = "short_demo";
-const string E = "short_err";
-const string B = "bubble";
-const string P = "poly";
-const string V = "variableAndIdnest";
-const string X = "expression";
-const string F = "class_func_etc";
-const string C = "shortClass_demo";
- const string A = "ast_demo_1";
-
-//Implemented Compiler feature testing:
-
-const string T = "basic_output.txt"; //basic alloction + output to CLI
-const string EX = "expressions.txt"; //expression testing
-const string AA = "arrayAccess.txt";
-const string R = "rel_op.txt";
-const string FU = "func_demo.txt";
-const string DEBUG = "debug.txt";
-const string L = "loop_test.txt";
-
-
-
-int main() {
-    cout<< "Parser started " <<endl;
-    string file = FU;
+int main(int argc, char *argv[]){
+    std::string file = argv[1];
     Parser test = Parser(file);
     SemanticTableVisitor* tableBuilder = new SemanticTableVisitor();
     LinkerVisitor* tableLinker = new LinkerVisitor();
@@ -51,7 +28,7 @@ int main() {
     cout<<"****************************************************" <<endl;
     auto ast = test.parse();
     if(ast->getType() != "Null"){
-        cout<< file << " Sucessfully parsed" <<endl;
+
 
         tableBuilder->visit(dynamic_cast<ProgNode*>(ast));
         tableLinker->visit(dynamic_cast<ProgNode*>(ast));
@@ -60,10 +37,8 @@ int main() {
         sizeMaker->visit(dynamic_cast<ProgNode*>(ast));
         log->visit(dynamic_cast<ProgNode*>(ast));
 
-       codeMaker->visit(dynamic_cast<ProgNode*>(ast));
-        //DEBUG print
-       Node::traverse(ast, 0);
-
+        codeMaker->visit(dynamic_cast<ProgNode*>(ast));
+        cout<<"Compilation sucessful for " <<file<<endl;
         //Delete all the things!!!!
         ast->deleteAll();
         delete(tableBuilder);
@@ -75,10 +50,7 @@ int main() {
         delete(codeMaker);
     }
     else{
-        cout<< file << " had errors parsed" <<endl;
+        cout<< file << " Compilation failed" <<endl;
     }
     cout<<"*****************************************************" <<endl;
-
-    cout<<"Parser Finished" <<endl;
-
 }

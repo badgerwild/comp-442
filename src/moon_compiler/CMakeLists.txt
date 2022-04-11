@@ -31,11 +31,11 @@ file(GLOB SOURCES
         ../semantic/tempVariableVisitor.h
         ../semantic/typeCheckVisitors.cpp
         ../semantic/typeCheckVisitors.h
-        codeGenerationVisitor.cpp
-        codeGenerationVisitor.h
-        compilerDriver.cpp
+        ../compliler/codeGenerationVisitor.cpp
+        ../compliler/codeGenerationVisitor.h
+        moonCompiler.cpp
 
-)
+
+        )
 set(SOURCES ${SOURCES})
-add_executable(${BINARY}_compiler ${SOURCES})
-#add_library(${BINARY}_com_lib STATIC ${SOURCES})
+add_executable(${BINARY}_moon_compiler ${SOURCES})

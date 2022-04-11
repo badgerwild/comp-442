@@ -3,16 +3,25 @@
 //
 
 #include "../AST/ast.h"
+#include "../utils/remove_suffix.h"
 #include "codeGenerationVisitor.h"
 const std::string CODE_GEN_PATH = "/home/jason/collective/comp-442/comp-442/src/compliler/output/";
 const std::string  MOON = ".m";
 const std::string INDENT_11 = "           ";
-const std::string INDENT_10 = "          ";//TODO MAKE THIS BETTER, probably a for loop
+const std::string INDENT_10 = "          ";//TODO MAKE THIS BETTER,
+std::unordered_map<std::string, std::string> RELOPTRANSLATION {
+        {">", "cgt"},
+        {"<", "clt"},
+        {"<=", "cle"},
+        {"==", "ceq"},
+        {"<>", "cne"},
+        {">=", "cge"}
+};
 
 CodeGenerationVisitor::CodeGenerationVisitor() {}
 
 CodeGenerationVisitor::CodeGenerationVisitor(const std::string &fileName) {
-    this->fileName = CODE_GEN_PATH+fileName+MOON;
+    this->fileName = CODE_GEN_PATH+stripSuffix(fileName)+MOON;
     codeOutput.open(this->fileName);
     //inititalized a stack of registers
     for(int i = 12; i >=1; --i){
@@ -129,7 +138,6 @@ void CodeGenerationVisitor::visit(VarDecl *node) {
         }
     }
     moonDataCode.push_back(INDENT_11 + "% Space for var " + children[0]->getData());
-    //TODO go back to symbol table genration and make sure to assign an entry to each node.
     moonDataCode.push_back(children[0]->getData()+ INDENT_10 +" res " +std::to_string((node->size)*arraySize));
 
 
@@ -209,6 +217,9 @@ void CodeGenerationVisitor::visit(PutStat *node) {
     moonExecCode.push_back(INDENT_11 + "% ourput to console");
     moonExecCode.push_back(INDENT_11 + "jl r15, putstr");
 
+    moonExecCode.push_back(INDENT_11 + "sub r1,r1,r1");
+    moonExecCode.push_back(INDENT_11 + "addi r1,r1,10");
+    moonExecCode.push_back(INDENT_11 + "putc r1");
     registerPool.push_back(localRegister);
 
 
@@ -230,16 +241,64 @@ void CodeGenerationVisitor::visit(GetStat *node) {
 
 void CodeGenerationVisitor::visit(IfStat *node) {
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
+    //Local moon jump tags generated for branching
+    std::string ifTag = "if"+ std::to_string(++branchTagCounter);
+    std::string thenTag = "then"+std::to_string(++branchTagCounter);
+    std::string endIfTag = "endIf"+ std::to_string(++branchTagCounter);
+    std::string elseTag = "else"+std::to_string(++branchTagCounter);
+    //assign relop a moontag
+    std::string relOpTag = children[0]->moonTag;
+    std::string localRegister = registerPool.back();
+    registerPool.pop_back();
+    moonExecCode.push_back(INDENT_11+"% Ifstat------------" + ifTag);
+    children[1]->moonTag = thenTag;
+    children[2]->moonTag = elseTag;
     for (auto &a: children) {
+        //jump to else tag before the else code is generated
+        if (a->moonTag == elseTag){
+            moonExecCode.push_back(a->moonTag);
+        }
         a->accept(this);
+        //jump tag for end if, after the code has already been generated
+        if(a->moonTag == thenTag){
+            moonExecCode.push_back(INDENT_11 + "j "+ endIfTag);
+        }
+        //checks if relOp to be sure rel op value has already been generated
+        else if (a->moonTag == relOpTag){
+            moonExecCode.push_back(INDENT_11+"% done with rel op ");
+            moonExecCode.push_back(INDENT_11+"lw "+localRegister+","+children[0]->moonTag+"(r0)");
+            moonExecCode.push_back(INDENT_11+"bz "+localRegister+","+elseTag);
+        }
     }
+    moonExecCode.push_back(endIfTag);
+    registerPool.push_back(localRegister);
 }
 
 void CodeGenerationVisitor::visit(ForStat *node) {
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
+    std::string goWhileTag = "goWhile"+ std::to_string(++branchTagCounter);
+    std::string endWhileTag = "endWhile" +std::to_string(++branchTagCounter);
+    std::string relOpTag = children[0]->moonTag; //identify rel op
+    std::string loopLocalRegister = registerPool.back();
+    registerPool.pop_back();
+    moonExecCode.push_back(INDENT_11 + "% Starting while -------");
+    moonExecCode.push_back(goWhileTag);
+
     for (auto &a: children) {
         a->accept(this);
+        //after rel op has been visited
+        if (a->moonTag == relOpTag){
+            moonExecCode.push_back(INDENT_11 + "lw "+loopLocalRegister+","+a->moonTag+"(r0)");
+            moonExecCode.push_back(INDENT_11 + "bz "+loopLocalRegister+","+endWhileTag);
+        }
+        else{
+            moonExecCode.push_back(INDENT_11+"j " + goWhileTag);
+        }
     }
+    moonExecCode.push_back(INDENT_11+"% Exit of while loop -------");
+    moonExecCode.push_back(endWhileTag);
+
+    registerPool.push_back(loopLocalRegister);
 }
 
 void CodeGenerationVisitor::visit(AddOp *node) {
@@ -357,6 +416,33 @@ void CodeGenerationVisitor::visit(FCallNode *node) {
 
 
 
+}
+
+void CodeGenerationVisitor::visit(RelExprNode *node) {
+    //TODO deal with array access after I create a process array function
+    std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
+    for (auto &a: children) {
+        a->accept(this);
+    }
+    std::string leftRegister = registerPool.back();
+    registerPool.pop_back();
+    std::string rightRegister = registerPool.back();
+    registerPool.pop_back();
+    std::string localRegister = registerPool.back();
+    registerPool.pop_back();
+    moonExecCode.push_back(INDENT_11+ "% Dealing with rel expression " + node->moonTag+ " "+ children[0]->getData() +" " +children[1]->getData()
+    + " " +children[2]->getData());
+    moonExecCode.push_back(INDENT_11+"lw "+leftRegister+","+children[0]->moonTag+"(r0)");
+    moonExecCode.push_back(INDENT_11+"lw "+rightRegister+","+children[2]->moonTag+"(r0)");
+    moonExecCode.push_back(INDENT_11+RELOPTRANSLATION.at(children[1]->getData())+" "+ localRegister+","+leftRegister+","+rightRegister);
+
+    moonDataCode.push_back(INDENT_11+"% Allocating space for "+ node->moonTag);
+    moonDataCode.push_back(node->moonTag + INDENT_10 +"res "+std::to_string(node->size));
+    moonExecCode.push_back(INDENT_11+ "sw "+node->moonTag+"(r0),"+ localRegister);
+
+    registerPool.push_back(localRegister);
+    registerPool.push_back(rightRegister);
+    registerPool.push_back(leftRegister);
 }
 
 void CodeGenerationVisitor::visit(RelOpNode *node) {
@@ -498,12 +584,7 @@ void CodeGenerationVisitor::visit(EpsilonNode *node) {
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
 }
 
-void CodeGenerationVisitor::visit(RelExprNode *node) {
-    std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());
-    for (auto &a: children) {
-        a->accept(this);
-    }
-}
+
 
 void CodeGenerationVisitor::visit(ImplNode *node) {
     std::vector<Node*> children = node->reverse(node->getLeftMostChild()->getSiblings());

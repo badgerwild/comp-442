@@ -15,7 +15,7 @@ int main(){
     string filePre ="/home/jason/collective/comp-442/comp-442/src/lexer/";
     string fileName = "a";//change this for different input file
     string fileSuf = ".txt";
-    scanner.addFile(filePre+fileName+ fileSuf);
+    scanner.addFile(filePre + fileName + fileSuf);
     scanner.readFile();
     bool condition = false;
     vector<Token> err {};

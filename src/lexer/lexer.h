@@ -4,11 +4,13 @@
 
 #ifndef COMP_442_LEXER_H
 #define COMP_442_LEXER_H
+#include <fstream>
 #include <memory>
 #include <string>
 #include <vector>
 #include "Token.h"
 #include "../DFA/DFA.h"
+
 
 class DfaSingleton {
 private:
@@ -41,11 +43,9 @@ private:
     std::vector<std::string> program;
     int charPosition;
     int lineNumber;
-    //TODO make these into pointers
     std::vector<int> states;
     std::vector<char> inputs;
     std::vector<std::vector<int>> lookUpTable;
-
 public:
     Lexer();
     Lexer(std::vector<int> states, std::vector<char> inputs, std::vector<std::vector<int>> lookUpTable);

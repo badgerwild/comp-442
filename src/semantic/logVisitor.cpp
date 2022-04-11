@@ -7,6 +7,7 @@
 #include "visitors.h"
 #include "SymbolTable.h"
 #include "./AST/ast.h"
+#include "../utils/remove_suffix.h"
 
 
 const std::string PATH = "/home/jason/collective/comp-442/comp-442/src/semantic/logs/";
@@ -20,8 +21,9 @@ LogVisitor::LogVisitor() {
 }
 
 LogVisitor::LogVisitor(std::string file) {
-    outputFiles[1] = PATH+file+OUTERRORS;
-    outputFiles[0] = PATH + file + OUTSYMBOLTABLES;
+    std::string outName = stripSuffix(file);
+    outputFiles[1] = PATH+outName+OUTERRORS;
+    outputFiles[0] = PATH + outName + OUTSYMBOLTABLES;
 
     for (int i =0; i<2;++i){
         outPut[i].open(outputFiles[i]);
@@ -132,3 +134,5 @@ void LogVisitor::visit(FParamList *node) {};
 void LogVisitor::visit(FPAramNode *node) {};
 
 void LogVisitor::visit(DimList *node) {};
+
+void LogVisitor::visit(ForStat *node) {};

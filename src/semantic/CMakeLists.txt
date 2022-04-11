@@ -14,6 +14,8 @@ file(GLOB SOURCES
         ../DFA/DFA.h
         ../parser/parser.cpp
         ../parser/parser.h
+        ../utils/remove_suffix.h
+        ../utils/remove_suffix.cpp
         visitors.h
         logVisitor.cpp
         logVisitor.h

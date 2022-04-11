@@ -78,7 +78,7 @@ std::vector<char> DFA::alphabet() {
     }
     return alph;
 }
-
+//Builds a lexical table from a dfa
 std::vector<std::vector<int>> DFA::generateTable(std::vector<int> stateArray, std::vector<char> alphabetArray) {
     std::vector<std::vector<int>> table(stateArray.size(), std::vector<int> (alphabetArray.size()+2));
     char inputChar{};

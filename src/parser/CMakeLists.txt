@@ -18,6 +18,8 @@ file(GLOB SOURCES
         ../semantic/SymbolTable.cpp
         ../semantic/visitors.cpp
         ../semantic/visitors.h
+        ../utils/remove_suffix.h
+        ../utils/remove_suffix.cpp
         parser.cpp
         parser.h
         parseDriver.cpp

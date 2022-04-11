@@ -89,12 +89,17 @@ const int ENDIMPL = 70;
 
 
 
-//ooutput constants
+//output constants
 const int ERROR = -1;
 const std::string SRCSUFFIX = ".txt";
 const std::string OUT = ".outderivation";
 const std::string ERR = ".outsyntaxerrors";
 const std::string LOG ="logs/";
+const std::string OUTPATH = "/home/jason/collective/comp-442/comp-442/src/lexer/logs/";
+const std::string TOKENSTREAM = ".outlextokens";
+const std::string ERRORSTREAM = ".outlexerrors";
+
+
 //unordered map with function pointers...not sure this needs to be a map. could just be a set
 //TODO refactor this so that it corresponds to an integer so I can use a swtich statement to call the semantic action function
 inline const std::unordered_map<std::string, int> SEMANTIC_ACTIONS = {
@@ -200,7 +205,8 @@ private:
     std::vector<Node*> semanticStack{};
     NodeFactory factory{};
     std::string sourceFile;
-    std::string outFiles[2];
+    std::string outFileName;
+    std::string outFiles[4];
 public:
     Parser(std::string src);
     ~Parser();
@@ -215,6 +221,7 @@ public:
     bool first(std::string top, std::string _lookAhead);
     bool follow(std::string top, std::string _lookAhead);
     void handleSemanticActions(int choice, Token token);
+    //std::string stripSuffix(std::string s);
     //AST creation functions
     void createLeaf(Token tok);
     void createTypeLeaf(Token tok);
@@ -249,6 +256,7 @@ public:
     void endGeneralDecl(std::string type);
     void openMakeFamily(std::string type);
     void closeFCall();
+
 };
 
 

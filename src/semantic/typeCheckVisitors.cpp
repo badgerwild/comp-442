@@ -186,6 +186,7 @@ void TypeVisitor::visit(RelExprNode *node){
     std::string child2Type = children[2]->getDataType();
     if (child1Type == child2Type){
         node->setDataType(node->getLeftMostChild()->getDataType());
+        int debug = 0;
     }
     else {
         node->setDataType("invalid");

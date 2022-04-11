@@ -9,6 +9,7 @@
 
 #include "parser.h"
 #include "../DFA/indexTemplate.h"
+#include "../utils/remove_suffix.h"
 
 //using namespace Lexer;
 
@@ -26,14 +27,18 @@ Parser::Parser(std::string src) : lexer() {
     }
     lexer = Lexer();
     sourceFile = src;
-    outFiles[0] = PATH+LOG+src+OUT;
-    outFiles[1] = PATH+LOG+src+ERR;
+    outFileName = stripSuffix(src);
+    outFiles[0] = PATH+LOG+outFileName+OUT;
+    outFiles[1] = PATH+LOG+outFileName+ERR;
+    outFiles[2] = OUTPATH+outFileName+TOKENSTREAM;
+    outFiles[3] =OUTPATH+outFileName+ERRORSTREAM;
 }
 
 Parser::~Parser() {}
 
 void Parser::readSource() {
-    lexer.addFile(SRCPATH+sourceFile+SRCSUFFIX);
+    //TODO changed here
+    lexer.addFile(SRCPATH + sourceFile);
     lexer.readFile();
 }
 
@@ -62,8 +67,8 @@ Token Parser::getNextToken() {
 
 Node * Parser::parse(){
    //logger open files
-  std::ofstream outPut[2];
-  for (int i =0; i<2;++i){
+  std::ofstream outPut[4];
+  for (int i =0; i<4;++i){
       outPut[i].open(outFiles[i]);
   }
     bool success = true;
@@ -71,12 +76,26 @@ Node * Parser::parse(){
     parseStack.push_back("START");
     Token token;
     token = getNextToken();
+    //log for lexer
+    if(token.getIsError()){
+        outPut[3]<<token<<std::endl;
+    }
+    else{
+        outPut[2]<<token<<std::endl;
+    }
     //tip != to end
     while(parseStack.back() != "$" ) {
         std::string topStack = parseStack.back();
         // by pass comments
         if (token.getType() == "cmt") {
             token = getNextToken();
+            //log for lexer
+            if(token.getIsError()){
+                outPut[3]<<token<<std::endl;
+            }
+            else{
+                outPut[2]<<token<<std::endl;
+            }
             int debug = 0;
             //DEBUG
             //std::cout<<token <<std::endl;
@@ -86,6 +105,13 @@ Node * Parser::parse(){
             if (topStack == token.getType()) {
                 parseStack.pop_back();
                 token = getNextToken();
+                //log for lexer
+                if(token.getIsError()){
+                    outPut[3]<<token<<std::endl;
+                }
+                else{
+                    outPut[2]<<token<<std::endl;
+                }
                 //logging for derivation
                 for (std::string &s: parseStack ) {
                     outPut[0]<< "[ " <<s <<"] ";
@@ -116,6 +142,13 @@ Node * Parser::parse(){
                 outPut[1]<< "Invalid Token at line: " << token.getLineNumber()<<" Token type: "<<token.getType()<< " Token value: " <<token.getLexeme() <<std::endl;
                 skipError();
                 token = getNextToken();
+                //log for lexer
+                if(token.getIsError()){
+                    outPut[3]<<token<<std::endl;
+                }
+                else{
+                    outPut[2]<<token<<std::endl;
+                }
                 success = false;
             }
             else if ((parseTable[tokenIndex][nonTerminalIndex] != " ")) {
@@ -154,6 +187,7 @@ Node * Parser::parse(){
 void Parser::skipError() {
     //TODO error logging here
     Token lookahead = getNextToken();
+
     bool ifTerm = (terminals.find(parseStack.back()) != terminals.end());
     if ((lookahead.getType() == "$") || (follow(parseStack.back(), lookahead.getType())) || ifTerm){
         parseStack.pop_back();//pop
@@ -376,7 +410,17 @@ void Parser::handleSemanticActions(int choice, Token token) {
             std::cout<<"why are you even here"<<std::endl;
     }
 }
-
+/*
+std::string Parser::stripSuffix(std::string s) {
+  std::string::size_type position = s.find('.');
+    if (position != std::string::npos){
+        return s.substr(0, position);
+    }
+    else{
+        return s;
+    }
+}
+ */
 std::vector<std::string> Parser::whitespace_split(const std::string &str) {
     std::stringstream stream(str);
     std::istream_iterator<std::string> begin(stream), end;
@@ -431,6 +475,7 @@ bool Parser::follow(std::string top, std::string _lookAhead) {
     }
     return false;
 }
+
 
 //TODO optamize to remove redundancies
 void Parser::createLeaf(Token tok) {

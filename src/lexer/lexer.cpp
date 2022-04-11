@@ -15,7 +15,8 @@ const int NORMAL = -5;
 const char SYMBOLS[20] = {'|','+', ',','&', '*', ';', '!', '.', '[',']','(', ')', '{','}', '>','<','=',':','-', '/'};
 const std::unordered_set<char> NOTADD{'\t', ' '};
 
-
+//DFA is hard coded here as a singleton class, mainly to clean up the lexer constructor and to prevent
+// deleting something
 DfaSingleton::DfaSingleton() {
     dfa = DFA();
     dfa.addState(State(1,false, false));
@@ -478,6 +479,7 @@ DfaSingleton::DfaSingleton() {
 
 }
 
+//constructor for singleton DFA
 std::shared_ptr<DfaSingleton>& DfaSingleton::getInstance() {
     static std::shared_ptr<DfaSingleton> inst_ = nullptr;
     if (!inst_){
@@ -485,11 +487,11 @@ std::shared_ptr<DfaSingleton>& DfaSingleton::getInstance() {
     }
     return inst_;
 }
-
+//returns the alphabet as a vector
 std::vector<char> DfaSingleton::getAlphabet() {
     return dfa.alphabet();
 }
-
+//returns a vector of states
 std::vector<int> DfaSingleton::getDfaState() {
     return dfa.stateList();
 }
@@ -505,7 +507,7 @@ Lexer::Lexer() {
     this->lookUpTable = dfa->getTable(this->states, this->inputs);
     this->lineNumber = 0;
     this->charPosition = 0;
-    std::vector<std::string> outFiles = {fileName+".outlexerrors", fileName+".outlextokens"};
+    //std::vector<std::string> outFiles = {fileName+".outlexerrors", fileName+".outlextokens"};
 
 }
 
@@ -531,7 +533,8 @@ int Lexer::getLineNumber() {
 void Lexer::addFile(std::string file) {
     this->fileName = file;
 }
-
+//reads a file into the lexer so that it can be tokenized
+//currently it only works with files that use unix style line endings
 void Lexer::readFile() {
     std::string temp;
     std::vector<std::string> lineStorage;
@@ -546,7 +549,7 @@ void Lexer::readFile() {
         std::cout<< "file not found";
     }
     programFile.close();
-    //replaces last '\n' with a '\r'
+    //replaces last '\n' with a '\r' this is used to create EOF token
     lineStorage[lineStorage.size()-1][lineStorage[lineStorage.size()-1].size()-1] = '\r';
     this->program = lineStorage;
 }
@@ -554,12 +557,14 @@ int Lexer::tableLookUp(int state, char input) {
     int stateIndex{}, charIndex{}, newState{};
     stateIndex = findIndex<int>(state, states);
     charIndex = findIndex<char>(input, inputs);
+    //error unknown character
     if (charIndex == -1 || stateIndex == -1){
         newState = -1;
     }
     else {
         newState = lookUpTable[stateIndex][charIndex];
     }
+    //deals with characters not in the alphabet if they occur in comments
     if (newState == -1 && state == 55) {
         newState = 55;
     }
@@ -575,21 +580,24 @@ int Lexer::tableLookUp(int state, char input) {
 char Lexer::nextChar() {
     int maxLen = this->program[lineNumber].size();
     char temp;
+    //EOF when character reaches max length and max program size
     if ((this->charPosition == maxLen-1) && (lineNumber == this->program.size()-1)){
         temp = '\r';
 
     }
+    //normal case, retrives next character
     else {
         temp = this->program[lineNumber][charPosition];
-        ++this->charPosition;
+        ++this->charPosition; //character position
         if ((temp == '\n') && (lineNumber < this->program.size()-1)) {
-            ++this->lineNumber;
+            ++this->lineNumber; //if line has ended increment line number
             this->charPosition = 0;
         }
     }
     return temp;
 }
 
+//checks if a state is final
 bool Lexer::isFinal(int stateName) {
     int tempIndex = findIndex<int>(stateName, this->states);
     int find = this->inputs.size();
@@ -598,6 +606,7 @@ bool Lexer::isFinal(int stateName) {
     return val;
 }
 
+//backtrack function for more cases where functions have multiple options
 bool Lexer::backTrack(int stateName) {
     int tempIndex = findIndex<int>(stateName, this->states);
     int find = this->inputs.size()+1;
@@ -606,7 +615,6 @@ bool Lexer::backTrack(int stateName) {
     return val;
 }
 
-//TODO 1.Deal with Space problem, 2.error recovery add specific error ever where 3. deal with invalid id
 Token Lexer::nextToken() {
 int state = 1;
 Token token;
@@ -620,7 +628,6 @@ while (token.isEmpty()){
         continue;
     }
     state = tableLookUp(state, lookUp);
-    //if (lookUp != ' ') {
     if (NOTADD.find(lookUp) == NOTADD.end()) {
         lex.push_back(lookUp);
     }
@@ -634,6 +641,7 @@ while (token.isEmpty()){
             else{
                 line = this->lineNumber;
             }
+            //Make sure not a white space character
             if (NOTADD.find(lookUp) == NOTADD.end()) {
                 lex.pop_back();
             }
@@ -644,6 +652,7 @@ while (token.isEmpty()){
         else {
             line = this->lineNumber;
         }
+        //new line return to begining state
         if (lex == "\n"){
             state = 1;
             lex.pop_back();
@@ -652,7 +661,5 @@ while (token.isEmpty()){
         token.create(lex, type, line+1);
     }
 }
-//DEBUG
-//std::cout<< lineNumber<< std::endl;
     return token;
 }

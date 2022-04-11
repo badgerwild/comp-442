@@ -290,7 +290,44 @@ void SizeVisitor::visit(PutStat *node) {
             a->accept(this);
         }
     }
+}
 
+void SizeVisitor::visit(RelOpNode *node) {
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    if (children[0]!= nullptr) {
+        for (auto &a: children) {
+            a->accept(this);
+        }
+    }
+}
+
+void SizeVisitor::visit(RelExprNode *node) {
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    if (children[0]!= nullptr) {
+        for (auto &a: children) {
+            a->accept(this);
+        }
+    }
+    node->size = children[0]->size;
+
+}
+
+void SizeVisitor::visit(IfStat *node) {
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    if (children[0]!= nullptr) {
+        for (auto &a: children) {
+            a->accept(this);
+        }
+    }
+}
+
+void SizeVisitor::visit(ForStat *node){
+    std::vector<Node*> children = node->getLeftMostChild()->getSiblings();
+    if (children[0]!= nullptr) {
+        for (auto &a: children) {
+            a->accept(this);
+        }
+    }
 }
 SizeVisitor::SizeVisitor() {}
 

@@ -51,6 +51,9 @@ public:
     void visit(DimList *node) override;
 
     void visit(ImplNode *node)override;
+
+    void visit(ForStat *node)override;
+
 };
 
 #endif //COMP_442_LOGVISITOR_H

@@ -2,6 +2,7 @@
 // Created by jason on 1/25/22.
 //
 
+//Helper function for finding and returning indexes used in the parsing and lexical tables
 #ifndef COMP_442_FINDINDEX_H
 #define COMP_442_FINDINDEX_H
 
